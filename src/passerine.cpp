@@ -12,7 +12,7 @@
 #include <include/MidiFile.h>
 #include <include/MidiMessage.h>
 #include <include/Options.h>
-
+#include <QFileDialog>
 Passerine::Passerine(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Passerine)
@@ -52,7 +52,9 @@ void Passerine::on_actionOpen_triggered()
 {
     MidiFile midifile;
 
-    int n = midifile.read("test.mid");
+    QString filename = QFileDialog::getOpenFileName();
+
+    int n = midifile.read(filename.toUtf8().constData());
 
     if(n == 0){
         qDebug() << "Neuspesno citanje fajla";
