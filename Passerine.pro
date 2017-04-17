@@ -30,7 +30,9 @@ SOURCES += src/main.cpp\
     src/MidiEventList.cpp \
     src/MidiFile.cpp \
     src/MidiMessage.cpp \
-    src/Options.cpp
+    src/Options.cpp \
+    src/RtMidi.cpp \
+    src/rtmidi_c.cpp
 
 HEADERS  += include/passerine.h \
     include/Binasc.h \
@@ -38,6 +40,10 @@ HEADERS  += include/passerine.h \
     include/MidiEventList.h \
     include/MidiFile.h \
     include/MidiMessage.h \
-    include/Options.h
+    include/Options.h \
+    include/RtMidi.h \
+    include/rtmidi_c.h
 
 FORMS    += ui/passerine.ui
+
+unix:!macx: LIBS += -lasound
