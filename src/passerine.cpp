@@ -5,6 +5,13 @@
 #include <QString>
 #include <QDialog>
 #include <QMessageBox>
+#include <QDebug>
+#include <include/Binasc.h>
+#include <include/MidiEvent.h>
+#include <include/MidiEventList.h>
+#include <include/MidiFile.h>
+#include <include/MidiMessage.h>
+#include <include/Options.h>
 
 Passerine::Passerine(QWidget *parent) :
     QMainWindow(parent),
@@ -39,4 +46,18 @@ void Passerine::on_actionAbout_Qt_triggered()
     QWidget *a = new QWidget();
 
     QMessageBox::aboutQt(a, tr("About Qt"));
+}
+
+void Passerine::on_actionOpen_triggered()
+{
+    MidiFile midifile;
+
+    int n = midifile.read("test.mid");
+
+    if(n == 0){
+        qDebug() << "Neuspesno citanje fajla";
+        return;
+    }
+
+    qDebug() << "Time: " << midifile.getTotalTimeInSeconds();
 }

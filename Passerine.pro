@@ -24,8 +24,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += src/main.cpp\
-        src/passerine.cpp
+        src/passerine.cpp \
+    src/Binasc.cpp \
+    src/MidiEvent.cpp \
+    src/MidiEventList.cpp \
+    src/MidiFile.cpp \
+    src/MidiMessage.cpp \
+    src/Options.cpp
 
-HEADERS  += include/passerine.h
+HEADERS  += include/passerine.h \
+    include/Binasc.h \
+    include/MidiEvent.h \
+    include/MidiEventList.h \
+    include/MidiFile.h \
+    include/MidiMessage.h \
+    include/Options.h
 
 FORMS    += ui/passerine.ui

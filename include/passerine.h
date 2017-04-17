@@ -22,6 +22,12 @@ private slots:
 
     void on_actionAbout_Qt_triggered();
 
+    void on_actionOpen_triggered();
+
+    void on_label_linkActivated(const QString &link);
+
+    void on_lblLabela_linkActivated(const QString &link);
+
 private:
     Ui::Passerine *ui;
 };
