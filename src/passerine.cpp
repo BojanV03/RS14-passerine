@@ -102,14 +102,18 @@ void Passerine::on_actionOpen_triggered()
           delete midiout;
       }
     }
-    catch ( RtMidiError &error ) {
+    catch ( RtMidiError &error )
+    {
       error.printMessage();
       qDebug() << "Exception: ";
       delete midiout;
     }
 
-    // Send out a series of MIDI messages.
+    midifile.joinTracks();
+    midifile.sortTracks();
+    qDebug() << "Number of tracks: " << midifile.getNumTracks();
 
+    qDebug() << "EventCount: " << midifile.getEventCount(0);
     // Program change: 192, 5
     message.push_back( 192 );
     message.push_back( 5 );
@@ -127,36 +131,25 @@ void Passerine::on_actionOpen_triggered()
     message.push_back( 100 );
     midiout->sendMessage( &message );
 
-    // Note On: 144, 64, 90
-    message[0] = 144;
-    message[1] = 64;
-    message[2] = 90;
-    midiout->sendMessage( &message );
+    double prevSeconds = 0;
+    for(int i = 0; i < midifile.getEventCount(0); i++)
+    {
+        MidiEvent curr = midifile.getEvent(0, i);
+        if(curr.isNoteOn() || curr.isNoteOff())
+        {
+            message[0] = curr[0];
+            message[1] = curr[1];
+            message[2] = curr[2];
 
-    SLEEP( 250 );
-    qDebug() << "Beep: ";
-
-    // Note Off: 128, 64, 40
-    message[0] = 128;
-    message[1] = 64;
-    message[2] = 40;
-    midiout->sendMessage( &message );
-
-    SLEEP( 175 );
-
-    // Note On: 144, 64, 90
-    message[0] = 144;
-    message[1] = 64;
-    message[2] = 90;
-    midiout->sendMessage( &message );
-
-    SLEEP( 750 );
-
-    // Note Off: 128, 64, 40
-    message[0] = 128;
-    message[1] = 64;
-    message[2] = 40;
-    midiout->sendMessage( &message );
+            usleep((curr.seconds - prevSeconds)*1000000);
+            midiout->sendMessage( &message);
+            if(curr.isNoteOn())
+                qDebug() << "NoteOn: " << message[1];
+            else
+                qDebug() << "NoteOff: " << message[1];
+            prevSeconds = curr.seconds;
+        }
+    }
 
     // Control Change: 176, 7, 40
     message[0] = 176;
@@ -174,7 +167,6 @@ void Passerine::on_actionOpen_triggered()
     message.push_back( 2 );
     message.push_back( 247 );
     midiout->sendMessage( &message );
-
     // Clean up
     delete midiout;
 }

@@ -221,7 +221,7 @@ int MidiEventList::linkNotePairs(void) {
    // dimension 1: MIDI channel (0-15)
    // dimension 2: MIDI key     (0-127)  (but 0 not used for note-ons)
    // dimension 3: List of active note-ons or note-offs.
-   vector<vector<vector<MidiEvent*> > > noteons;
+   vector<vector<vector<MidiEvent*>>> noteons;
    noteons.resize(16);
    int i;
    for (i=0; i<(int)noteons.size(); i++) {
