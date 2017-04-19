@@ -14,6 +14,7 @@
 #include <include/Options.h>
 #include <include/RtMidi.h>
 #include <QFileDialog>
+#include <ui/portselector.h>
 
 #if defined(__WINDOWS_MM__)
   #include <windows.h>
@@ -116,7 +117,7 @@ void Passerine::on_actionOpen_triggered()
     qDebug() << "EventCount: " << midifile.getEventCount(0);
     // Program change: 192, 5
     message.push_back( 192 );
-    message.push_back( 5 );
+    message.push_back( 7 );
     midiout->sendMessage( &message );
 
     SLEEP( 500 );
@@ -145,8 +146,6 @@ void Passerine::on_actionOpen_triggered()
             midiout->sendMessage( &message);
             if(curr.isNoteOn())
                 qDebug() << "NoteOn: " << message[1];
-            else
-                qDebug() << "NoteOff: " << message[1];
             prevSeconds = curr.seconds;
         }
     }
@@ -154,7 +153,7 @@ void Passerine::on_actionOpen_triggered()
     // Control Change: 176, 7, 40
     message[0] = 176;
     message[1] = 7;
-    message[2] = 40;
+    message[2] = 100;
     midiout->sendMessage( &message );
 
     SLEEP( 500 );
@@ -180,24 +179,19 @@ bool chooseMidiPort( RtMidiOut *rtmidi )
     return false;
   }
 
-  if ( nPorts == 1 ) {
-    std::cout << "\nOpening " << rtmidi->getPortName() << std::endl;
-  }/*
-  else {
-    for ( i=0; i<nPorts; i++ ) {
-      portName = rtmidi->getPortName(i);
-      std::cout << "  Output port #" << i << ": " << portName << '\n';
-    }
 
-    do {
-      std::cout << "\nChoose a port number: ";
-      std::cin >> i;
-    } while ( i >= nPorts );
-  }*/
+  PortSelector *PS = new PortSelector(NULL, rtmidi);
+  PS->exec();
+  qDebug() << PS->selectedPort;
+  if(PS->Accepted)
+      std::cout << "\Prihvacen ";
+  else
+      return false;
+  std::cout << "\nOpening " << rtmidi->getPortName(PS->selectedPort) << std::endl;
 
   std::cout << "\n";
-  qDebug() << "Selected Port: " << QString::fromStdString(rtmidi->getPortName(3));
-  rtmidi->openPort(3);
+  qDebug() << "Selected Port: " << QString::fromStdString(rtmidi->getPortName(PS->selectedPort));
+  rtmidi->openPort(PS->selectedPort);
 
   return true;
 }

@@ -32,7 +32,8 @@ SOURCES += src/main.cpp\
     src/MidiMessage.cpp \
     src/Options.cpp \
     src/RtMidi.cpp \
-    src/rtmidi_c.cpp
+    src/rtmidi_c.cpp \
+    ui/portselector.cpp
 
 HEADERS  += include/passerine.h \
     include/Binasc.h \
@@ -42,8 +43,12 @@ HEADERS  += include/passerine.h \
     include/MidiMessage.h \
     include/Options.h \
     include/RtMidi.h \
-    include/rtmidi_c.h
+    include/rtmidi_c.h \
+    ui/portselector.h
 
-FORMS    += ui/passerine.ui
+FORMS    += ui/passerine.ui \
+    ui/portselector.ui
 
 unix:!macx: LIBS += -lasound
+
+DISTFILES +=
