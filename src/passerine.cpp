@@ -6,6 +6,7 @@
 #include <QDialog>
 #include <QMessageBox>
 #include <QDebug>
+#include <QFileDialog>
 #include <include/Binasc.h>
 #include <include/MidiEvent.h>
 #include <include/MidiEventList.h>
@@ -13,8 +14,7 @@
 #include <include/MidiMessage.h>
 #include <include/Options.h>
 #include <include/RtMidi.h>
-#include <QFileDialog>
-#include <ui/portselector.h>
+#include <include/portselector.h>
 
 #if defined(__WINDOWS_MM__)
   #include <windows.h>
@@ -173,7 +173,7 @@ void Passerine::on_actionOpen_triggered()
 bool chooseMidiPort( RtMidiOut *rtmidi )
 {
   std::string portName;
-  unsigned int i = 0, nPorts = rtmidi->getPortCount();
+  unsigned int nPorts = rtmidi->getPortCount();
   if ( nPorts == 0 ) {
     std::cout << "No output ports available!" << std::endl;
     return false;
@@ -184,7 +184,7 @@ bool chooseMidiPort( RtMidiOut *rtmidi )
   PS->exec();
   qDebug() << PS->selectedPort;
   if(PS->Accepted)
-      std::cout << "\Prihvacen ";
+      std::cout << "\nPrihvacen ";
   else
       return false;
   std::cout << "\nOpening " << rtmidi->getPortName(PS->selectedPort) << std::endl;

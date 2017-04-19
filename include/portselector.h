@@ -21,10 +21,6 @@ public:
 private slots:
     void on_buttonBox_accepted();
 
-    void on_portList_itemChanged(QListWidgetItem *item);
-
-    void on_portList_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
-
 private:
     Ui::PortSelector *ui;
 };

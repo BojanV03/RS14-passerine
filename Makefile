@@ -36,7 +36,7 @@ DISTNAME      = Passerine1.0.0
 DISTDIR = /home/jovan/QtProjects/Passerine/.tmp/Passerine1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1 -Wl,-O1,--sort-common,--as-needed,-z,relro
-LIBS          = $(SUBLIBS) -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread -alsa
+LIBS          = $(SUBLIBS) -lasound -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -49,10 +49,30 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = src/main.cpp \
-		src/passerine.cpp moc_passerine.cpp
+		src/passerine.cpp \
+		src/Binasc.cpp \
+		src/MidiEvent.cpp \
+		src/MidiEventList.cpp \
+		src/MidiFile.cpp \
+		src/MidiMessage.cpp \
+		src/Options.cpp \
+		src/RtMidi.cpp \
+		src/rtmidi_c.cpp \
+		src/portselector.cpp moc_passerine.cpp \
+		moc_portselector.cpp
 OBJECTS       = main.o \
 		passerine.o \
-		moc_passerine.o
+		Binasc.o \
+		MidiEvent.o \
+		MidiEventList.o \
+		MidiFile.o \
+		MidiMessage.o \
+		Options.o \
+		RtMidi.o \
+		rtmidi_c.o \
+		portselector.o \
+		moc_passerine.o \
+		moc_portselector.o
 DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		/usr/lib/qt/mkspecs/common/unix.conf \
 		/usr/lib/qt/mkspecs/common/linux.conf \
@@ -88,15 +108,37 @@ DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		/usr/lib/qt/mkspecs/modules/qt_lib_help_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_input_support_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_linuxaccessibility_support_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_location.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_location_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_network.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_network_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_opengl.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_opengl_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_openglextensions.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_openglextensions_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_packetprotocol_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_platformcompositor_support_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_positioning.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_positioning_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_printsupport.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_printsupport_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_qml.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_qml_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_qmldebug_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_qmldevtools_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_qmltest.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_qmltest_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_quick.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_quick_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_quickparticles_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_quickwidgets.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_quickwidgets_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_script.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_script_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_scripttools.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_scripttools_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_sensors.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_sensors_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_service_support_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_sql.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_sql_private.pri \
@@ -108,15 +150,33 @@ DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		/usr/lib/qt/mkspecs/modules/qt_lib_uiplugin.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_uitools.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_uitools_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_webchannel.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_webchannel_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_webengine.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_webengine_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_webenginecore.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_webenginecore_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_webenginecoreheaders_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_webenginewidgets.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_webenginewidgets_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_webkit.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_webkit_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_webkitwidgets.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_webkitwidgets_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_widgets.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_widgets_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_x11extras.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_x11extras_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_xcb_qpa_lib_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_xml.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_xml_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_xmlpatterns.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_xmlpatterns_private.pri \
 		/usr/lib/qt/mkspecs/features/qt_functions.prf \
 		/usr/lib/qt/mkspecs/features/qt_config.prf \
 		/usr/lib/qt/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/qt/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/usr/lib/qt/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/qt/mkspecs/features/toolchain.prf \
 		/usr/lib/qt/mkspecs/features/default_pre.prf \
@@ -135,8 +195,26 @@ DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		/usr/lib/qt/mkspecs/features/exceptions.prf \
 		/usr/lib/qt/mkspecs/features/yacc.prf \
 		/usr/lib/qt/mkspecs/features/lex.prf \
-		Passerine.pro include/passerine.h src/main.cpp \
-		src/passerine.cpp
+		Passerine.pro include/passerine.h \
+		include/Binasc.h \
+		include/MidiEvent.h \
+		include/MidiEventList.h \
+		include/MidiFile.h \
+		include/MidiMessage.h \
+		include/Options.h \
+		include/RtMidi.h \
+		include/rtmidi_c.h \
+		include/portselector.h src/main.cpp \
+		src/passerine.cpp \
+		src/Binasc.cpp \
+		src/MidiEvent.cpp \
+		src/MidiEventList.cpp \
+		src/MidiFile.cpp \
+		src/MidiMessage.cpp \
+		src/Options.cpp \
+		src/RtMidi.cpp \
+		src/rtmidi_c.cpp \
+		src/portselector.cpp
 QMAKE_TARGET  = Passerine
 DESTDIR       = 
 TARGET        = Passerine
@@ -145,7 +223,7 @@ TARGET        = Passerine
 first: all
 ####### Build rules
 
-$(TARGET): ui_passerine.h $(OBJECTS)  
+$(TARGET): ui_passerine.h ui_portselector.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: Passerine.pro /usr/lib/qt/mkspecs/linux-g++/qmake.conf /usr/lib/qt/mkspecs/features/spec_pre.prf \
@@ -183,15 +261,37 @@ Makefile: Passerine.pro /usr/lib/qt/mkspecs/linux-g++/qmake.conf /usr/lib/qt/mks
 		/usr/lib/qt/mkspecs/modules/qt_lib_help_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_input_support_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_linuxaccessibility_support_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_location.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_location_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_network.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_network_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_opengl.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_opengl_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_openglextensions.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_openglextensions_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_packetprotocol_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_platformcompositor_support_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_positioning.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_positioning_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_printsupport.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_printsupport_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_qml.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_qml_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_qmldebug_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_qmldevtools_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_qmltest.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_qmltest_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_quick.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_quick_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_quickparticles_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_quickwidgets.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_quickwidgets_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_script.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_script_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_scripttools.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_scripttools_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_sensors.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_sensors_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_service_support_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_sql.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_sql_private.pri \
@@ -203,15 +303,33 @@ Makefile: Passerine.pro /usr/lib/qt/mkspecs/linux-g++/qmake.conf /usr/lib/qt/mks
 		/usr/lib/qt/mkspecs/modules/qt_lib_uiplugin.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_uitools.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_uitools_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_webchannel.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_webchannel_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_webengine.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_webengine_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_webenginecore.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_webenginecore_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_webenginecoreheaders_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_webenginewidgets.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_webenginewidgets_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_webkit.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_webkit_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_webkitwidgets.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_webkitwidgets_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_widgets.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_widgets_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_x11extras.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_x11extras_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_xcb_qpa_lib_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_xml.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_xml_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_xmlpatterns.pri \
+		/usr/lib/qt/mkspecs/modules/qt_lib_xmlpatterns_private.pri \
 		/usr/lib/qt/mkspecs/features/qt_functions.prf \
 		/usr/lib/qt/mkspecs/features/qt_config.prf \
 		/usr/lib/qt/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/qt/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/usr/lib/qt/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/qt/mkspecs/features/toolchain.prf \
 		/usr/lib/qt/mkspecs/features/default_pre.prf \
@@ -270,15 +388,37 @@ Makefile: Passerine.pro /usr/lib/qt/mkspecs/linux-g++/qmake.conf /usr/lib/qt/mks
 /usr/lib/qt/mkspecs/modules/qt_lib_help_private.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_input_support_private.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_linuxaccessibility_support_private.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_location.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_location_private.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_network.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_network_private.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_opengl.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_opengl_private.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_openglextensions.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_openglextensions_private.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_packetprotocol_private.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_platformcompositor_support_private.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_positioning.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_positioning_private.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_printsupport.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_printsupport_private.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_qml.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_qml_private.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_qmldebug_private.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_qmldevtools_private.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_qmltest.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_qmltest_private.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_quick.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_quick_private.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_quickparticles_private.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_quickwidgets.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_quickwidgets_private.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_script.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_script_private.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_scripttools.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_scripttools_private.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_sensors.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_sensors_private.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_service_support_private.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_sql.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_sql_private.pri:
@@ -290,15 +430,33 @@ Makefile: Passerine.pro /usr/lib/qt/mkspecs/linux-g++/qmake.conf /usr/lib/qt/mks
 /usr/lib/qt/mkspecs/modules/qt_lib_uiplugin.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_uitools.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_uitools_private.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_webchannel.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_webchannel_private.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_webengine.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_webengine_private.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_webenginecore.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_webenginecore_private.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_webenginecoreheaders_private.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_webenginewidgets.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_webenginewidgets_private.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_webkit.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_webkit_private.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_webkitwidgets.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_webkitwidgets_private.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_widgets.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_widgets_private.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_x11extras.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_x11extras_private.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_xcb_qpa_lib_private.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_xml.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_xml_private.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_xmlpatterns.pri:
+/usr/lib/qt/mkspecs/modules/qt_lib_xmlpatterns_private.pri:
 /usr/lib/qt/mkspecs/features/qt_functions.prf:
 /usr/lib/qt/mkspecs/features/qt_config.prf:
 /usr/lib/qt/mkspecs/linux-g++/qmake.conf:
 /usr/lib/qt/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /usr/lib/qt/mkspecs/features/exclusive_builds.prf:
 /usr/lib/qt/mkspecs/features/toolchain.prf:
 /usr/lib/qt/mkspecs/features/default_pre.prf:
@@ -336,9 +494,9 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/qt/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents include/passerine.h $(DISTDIR)/
-	$(COPY_FILE) --parents src/main.cpp src/passerine.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ui/passerine.ui $(DISTDIR)/
+	$(COPY_FILE) --parents include/passerine.h include/Binasc.h include/MidiEvent.h include/MidiEventList.h include/MidiFile.h include/MidiMessage.h include/Options.h include/RtMidi.h include/rtmidi_c.h include/portselector.h $(DISTDIR)/
+	$(COPY_FILE) --parents src/main.cpp src/passerine.cpp src/Binasc.cpp src/MidiEvent.cpp src/MidiEventList.cpp src/MidiFile.cpp src/MidiMessage.cpp src/Options.cpp src/RtMidi.cpp src/rtmidi_c.cpp src/portselector.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ui/passerine.ui ui/portselector.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -370,22 +528,33 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/qt/mkspecs/features/data/dummy.cpp
 	g++ -pipe -O2 -march=x86-64 -mtune=generic -O2 -pipe -fstack-protector-strong -Wall -W -dM -E -o moc_predefs.h /usr/lib/qt/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_passerine.cpp
+compiler_moc_header_make_all: moc_passerine.cpp moc_portselector.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_passerine.cpp
+	-$(DEL_FILE) moc_passerine.cpp moc_portselector.cpp
 moc_passerine.cpp: include/passerine.h \
 		moc_predefs.h \
 		/usr/bin/moc
 	/usr/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt/mkspecs/linux-g++ -I/home/jovan/QtProjects/Passerine -I/usr/include/qt -I/usr/include/qt/QtWidgets -I/usr/include/qt/QtGui -I/usr/include/qt/QtCore -I/usr/include/c++/6.3.1 -I/usr/include/c++/6.3.1/x86_64-pc-linux-gnu -I/usr/include/c++/6.3.1/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/6.3.1/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/6.3.1/include-fixed -I/usr/include include/passerine.h -o moc_passerine.cpp
 
+moc_portselector.cpp: include/RtMidi.h \
+		include/rtmidi_c.h \
+		include/portselector.h \
+		moc_predefs.h \
+		/usr/bin/moc
+	/usr/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/qt/mkspecs/linux-g++ -I/home/jovan/QtProjects/Passerine -I/usr/include/qt -I/usr/include/qt/QtWidgets -I/usr/include/qt/QtGui -I/usr/include/qt/QtCore -I/usr/include/c++/6.3.1 -I/usr/include/c++/6.3.1/x86_64-pc-linux-gnu -I/usr/include/c++/6.3.1/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/6.3.1/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/6.3.1/include-fixed -I/usr/include include/portselector.h -o moc_portselector.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_passerine.h
+compiler_uic_make_all: ui_passerine.h ui_portselector.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_passerine.h
+	-$(DEL_FILE) ui_passerine.h ui_portselector.h
 ui_passerine.h: ui/passerine.ui \
 		/usr/bin/uic
 	/usr/bin/uic ui/passerine.ui -o ui_passerine.h
+
+ui_portselector.h: ui/portselector.ui \
+		/usr/bin/uic
+	/usr/bin/uic ui/portselector.ui -o ui_portselector.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
@@ -401,11 +570,59 @@ main.o: src/main.cpp include/passerine.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o src/main.cpp
 
 passerine.o: src/passerine.cpp include/passerine.h \
-		ui_passerine.h
+		ui_passerine.h \
+		include/Binasc.h \
+		include/MidiEvent.h \
+		include/MidiMessage.h \
+		include/MidiEventList.h \
+		include/MidiFile.h \
+		include/Options.h \
+		include/RtMidi.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o passerine.o src/passerine.cpp
+
+Binasc.o: src/Binasc.cpp include/Binasc.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Binasc.o src/Binasc.cpp
+
+MidiEvent.o: src/MidiEvent.cpp include/MidiEvent.h \
+		include/MidiMessage.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o MidiEvent.o src/MidiEvent.cpp
+
+MidiEventList.o: src/MidiEventList.cpp include/MidiEventList.h \
+		include/MidiEvent.h \
+		include/MidiMessage.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o MidiEventList.o src/MidiEventList.cpp
+
+MidiFile.o: src/MidiFile.cpp include/MidiFile.h \
+		include/MidiEventList.h \
+		include/MidiEvent.h \
+		include/MidiMessage.h \
+		include/Binasc.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o MidiFile.o src/MidiFile.cpp
+
+MidiMessage.o: src/MidiMessage.cpp include/MidiMessage.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o MidiMessage.o src/MidiMessage.cpp
+
+Options.o: src/Options.cpp include/Options.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Options.o src/Options.cpp
+
+RtMidi.o: src/RtMidi.cpp include/RtMidi.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o RtMidi.o src/RtMidi.cpp
+
+rtmidi_c.o: src/rtmidi_c.cpp include/rtmidi_c.h \
+		include/RtMidi.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o rtmidi_c.o src/rtmidi_c.cpp
+
+portselector.o: src/portselector.cpp include/portselector.h \
+		include/RtMidi.h \
+		include/rtmidi_c.h \
+		ui_portselector.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o portselector.o src/portselector.cpp
 
 moc_passerine.o: moc_passerine.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_passerine.o moc_passerine.cpp
+
+moc_portselector.o: moc_portselector.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_portselector.o moc_portselector.cpp
 
 ####### Install
 

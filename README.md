@@ -4,7 +4,15 @@ A simple program for writing down sheet music. Inspired by Super Mario Paint Com
 
 ## Prerequisites
 
-In order to build this tool you will need to have the ALSA(Advanced Linux Sound Architecture) library installed on your Linux system. It usually comes with the system but if not, simple install libasound2-dev with your favorite package manager should do the trick. 
+- ALSA - In order to build this tool you will need to have the ALSA(Advanced Linux Sound Architecture) library installed on your Linux system. It usually comes with the system but if not, installing libasound2-dev with your favorite package manager should do the trick.
+
+- TiMidity++ - software synthesizer, which handles MIDI playback.
+
+- Soundfonts - You will need to install FluidR3 soundfont, and append the following line to your /etc/timidity++/timidity.cfg file (with sudo privileges):
+
+```
+soundfont /usr/share/soundfonts/FluidR3_GM.sf2
+```
 
 ## Usage
 

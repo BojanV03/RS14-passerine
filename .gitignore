@@ -1,0 +1,4 @@
+*.o
+Passerine
+moc_*
+*.pro.user.*

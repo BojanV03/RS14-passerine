@@ -1,4 +1,4 @@
-#include "portselector.h"
+#include <include/portselector.h>
 #include "ui_portselector.h"
 #include <QDebug>
 
