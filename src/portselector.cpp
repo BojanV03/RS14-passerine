@@ -25,3 +25,8 @@ void PortSelector::on_buttonBox_accepted()
 {
     selectedPort = ui->portList->currentRow();
 }
+
+void PortSelector::on_buttonBox_rejected()
+{
+    selectedPort = -1;
+}

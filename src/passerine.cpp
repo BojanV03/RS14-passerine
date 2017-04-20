@@ -101,6 +101,7 @@ void Passerine::on_actionOpen_triggered()
       if ( chooseMidiPort( midiout ) == false ){
           qDebug() << "Failed to port: ";
           delete midiout;
+          return;
       }
     }
     catch ( RtMidiError &error )
@@ -178,12 +179,10 @@ bool chooseMidiPort( RtMidiOut *rtmidi )
     std::cout << "No output ports available!" << std::endl;
     return false;
   }
-
-
   PortSelector *PS = new PortSelector(NULL, rtmidi);
   PS->exec();
   qDebug() << PS->selectedPort;
-  if(PS->Accepted)
+  if(PS->selectedPort != -1)
       std::cout << "\nPrihvacen ";
   else
       return false;
