@@ -33,7 +33,8 @@ SOURCES += src/main.cpp\
     src/Options.cpp \
     src/RtMidi.cpp \
     src/rtmidi_c.cpp \
-    src/portselector.cpp
+    src/portselector.cpp \
+    src/SongPlayer.cpp
 
 HEADERS  += include/passerine.h \
     include/Binasc.h \
@@ -44,7 +45,9 @@ HEADERS  += include/passerine.h \
     include/Options.h \
     include/RtMidi.h \
     include/rtmidi_c.h \
-    include/portselector.h
+    include/portselector.h \
+    src/SongPlayer.h \
+    include/SongPlayer.h
 
 FORMS    += ui/passerine.ui \
     ui/portselector.ui

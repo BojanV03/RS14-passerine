@@ -113,26 +113,32 @@ void Passerine::on_actionOpen_triggered()
 
     midifile.joinTracks();
     midifile.sortTracks();
+
+    // Program change: 192, 5
+    message.push_back( 0xC0 );  //Channel 1 instrument
+    message.push_back( 41 );    //to Viola
+    qDebug() << "Message: " << message;
+    midiout->sendMessage( &message );
+    message[0] = 0xC1;          //Channel 2 instrument
+    message[1] = 48;          //to String ensemble
+    qDebug() << "Message: " << message;
+    midiout->sendMessage( &message );
     qDebug() << "Number of tracks: " << midifile.getNumTracks();
 
     qDebug() << "EventCount: " << midifile.getEventCount(0);
-    // Program change: 192, 5
-    message.push_back( 192 );
-    message.push_back( 7 );
-    midiout->sendMessage( &message );
 
-    SLEEP( 500 );
-
-    message[0] = 0xF1;
+/*    message[0] = 0xF1;  //System common- undefined?
     message[1] = 60;
     midiout->sendMessage( &message );
-
+*/
     // Control Change: 176, 7, 100 (volume)
-    message[0] = 176;
+    message[0] = 0xB0;       //set volume to 100
     message[1] = 7;
     message.push_back( 100 );
+    message[0] = 0xB1;       //set volume to 100
+    message[1] = 7;
+    message[2] = 75;
     midiout->sendMessage( &message );
-
     double prevSeconds = 0;
     for(int i = 0; i < midifile.getEventCount(0); i++)
     {
@@ -142,11 +148,21 @@ void Passerine::on_actionOpen_triggered()
             message[0] = curr[0];
             message[1] = curr[1];
             message[2] = curr[2];
-
             usleep((curr.seconds - prevSeconds)*1000000);
             midiout->sendMessage( &message);
-            if(curr.isNoteOn())
-                qDebug() << "NoteOn: " << message[1];
+//            if(curr.isNoteOn() )
+//                qDebug() << "NoteOn: " << message[0] << message[1] << message[2] << curr[3] << curr[4];
+            prevSeconds = curr.seconds;
+        }
+        else if(curr.isMeta() && curr[1] == 5)
+        {
+            usleep((curr.seconds - prevSeconds)*1000000);
+            QString S;
+            for(int j = 0; j < curr[2]; j++)
+            {
+                S.append(curr[3+j]);
+            }
+            qDebug() << S;
             prevSeconds = curr.seconds;
         }
     }
