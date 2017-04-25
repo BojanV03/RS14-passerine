@@ -1,20 +1,6 @@
-#include "include/passerine.h"
+#include <include/passerine.h>
 #include "ui_passerine.h"
-#include <QApplication>
-#include <QDialog>
-#include <QString>
-#include <QDialog>
-#include <QMessageBox>
-#include <QDebug>
-#include <QFileDialog>
-#include <include/Binasc.h>
-#include <include/MidiEvent.h>
-#include <include/MidiEventList.h>
-#include <include/MidiFile.h>
-#include <include/MidiMessage.h>
-#include <include/Options.h>
-#include <include/RtMidi.h>
-#include <include/portselector.h>
+
 
 #if defined(__WINDOWS_MM__)
   #include <windows.h>
@@ -23,6 +9,10 @@
   #include <unistd.h>
   #define SLEEP( milliseconds ) usleep( (unsigned long) (milliseconds * 1000.0) )
 #endif
+
+static SongPlayer *songPlayer;
+static RtMidiOut *midiout;
+static MidiFile midifile;
 
 bool chooseMidiPort( RtMidiOut *rtmidi );
 
@@ -63,8 +53,6 @@ void Passerine::on_actionAbout_Qt_triggered()
 
 void Passerine::on_actionOpen_triggered()
 {
-    MidiFile midifile;
-
     QString filename = QFileDialog::getOpenFileName(
                 this,
                 "Open Midi File",
@@ -82,20 +70,17 @@ void Passerine::on_actionOpen_triggered()
     qDebug() << "Uspesno citanje fajla";
     qDebug() << "Time: " << midifile.getTotalTimeInSeconds();
 
-    RtMidiOut *midiout = 0;
-    std::vector<unsigned char> message;
-
     // RtMidiOut constructor
     try {
-      qDebug() << "Creating output: ";
+      qDebug() << "Creating rtMidiOut: ";
       midiout = new RtMidiOut();
     }
     catch ( RtMidiError &error ) {
-      qDebug() << "NEUSPEH!!!: ";
+      qDebug() << "Failed to create rtMidiOut!!!: ";
       error.printMessage();
       exit( EXIT_FAILURE );
     }
-    qDebug() << "Successfully created the output: ";
+    qDebug() << "Successfully created the rtMidiOut: ";
     // Call function to select port.
     try {
       if ( chooseMidiPort( midiout ) == false ){
@@ -111,80 +96,10 @@ void Passerine::on_actionOpen_triggered()
       delete midiout;
     }
 
-    midifile.joinTracks();
-    midifile.sortTracks();
+    songPlayer = new SongPlayer(&midifile, 0, 60, midiout);
+    songPlayer->PlaySong();
 
-    // Program change: 192, 5
-    message.push_back( 0xC0 );  //Channel 1 instrument
-    message.push_back( 41 );    //to Viola
-    qDebug() << "Message: " << message;
-    midiout->sendMessage( &message );
-    message[0] = 0xC1;          //Channel 2 instrument
-    message[1] = 48;          //to String ensemble
-    qDebug() << "Message: " << message;
-    midiout->sendMessage( &message );
-    qDebug() << "Number of tracks: " << midifile.getNumTracks();
-
-    qDebug() << "EventCount: " << midifile.getEventCount(0);
-
-/*    message[0] = 0xF1;  //System common- undefined?
-    message[1] = 60;
-    midiout->sendMessage( &message );
-*/
-    // Control Change: 176, 7, 100 (volume)
-    message[0] = 0xB0;       //set volume to 100
-    message[1] = 7;
-    message.push_back( 100 );
-    message[0] = 0xB1;       //set volume to 100
-    message[1] = 7;
-    message[2] = 75;
-    midiout->sendMessage( &message );
-    double prevSeconds = 0;
-    for(int i = 0; i < midifile.getEventCount(0); i++)
-    {
-        MidiEvent curr = midifile.getEvent(0, i);
-        if(curr.isNoteOn() || curr.isNoteOff())
-        {
-            message[0] = curr[0];
-            message[1] = curr[1];
-            message[2] = curr[2];
-            usleep((curr.seconds - prevSeconds)*1000000);
-            midiout->sendMessage( &message);
-//            if(curr.isNoteOn() )
-//                qDebug() << "NoteOn: " << message[0] << message[1] << message[2] << curr[3] << curr[4];
-            prevSeconds = curr.seconds;
-        }
-        else if(curr.isMeta() && curr[1] == 5)
-        {
-            usleep((curr.seconds - prevSeconds)*1000000);
-            QString S;
-            for(int j = 0; j < curr[2]; j++)
-            {
-                S.append(curr[3+j]);
-            }
-            qDebug() << S;
-            prevSeconds = curr.seconds;
-        }
-    }
-
-    // Control Change: 176, 7, 40
-    message[0] = 176;
-    message[1] = 7;
-    message[2] = 100;
-    midiout->sendMessage( &message );
-
-    SLEEP( 500 );
-
-    // Sysex: 240, 67, 4, 3, 2, 247
-    message[0] = 240;
-    message[1] = 67;
-    message[2] = 4;
-    message.push_back( 3 );
-    message.push_back( 2 );
-    message.push_back( 247 );
-    midiout->sendMessage( &message );
-    // Clean up
-    delete midiout;
+    return;
 }
 
 bool chooseMidiPort( RtMidiOut *rtmidi )
@@ -198,13 +113,13 @@ bool chooseMidiPort( RtMidiOut *rtmidi )
   PortSelector *PS = new PortSelector(NULL, rtmidi);
   PS->exec();
   qDebug() << PS->selectedPort;
+
   if(PS->selectedPort != -1)
       std::cout << "\nPrihvacen ";
   else
       return false;
-  std::cout << "\nOpening " << rtmidi->getPortName(PS->selectedPort) << std::endl;
 
-  std::cout << "\n";
+  std::cout << "\nOpening " << rtmidi->getPortName(PS->selectedPort) << std::endl;
   qDebug() << "Selected Port: " << QString::fromStdString(rtmidi->getPortName(PS->selectedPort));
   rtmidi->openPort(PS->selectedPort);
 

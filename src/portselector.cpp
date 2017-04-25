@@ -20,7 +20,6 @@ PortSelector::~PortSelector()
 {
     delete ui;
 }
-
 void PortSelector::on_buttonBox_accepted()
 {
     selectedPort = ui->portList->currentRow();
