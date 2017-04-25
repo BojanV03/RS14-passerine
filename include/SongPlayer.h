@@ -9,7 +9,7 @@
 #include <include/Options.h>
 #include <include/RtMidi.h>
 #include <thread>
-
+#include <float.h>
 class SongPlayer
 {
 public:
@@ -25,14 +25,14 @@ public:
     void setTempo(int);
     void setPort(RtMidiOut *);
 
-    void PlaySong();
-    static void playSongWrapper(SongPlayer* player);
+    void PlaySong(float startTime = 0, float endTime = FLT_MAX);
 private:
     MidiFile *song;
     int instrument, tempo;
     RtMidiOut *outputPort;
 
-    void PlaySongInNewThread();
+    static void playSongWrapper(SongPlayer* player, float startTime, float endTime);
+    void PlaySongInNewThread(float startTime = 0, float endTime = FLT_MAX);
 };
 
 #endif // SONGPLAYER_H

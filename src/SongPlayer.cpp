@@ -16,18 +16,19 @@ SongPlayer::SongPlayer(MidiFile *_song, int _instrument, int _tempo, RtMidiOut *
     outputPort = _outputPort;
 }
 
-void SongPlayer::PlaySong()
+void SongPlayer::PlaySong(float startTime, float endTime)
 {
-    std::thread t1 (SongPlayer::playSongWrapper, this);
+    std::thread t1 (SongPlayer::playSongWrapper, this, startTime, endTime);
     t1.detach();
     return;
 }
 
-void SongPlayer::playSongWrapper(SongPlayer* player)
+void SongPlayer::playSongWrapper(SongPlayer* player, float startTime, float endTime)
 {
-    player->PlaySongInNewThread();
+    player->PlaySongInNewThread(startTime, endTime);
 }
-void SongPlayer::PlaySongInNewThread()
+
+void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
 {
     std::vector<unsigned char> message;
 
@@ -66,6 +67,15 @@ void SongPlayer::PlaySongInNewThread()
     {
         MidiEvent curr = song->getEvent(0, i);
 
+        if(curr.seconds < startTime)
+        {
+            prevSeconds = curr.seconds;
+            continue;
+        }
+        else if(curr.seconds > endTime)
+        {
+            break;
+        }
         if(curr.isNoteOn() || curr.isNoteOff())
         {
             message[0] = curr[0];

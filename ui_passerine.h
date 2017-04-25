@@ -17,7 +17,7 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
-#include <QtWidgets/QStatusBar>
+#include <QtWidgets/QTextEdit>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -33,16 +33,16 @@ public:
     QAction *actionAbout_Passerine;
     QAction *actionAbout_Qt;
     QWidget *centralWidget;
+    QTextEdit *tbLyrics;
     QMenuBar *menuBar;
     QMenu *menuFIle;
     QMenu *menuAbout;
-    QStatusBar *statusBar;
 
     void setupUi(QMainWindow *Passerine)
     {
         if (Passerine->objectName().isEmpty())
             Passerine->setObjectName(QStringLiteral("Passerine"));
-        Passerine->resize(400, 300);
+        Passerine->resize(525, 353);
         actionNew = new QAction(Passerine);
         actionNew->setObjectName(QStringLiteral("actionNew"));
         actionOpen = new QAction(Passerine);
@@ -59,18 +59,20 @@ public:
         actionAbout_Qt->setObjectName(QStringLiteral("actionAbout_Qt"));
         centralWidget = new QWidget(Passerine);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
+        centralWidget->setEnabled(true);
+        centralWidget->setAutoFillBackground(false);
+        tbLyrics = new QTextEdit(centralWidget);
+        tbLyrics->setObjectName(QStringLiteral("tbLyrics"));
+        tbLyrics->setGeometry(QRect(220, 80, 104, 70));
         Passerine->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(Passerine);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 400, 19));
+        menuBar->setGeometry(QRect(0, 0, 525, 22));
         menuFIle = new QMenu(menuBar);
         menuFIle->setObjectName(QStringLiteral("menuFIle"));
         menuAbout = new QMenu(menuBar);
         menuAbout->setObjectName(QStringLiteral("menuAbout"));
         Passerine->setMenuBar(menuBar);
-        statusBar = new QStatusBar(Passerine);
-        statusBar->setObjectName(QStringLiteral("statusBar"));
-        Passerine->setStatusBar(statusBar);
 
         menuBar->addAction(menuFIle->menuAction());
         menuBar->addAction(menuAbout->menuAction());

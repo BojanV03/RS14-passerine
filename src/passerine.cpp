@@ -97,7 +97,7 @@ void Passerine::on_actionOpen_triggered()
     }
 
     songPlayer = new SongPlayer(&midifile, 0, 60, midiout);
-    songPlayer->PlaySong();
+    songPlayer->PlaySong(30);
 
     return;
 }
