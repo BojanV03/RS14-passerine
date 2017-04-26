@@ -10,6 +10,7 @@
 #include <include/RtMidi.h>
 #include <thread>
 #include <float.h>
+#include <include/SongObserver.h>
 class SongPlayer
 {
 public:
@@ -30,6 +31,8 @@ private:
     MidiFile *song;
     int instrument, tempo;
     RtMidiOut *outputPort;
+
+    vector<class SongObserver *> views;
 
     static void playSongWrapper(SongPlayer* player, float startTime, float endTime);
     void PlaySongInNewThread(float startTime = 0, float endTime = FLT_MAX);

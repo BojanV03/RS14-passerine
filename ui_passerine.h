@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'passerine.ui'
 **
-** Created by: Qt User Interface Compiler version 5.8.0
+** Created by: Qt User Interface Compiler version 5.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -63,11 +63,11 @@ public:
         centralWidget->setAutoFillBackground(false);
         tbLyrics = new QTextEdit(centralWidget);
         tbLyrics->setObjectName(QStringLiteral("tbLyrics"));
-        tbLyrics->setGeometry(QRect(220, 80, 104, 70));
+        tbLyrics->setGeometry(QRect(10, 250, 501, 71));
         Passerine->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(Passerine);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 525, 22));
+        menuBar->setGeometry(QRect(0, 0, 525, 19));
         menuFIle = new QMenu(menuBar);
         menuFIle->setObjectName(QStringLiteral("menuFIle"));
         menuAbout = new QMenu(menuBar);
@@ -93,21 +93,21 @@ public:
 
     void retranslateUi(QMainWindow *Passerine)
     {
-        Passerine->setWindowTitle(QApplication::translate("Passerine", "Passerine", Q_NULLPTR));
-        actionNew->setText(QApplication::translate("Passerine", "New", Q_NULLPTR));
-        actionNew->setShortcut(QApplication::translate("Passerine", "Ctrl+N", Q_NULLPTR));
-        actionOpen->setText(QApplication::translate("Passerine", "Open", Q_NULLPTR));
-        actionOpen->setShortcut(QApplication::translate("Passerine", "Ctrl+O", Q_NULLPTR));
-        actionSave->setText(QApplication::translate("Passerine", "Save", Q_NULLPTR));
-        actionSave->setShortcut(QApplication::translate("Passerine", "Ctrl+S", Q_NULLPTR));
-        actionSave_As->setText(QApplication::translate("Passerine", "Save As...", Q_NULLPTR));
-        actionSave_As->setShortcut(QApplication::translate("Passerine", "Ctrl+Shift+S", Q_NULLPTR));
-        actionClose->setText(QApplication::translate("Passerine", "Close", Q_NULLPTR));
-        actionClose->setShortcut(QApplication::translate("Passerine", "Ctrl+Q", Q_NULLPTR));
-        actionAbout_Passerine->setText(QApplication::translate("Passerine", "About Passerine...", Q_NULLPTR));
-        actionAbout_Qt->setText(QApplication::translate("Passerine", "About Qt...", Q_NULLPTR));
-        menuFIle->setTitle(QApplication::translate("Passerine", "FIle", Q_NULLPTR));
-        menuAbout->setTitle(QApplication::translate("Passerine", "Help", Q_NULLPTR));
+        Passerine->setWindowTitle(QApplication::translate("Passerine", "Passerine", 0));
+        actionNew->setText(QApplication::translate("Passerine", "New", 0));
+        actionNew->setShortcut(QApplication::translate("Passerine", "Ctrl+N", 0));
+        actionOpen->setText(QApplication::translate("Passerine", "Open", 0));
+        actionOpen->setShortcut(QApplication::translate("Passerine", "Ctrl+O", 0));
+        actionSave->setText(QApplication::translate("Passerine", "Save", 0));
+        actionSave->setShortcut(QApplication::translate("Passerine", "Ctrl+S", 0));
+        actionSave_As->setText(QApplication::translate("Passerine", "Save As...", 0));
+        actionSave_As->setShortcut(QApplication::translate("Passerine", "Ctrl+Shift+S", 0));
+        actionClose->setText(QApplication::translate("Passerine", "Close", 0));
+        actionClose->setShortcut(QApplication::translate("Passerine", "Ctrl+Q", 0));
+        actionAbout_Passerine->setText(QApplication::translate("Passerine", "About Passerine...", 0));
+        actionAbout_Qt->setText(QApplication::translate("Passerine", "About Qt...", 0));
+        menuFIle->setTitle(QApplication::translate("Passerine", "FIle", 0));
+        menuAbout->setTitle(QApplication::translate("Passerine", "Help", 0));
     } // retranslateUi
 
 };

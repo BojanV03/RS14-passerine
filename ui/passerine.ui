@@ -23,10 +23,10 @@
    <widget class="QTextEdit" name="tbLyrics">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>80</y>
-      <width>104</width>
-      <height>70</height>
+      <x>10</x>
+      <y>250</y>
+      <width>501</width>
+      <height>71</height>
      </rect>
     </property>
    </widget>
@@ -37,7 +37,7 @@
      <x>0</x>
      <y>0</y>
      <width>525</width>
-     <height>22</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFIle">
