@@ -11,6 +11,8 @@
 #include <thread>
 #include <float.h>
 #include <include/SongObserver.h>
+//#include <include/passerine.h>
+
 class SongPlayer
 {
 public:
@@ -20,17 +22,21 @@ public:
     int getInstrument();
     int getTempo();
     RtMidi* getPort();
+    bool isPlaying();
 
     void setSong(MidiFile*);
     void setInstrument(int);
     void setTempo(int);
     void setPort(RtMidiOut *);
+    void setPlaying(bool);
 
     void PlaySong(float startTime = 0, float endTime = FLT_MAX);
+
 private:
     MidiFile *song;
     int instrument, tempo;
     RtMidiOut *outputPort;
+    bool playing;
 
     vector<class SongObserver *> views;
 

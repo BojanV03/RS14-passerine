@@ -10,16 +10,11 @@
   #define SLEEP( milliseconds ) usleep( (unsigned long) (milliseconds * 1000.0) )
 #endif
 
-static SongPlayer *songPlayer;
-static RtMidiOut *midiout;
-static MidiFile midifile;
-
-bool chooseMidiPort( RtMidiOut *rtmidi );
-
 Passerine::Passerine(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Passerine)
 {
+    songPlayer = nullptr;
     ui->setupUi(this);
 }
 
@@ -53,6 +48,10 @@ void Passerine::on_actionAbout_Qt_triggered()
 
 void Passerine::on_actionOpen_triggered()
 {
+    if(songPlayer != nullptr){
+        songPlayer->setPlaying(false);
+    }
+
     QString filename = QFileDialog::getOpenFileName(
                 this,
                 "Open Midi File",
@@ -99,10 +98,13 @@ void Passerine::on_actionOpen_triggered()
     songPlayer = new SongPlayer(&midifile, 0, 60, midiout);
     songPlayer->PlaySong(30, 35);
 
+    ui->playPauseButton->setText("Play");
+    ui->playPauseButton->setEnabled(true);
+
     return;
 }
 
-bool chooseMidiPort( RtMidiOut *rtmidi )
+bool Passerine::chooseMidiPort( RtMidiOut *rtmidi )
 {
   std::string portName;
   unsigned int nPorts = rtmidi->getPortCount();
@@ -124,4 +126,18 @@ bool chooseMidiPort( RtMidiOut *rtmidi )
   rtmidi->openPort(PS->selectedPort);
 
   return true;
+}
+
+void Passerine::on_playPauseButton_clicked()
+{
+     if(songPlayer != nullptr){
+        if(songPlayer->isPlaying() == false){
+            songPlayer->setPlaying(true);
+            ui->playPauseButton->setText("Pause");
+        }
+        else{
+            songPlayer->setPlaying(false);
+            ui->playPauseButton->setText("Play");
+        }
+    }
 }

@@ -36,10 +36,16 @@ private slots:
 
     void on_actionOpen_triggered();
 
+    void on_playPauseButton_clicked();
 
 private:
     Ui::Passerine *ui;
 
+    SongPlayer *songPlayer;
+    RtMidiOut *midiout;
+    MidiFile midifile;
+
+    bool chooseMidiPort( RtMidiOut *rtmidi );
 };
 
 #endif // PASSERINE_H

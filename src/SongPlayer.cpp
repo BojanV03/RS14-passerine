@@ -8,18 +8,21 @@
   #define SLEEP( milliseconds ) usleep( (unsigned long) (milliseconds * 1000.0) )
 #endif
 
-SongPlayer::SongPlayer(MidiFile *_song, int _instrument, int _tempo, RtMidiOut *_outputPort)
+SongPlayer::SongPlayer(MidiFile *_song, int _instrument, int _tempo, RtMidiOut *_outputPort) :
+    song(_song),
+    instrument(_instrument),
+    tempo(_tempo),
+    outputPort(_outputPort)
 {
-    song = _song;
-    instrument = _instrument;
-    tempo = _tempo;
-    outputPort = _outputPort;
+    playing = false;
 }
 
 void SongPlayer::PlaySong(float startTime, float endTime)
 {
+    setPlaying(true);
     std::thread t1 (SongPlayer::playSongWrapper, this, startTime, endTime);
     t1.detach();
+    setPlaying(false);
     return;
 }
 
@@ -65,7 +68,11 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
     double prevSeconds = 0;
     for(int i = 0; i < song->getEventCount(0); i++)
     {
+        while(playing == false) {}
+
         MidiEvent curr = song->getEvent(0, i);
+
+
 
         if(curr.seconds < startTime)
         {
@@ -74,6 +81,7 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
         }
         else if(curr.seconds > endTime)
         {
+            playing = false;
             break;
         }
         if(curr.isNoteOn() || curr.isNoteOff())
@@ -135,6 +143,11 @@ RtMidi* SongPlayer::getPort()
     return outputPort;
 }
 
+bool SongPlayer::isPlaying()
+{
+    return playing;
+}
+
 void SongPlayer::setSong(MidiFile *_song)
 {
     song = _song;
@@ -150,4 +163,9 @@ void SongPlayer::setTempo(int _tempo)
 void SongPlayer::setPort(RtMidiOut* _outputPort)
 {
     outputPort = _outputPort;
+}
+
+void SongPlayer::setPlaying(bool _playing)
+{
+    playing = _playing;
 }

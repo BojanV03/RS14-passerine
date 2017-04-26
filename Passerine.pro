@@ -47,9 +47,8 @@ HEADERS  += include/passerine.h \
     include/RtMidi.h \
     include/rtmidi_c.h \
     include/portselector.h \
-    src/SongPlayer.h \
     include/SongPlayer.h \
-    src/Observer.h \
+    include/SongPlayer.h \
     include/SongObserver.h
 
 FORMS    += ui/passerine.ui \
