@@ -68,7 +68,9 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
     double prevSeconds = 0;
     for(int i = 0; i < song->getEventCount(0); i++)
     {
-        while(playing == false) {}
+        while(playing == false) {
+            SLEEP(500);
+        }
 
         MidiEvent curr = song->getEvent(0, i);
 
