@@ -22,8 +22,17 @@ void SongPlayer::PlaySong(float startTime, float endTime)
     setPlaying(true);
     std::thread t1 (SongPlayer::playSongWrapper, this, startTime, endTime);
     t1.detach();
-    setPlaying(false);
     return;
+}
+
+float SongPlayer::getCurrentTime() const
+{
+    return currentTime;
+}
+
+void SongPlayer::setCurrentTime(float value)
+{
+    currentTime = value;
 }
 
 void SongPlayer::playSongWrapper(SongPlayer* player, float startTime, float endTime)
@@ -65,20 +74,14 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
     message[2] = 100;
     outputPort->sendMessage( &message );
 
-    double prevSeconds = 0;
-    for(int i = 0; i < song->getEventCount(0); i++)
+    double prevSeconds = startTime;
+    for(int currentEvent = 0; isPlaying() && currentEvent < song->getEventCount(0); currentEvent++)
     {
-        while(playing == false) {
-            SLEEP(500);
-        }
-
-        MidiEvent curr = song->getEvent(0, i);
-
-
-
+        qDebug() << currentEvent;
+        MidiEvent curr = song->getEvent(0, currentEvent);
+        currentTime = curr.seconds;
         if(curr.seconds < startTime)
         {
-            prevSeconds = curr.seconds;
             continue;
         }
         else if(curr.seconds > endTime)
@@ -96,6 +99,7 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
 //            if(curr.isNoteOn())
 //                qDebug() << "NoteOn: " << message[0] << message[1] << message[2];
             prevSeconds = curr.seconds;
+
         }
         else if(curr.isMeta() && curr[1] == 5)
         {
@@ -128,24 +132,24 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
     outputPort->sendMessage( &message );
 }
 
-MidiFile* SongPlayer::getSong()
+MidiFile* SongPlayer::getSong() const
 {
     return song;
 }
-int SongPlayer::getInstrument()
+int SongPlayer::getInstrument() const
 {
     return instrument;
 }
-int SongPlayer::getTempo()
+int SongPlayer::getTempo() const
 {
     return tempo;
 }
-RtMidi* SongPlayer::getPort()
+RtMidi* SongPlayer::getPort() const
 {
     return outputPort;
 }
 
-bool SongPlayer::isPlaying()
+bool SongPlayer::isPlaying() const
 {
     return playing;
 }

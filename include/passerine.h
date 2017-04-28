@@ -38,6 +38,8 @@ private slots:
 
     void on_playPauseButton_clicked();
 
+    void on_stopButton_clicked();
+
 private:
     Ui::Passerine *ui;
 

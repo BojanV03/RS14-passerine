@@ -96,10 +96,10 @@ void Passerine::on_actionOpen_triggered()
     }
 
     songPlayer = new SongPlayer(&midifile, 0, 60, midiout);
-    songPlayer->PlaySong(30, 35);
 
     ui->playPauseButton->setText("Play");
     ui->playPauseButton->setEnabled(true);
+    ui->stopButton->setEnabled("true");
 
     return;
 }
@@ -133,11 +133,30 @@ void Passerine::on_playPauseButton_clicked()
      if(songPlayer != nullptr){
         if(songPlayer->isPlaying() == false){
             songPlayer->setPlaying(true);
+            qDebug() << "Playing";
+            qDebug() << "Playing from: " << songPlayer->getCurrentTime();
+            songPlayer->PlaySong(songPlayer->getCurrentTime());
             ui->playPauseButton->setText("Pause");
         }
         else{
             songPlayer->setPlaying(false);
+            qDebug() << "Stopping";
             ui->playPauseButton->setText("Play");
         }
+    }
+}
+
+void Passerine::on_stopButton_clicked()
+{
+    if(songPlayer != nullptr)
+    {
+        if(songPlayer->isPlaying())
+        {
+            songPlayer->setPlaying(false);
+            qDebug() << "Stopping";
+            ui->playPauseButton->setText("Play");
+        }
+        qDebug() << "Set time to: " << songPlayer->getCurrentTime();
+        songPlayer->setCurrentTime(0);
     }
 }
