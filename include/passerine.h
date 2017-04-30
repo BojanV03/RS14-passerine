@@ -11,6 +11,8 @@
 #include <QFileDialog>
 #include <include/RtMidi.h>
 #include <include/portselector.h>
+#include <QGraphicsScene>
+#include <QGraphicsRectItem>
 
 #include <include/SongPlayer.h>
 #include <include/MidiFile.h>
@@ -46,6 +48,7 @@ private:
     SongPlayer *songPlayer;
     RtMidiOut *midiout;
     MidiFile midifile;
+    QGraphicsScene *scene;
 
     bool chooseMidiPort( RtMidiOut *rtmidi );
 };

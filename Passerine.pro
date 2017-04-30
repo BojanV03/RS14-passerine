@@ -34,7 +34,10 @@ SOURCES += src/main.cpp\
     src/RtMidi.cpp \
     src/rtmidi_c.cpp \
     src/portselector.cpp \
-    src/SongPlayer.cpp
+    src/SongPlayer.cpp \
+    src/Octave.cpp \
+    src/GraphicsEntity.cpp \
+    src/Key.cpp
 
 HEADERS  += include/passerine.h \
     include/Binasc.h \
@@ -47,7 +50,12 @@ HEADERS  += include/passerine.h \
     include/rtmidi_c.h \
     include/portselector.h \
     include/SongPlayer.h \
-    include/SongPlayer.h
+    include/SongPlayer.h \
+    include/Octave.h \
+    include/GraphicsEntity.h \
+    include/Octave.h \
+    src/Key.h \
+    include/Key.h
 
 FORMS    += ui/passerine.ui \
     ui/portselector.ui

@@ -40,7 +40,6 @@ public:
     QVBoxLayout *verticalLayout;
     QSpacerItem *verticalSpacer_2;
     QGraphicsView *graphicsView;
-    QSpacerItem *verticalSpacer;
     QHBoxLayout *horizontalLayout;
     QSpacerItem *horizontalSpacer_2;
     QPushButton *playPauseButton;
@@ -86,10 +85,6 @@ public:
 
         verticalLayout->addWidget(graphicsView);
 
-        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        verticalLayout->addItem(verticalSpacer);
-
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setSpacing(6);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
@@ -106,6 +101,8 @@ public:
         stopButton = new QPushButton(centralWidget);
         stopButton->setObjectName(QStringLiteral("stopButton"));
         stopButton->setEnabled(false);
+        stopButton->setCheckable(false);
+        stopButton->setAutoDefault(false);
 
         horizontalLayout->addWidget(stopButton);
 
@@ -119,7 +116,7 @@ public:
         Passerine->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(Passerine);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 525, 19));
+        menuBar->setGeometry(QRect(0, 0, 525, 22));
         menuFIle = new QMenu(menuBar);
         menuFIle->setObjectName(QStringLiteral("menuFIle"));
         menuAbout = new QMenu(menuBar);
@@ -139,6 +136,9 @@ public:
         menuAbout->addAction(actionAbout_Qt);
 
         retranslateUi(Passerine);
+
+        stopButton->setDefault(false);
+
 
         QMetaObject::connectSlotsByName(Passerine);
     } // setupUi
