@@ -15,7 +15,37 @@ Passerine::Passerine(QWidget *parent) :
     ui(new Ui::Passerine)
 {
     songPlayer = nullptr;
+
     ui->setupUi(this);
+
+    scene = new QGraphicsScene(this);
+    ui->graphicsView->setScene(scene);
+
+    float y = 0;//TEMP!!!
+    for(int j = 0; j < 8; j++)
+    {
+        for(int i = 0; i < 12; i++)
+        {
+            float x, width, height;
+            height = 15;
+            x = 0;
+            if(i == 1 || i == 3 || i == 6 || i == 8 || i == 10)
+            {
+                width = 80;
+                height /= 1.5;
+                x+=70;
+                QPen pen(Qt::black);
+                pen.setWidth(0);
+                scene->addRect(x, y + 15 - (height/2), width, height, pen, QBrush(Qt::black))->setZValue(10);
+            }
+            else
+            {
+                width = 150;
+                y += height;
+                scene->addRect(x, y, width, height, QPen(Qt::black), QBrush(Qt::white))->setZValue(0);
+            }
+        }
+    }
 }
 
 Passerine::~Passerine()
@@ -65,13 +95,10 @@ void Passerine::on_actionOpen_triggered()
         qDebug() << "Neuspesno citanje fajla";
         return;
     }
-
-    qDebug() << "Uspesno citanje fajla";
     qDebug() << "Time: " << midifile.getTotalTimeInSeconds();
 
     // RtMidiOut constructor
     try {
-      qDebug() << "Creating rtMidiOut: ";
       midiout = new RtMidiOut();
     }
     catch ( RtMidiError &error ) {
@@ -79,7 +106,6 @@ void Passerine::on_actionOpen_triggered()
       error.printMessage();
       exit( EXIT_FAILURE );
     }
-    qDebug() << "Successfully created the rtMidiOut: ";
     // Call function to select port.
     try {
       if ( chooseMidiPort( midiout ) == false ){
