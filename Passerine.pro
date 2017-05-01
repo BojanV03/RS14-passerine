@@ -55,7 +55,8 @@ HEADERS  += include/passerine.h \
     include/GraphicsEntity.h \
     include/Octave.h \
     src/Key.h \
-    include/Key.h
+    include/Key.h \
+    include/GraphicsEntity.h
 
 FORMS    += ui/passerine.ui \
     ui/portselector.ui

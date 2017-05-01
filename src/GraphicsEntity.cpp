@@ -1,4 +1,4 @@
-#include "GraphicsEntity.h"
+#include <include/GraphicsEntity.h>
 
 GraphicsEntity::GraphicsEntity(float _x, float _y, QColor _color):
     x(_x), y(_y), color(_color)
@@ -12,14 +12,9 @@ void GraphicsEntity::drawAt(float _x, float _y)
     setPos(x, y);
 }
 
-float GraphicsEntity::getX() const
+QColor GraphicsEntity::getColor() const
 {
-    return x;
-}
-
-void GraphicsEntity::setX(float value)
-{
-    x = value;
+    return color;
 }
 
 float GraphicsEntity::getY() const
@@ -32,12 +27,12 @@ void GraphicsEntity::setY(float value)
     y = value;
 }
 
-QColor GraphicsEntity::getColor() const
+float GraphicsEntity::getX() const
 {
-    return color;
+    return x;
 }
 
-void GraphicsEntity::setColor(const QColor &value)
+void GraphicsEntity::setX(float value)
 {
-    color = value;
+    x = value;
 }
