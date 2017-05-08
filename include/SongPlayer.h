@@ -8,9 +8,9 @@
 #include <include/MidiMessage.h>
 #include <include/Options.h>
 #include <include/RtMidi.h>
+
 #include <thread>
 #include <float.h>
-//#include <include/passerine.h>
 
 class SongPlayer
 {
@@ -42,8 +42,8 @@ private:
     bool playing;
     bool stopped;
 
+  //  Passerine *p;
     float currentTime = 0;
-    vector<class SongObserver *> views;
 
     static void playSongWrapper(SongPlayer* player, float startTime, float endTime);
     void PlaySongInNewThread(float startTime = 0, float endTime = FLT_MAX);

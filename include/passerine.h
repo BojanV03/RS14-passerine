@@ -14,9 +14,8 @@
 #include <QGraphicsScene>
 #include <QGraphicsRectItem>
 
-#include <include/SongPlayer.h>
 #include <include/MidiFile.h>
-
+#include <include/SongPlayer.h>
 namespace Ui {
 class Passerine;
 }
@@ -28,6 +27,9 @@ class Passerine : public QMainWindow
 public:
     explicit Passerine(QWidget *parent = 0);
     ~Passerine();
+    void resizeEvent(QResizeEvent* event);
+    void noteChanged(MidiEvent &m);
+
 
 private slots:
     void on_actionClose_triggered();
@@ -51,6 +53,7 @@ private:
     QGraphicsScene *scene;
 
     bool chooseMidiPort( RtMidiOut *rtmidi );
+    void drawPiano(int startNote = 0, int endNote = 96);
 };
 
 #endif // PASSERINE_H

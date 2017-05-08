@@ -96,6 +96,8 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
             message[2] = curr[2];
             usleep((curr.seconds - prevSeconds)*1000000);
             outputPort->sendMessage( &message);
+
+
 //            if(curr.isNoteOn())
 //                qDebug() << "NoteOn: " << message[0] << message[1] << message[2];
             prevSeconds = curr.seconds;

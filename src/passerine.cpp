@@ -10,6 +10,7 @@
   #define SLEEP( milliseconds ) usleep( (unsigned long) (milliseconds * 1000.0) )
 #endif
 
+
 Passerine::Passerine(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Passerine)
@@ -20,32 +21,61 @@ Passerine::Passerine(QWidget *parent) :
 
     scene = new QGraphicsScene(this);
     ui->graphicsView->setScene(scene);
+    drawPiano();
+}
 
-    float y = 0;//TEMP!!!
-    for(int j = 0; j < 8; j++)
+void Passerine::drawPiano(int startNote, int endNote)
+{
+    scene->setSceneRect(0, 0, ui->graphicsView->width()-10, ui->graphicsView->height()-10);
+
+    int numberOfWhiteNotesInRange = 0;
+
+    for(int i = startNote; i < endNote; i++)
     {
-        for(int i = 0; i < 12; i++)
+        int note = i % 12;
+        if(note == 0 || note == 2 || note == 4 || note == 5 || note == 7 || note == 9 || note == 11)
+            numberOfWhiteNotesInRange++;
+    }
+    qDebug() << ui->graphicsView->width() << " " << ui->graphicsView->height();
+    float y = 0;//TEMP!!!
+    scene->clear();
+
+    qDebug() << numberOfWhiteNotesInRange;
+
+    float x, width, height;
+    width = scene->width()/6;
+
+    for(int j = startNote; j < endNote; j++)
+    {
+        int i = (j % 12);
+        height = scene->height() / numberOfWhiteNotesInRange;
+        x = 0;
+        if(i == 1 || i == 3 || i == 6 || i == 8 || i == 10)
         {
-            float x, width, height;
-            height = 15;
-            x = 0;
-            if(i == 1 || i == 3 || i == 6 || i == 8 || i == 10)
-            {
-                width = 80;
-                height /= 1.5;
-                x+=70;
-                QPen pen(Qt::black);
-                pen.setWidth(0);
-                scene->addRect(x, y + 15 - (height/2), width, height, pen, QBrush(Qt::black))->setZValue(10);
-            }
-            else
-            {
-                width = 150;
-                y += height;
-                scene->addRect(x, y, width, height, QPen(Qt::black), QBrush(Qt::white))->setZValue(0);
-            }
+            QPen pen(Qt::black);
+            pen.setWidth(0);
+            height /= 1.5;
+            x+=(width*4/7);
+            scene->addRect(x, y - height/2, width*3/7, height, pen, QBrush(Qt::black))->setZValue(10);
+        }
+        else
+        {
+            scene->addRect(x, y, width, height, QPen(Qt::black), QBrush(Qt::white))->setZValue(0);
+            y += height;
         }
     }
+}
+
+void Passerine::resizeEvent(QResizeEvent* event)
+{
+   QMainWindow::resizeEvent(event);
+
+   drawPiano();
+}
+
+void Passerine::noteChanged(MidiEvent &m)
+{
+    qDebug() << "I've been notified of a " << m[1] << "note change. Sincerely, passerine.cpp";
 }
 
 Passerine::~Passerine()
