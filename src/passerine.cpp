@@ -28,6 +28,9 @@ Passerine::Passerine(QWidget *parent) :
     graphicsTimer = new QTimer(this);
     connect(graphicsTimer, SIGNAL(timeout()), this, SLOT(updateGraphics()));
 
+    ui->playPauseButton->setText("\u25B6");
+    ui->stopButton->setText("\u23F9");
+
     drawPiano();
 }
 
@@ -194,7 +197,7 @@ void Passerine::on_actionOpen_triggered()
 
     songPlayer = new SongPlayer(&midifile, 0, 60, midiout, this);
 
-    ui->playPauseButton->setText("Play");
+    ui->playPauseButton->setText("\u25B6");
     ui->playPauseButton->setEnabled(true);
     ui->stopButton->setEnabled("true");
 
@@ -233,13 +236,13 @@ void Passerine::on_playPauseButton_clicked()
             qDebug() << "Playing";
             qDebug() << "Playing from: " << songPlayer->getCurrentTime();
             songPlayer->PlaySong(songPlayer->getCurrentTime());
-            ui->playPauseButton->setText("Pause");
+            ui->playPauseButton->setText("\u2016");
             graphicsTimer->start(33);
         }
         else{
             songPlayer->setPlaying(false);
             qDebug() << "Stopping";
-            ui->playPauseButton->setText("Play");
+            ui->playPauseButton->setText("\u25B6");
             graphicsTimer->stop();
         }
     }
@@ -253,7 +256,7 @@ void Passerine::on_stopButton_clicked()
         {
             songPlayer->setPlaying(false);
             qDebug() << "Stopping";
-            ui->playPauseButton->setText("Play");
+            ui->playPauseButton->setText("\u25B6");
             graphicsTimer->stop();
         }
         qDebug() << "Set time to: " << songPlayer->getCurrentTime();
@@ -266,3 +269,5 @@ void Passerine::updateGraphics()
     drawPiano();
 
 }
+
+// \u23F9 stop znak

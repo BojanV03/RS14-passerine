@@ -52,12 +52,12 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
     // Program change: 192, 5
     message.push_back( 0xC0 );  //Channel 1 instrument
     message.push_back( instrument );
-    qDebug() << "Sent: " << message;
+    //qDebug() << "Sent: " << message;
     outputPort->sendMessage( &message );
 
     message[0] = 0xC1;          //Channel 2 instrument
     message[1] = instrument;
-    qDebug() << "Sent: " << message;
+    //qDebug() << "Sent: " << message;
     outputPort->sendMessage( &message );
 
     qDebug() << "Number of tracks: " << song->getNumTracks();

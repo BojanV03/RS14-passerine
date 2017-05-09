@@ -64,3 +64,5 @@ FORMS    += ui/passerine.ui \
 unix:!macx: LIBS += -lasound
 
 DISTFILES +=
+
+CONFIG += c++11
