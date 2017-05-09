@@ -17,7 +17,7 @@ class Passerine;
 class SongPlayer
 {
 public:
-    SongPlayer(MidiFile *song = nullptr, int instrument = 0, int tempo = 0, RtMidiOut *outputPort = nullptr, Passerine *main = nullptr);
+    SongPlayer(MidiFile *song = nullptr, int instrument = 0, int tempo = 0, RtMidiOut *outputPort = nullptr);
 
     MidiFile* getSong()const;
     int getInstrument()const;
@@ -25,6 +25,7 @@ public:
     RtMidi* getPort()const;
     bool isPlaying()const;
     float getCurrentTime() const;
+    bool getNoteState(int pos) const;
 
     void setSong(MidiFile*);
     void setInstrument(int);
@@ -32,9 +33,10 @@ public:
     void setPort(RtMidiOut *);
     void setPlaying(bool);
     void setCurrentTime(float value);
+    void setNoteState(int pos, bool state);
 
     void PlaySong(float startTime = 0, float endTime = FLT_MAX);
-
+    void noteChanged(MidiEvent &m);
 
 private:
     MidiFile *song;
@@ -42,8 +44,8 @@ private:
     RtMidiOut *outputPort;
     bool playing;
     bool stopped;
+    std::vector<bool> noteStates;
 
-    Passerine *main;
     float currentTime = 0;
 
     static void playSongWrapper(SongPlayer* player, float startTime, float endTime);
@@ -52,6 +54,4 @@ private:
 
 };
 
-// TODO: UNHACK
-#include <include/passerine.h>
 #endif // SONGPLAYER_H

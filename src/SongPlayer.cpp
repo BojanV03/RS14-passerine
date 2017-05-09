@@ -9,12 +9,12 @@
   #define SLEEP( milliseconds ) usleep( (unsigned long) (milliseconds * 1000.0) )
 #endif
 
-SongPlayer::SongPlayer(MidiFile *_song, int _instrument, int _tempo, RtMidiOut *_outputPort, Passerine *_main) :
+SongPlayer::SongPlayer(MidiFile *_song, int _instrument, int _tempo, RtMidiOut *_outputPort) :
     song(_song),
     instrument(_instrument),
     tempo(_tempo),
     outputPort(_outputPort),
-    main(_main)
+    noteStates(128, false)
 {
     playing = false;
 }
@@ -99,8 +99,7 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
             usleep((curr.seconds - prevSeconds)*1000000);
             outputPort->sendMessage( &message);
 
-            if(main != nullptr)
-                main->noteChanged(curr);
+            noteChanged(curr);
 
 //            if(curr.isNoteOn())
 //                qDebug() << "NoteOn: " << message[0] << message[1] << message[2];
@@ -138,6 +137,20 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
     outputPort->sendMessage( &message );
 }
 
+void SongPlayer::noteChanged(MidiEvent &m)
+{
+    if(m.isNoteOn())
+    {
+        noteStates[m[1]-12] = true;// -12 because the first key on our keyboard is the 12th key in the midi standard
+//        qDebug() << m[1]-12 << "is now " << noteStates[m[1]-12];
+    }
+    else if(m.isNoteOff())
+    {
+        noteStates[m[1]-12] = false;
+//        qDebug() << m[1]-12 << "is now " << noteStates[m[1]-12];
+    }
+}
+
 MidiFile* SongPlayer::getSong() const
 {
     return song;
@@ -153,6 +166,11 @@ int SongPlayer::getTempo() const
 RtMidi* SongPlayer::getPort() const
 {
     return outputPort;
+}
+
+bool SongPlayer::getNoteState(int pos) const
+{
+    return noteStates[pos];
 }
 
 bool SongPlayer::isPlaying() const
@@ -180,4 +198,9 @@ void SongPlayer::setPort(RtMidiOut* _outputPort)
 void SongPlayer::setPlaying(bool _playing)
 {
     playing = _playing;
+}
+
+void SongPlayer::setNoteState(int pos, bool state)
+{
+    noteStates[pos] = state;
 }

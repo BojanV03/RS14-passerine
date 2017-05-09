@@ -54,7 +54,7 @@ private:
     RtMidiOut *midiout;
     MidiFile midifile;
     QGraphicsScene *scene;
-    std::vector<bool> noteStates;
+//    std::vector<bool> noteStates;
 
     QTimer *graphicsTimer;
 
