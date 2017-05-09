@@ -14,8 +14,6 @@ PortSelector::PortSelector(QWidget *parent, RtMidiOut *Midi) :
         qlwi->setData(0, i);
         ui->portList->addItem(QString::fromStdString(Midi->getPortName(i)));
     }
-
-
 }
 
 PortSelector::~PortSelector()

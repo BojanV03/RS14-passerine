@@ -12,10 +12,12 @@
 #include <thread>
 #include <float.h>
 
+class Passerine;
+
 class SongPlayer
 {
 public:
-    SongPlayer(MidiFile *song = nullptr, int instrument = 0, int tempo = 0, RtMidiOut *outputPort = nullptr);
+    SongPlayer(MidiFile *song = nullptr, int instrument = 0, int tempo = 0, RtMidiOut *outputPort = nullptr, Passerine *main = nullptr);
 
     MidiFile* getSong()const;
     int getInstrument()const;
@@ -34,7 +36,6 @@ public:
     void PlaySong(float startTime = 0, float endTime = FLT_MAX);
 
 
-
 private:
     MidiFile *song;
     int instrument, tempo;
@@ -42,11 +43,15 @@ private:
     bool playing;
     bool stopped;
 
-  //  Passerine *p;
+    Passerine *main;
     float currentTime = 0;
 
     static void playSongWrapper(SongPlayer* player, float startTime, float endTime);
     void PlaySongInNewThread(float startTime = 0, float endTime = FLT_MAX);
+
+
 };
 
+// TODO: UNHACK
+#include <include/passerine.h>
 #endif // SONGPLAYER_H

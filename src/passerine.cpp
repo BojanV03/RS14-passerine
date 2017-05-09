@@ -17,10 +17,17 @@ Passerine::Passerine(QWidget *parent) :
 {
     songPlayer = nullptr;
 
+    // TODO: UNHACK
+    for(int i = 0; i < 128; i++)
+        noteStates.push_back(false);
     ui->setupUi(this);
 
     scene = new QGraphicsScene(this);
     ui->graphicsView->setScene(scene);
+
+    graphicsTimer = new QTimer(this);
+    connect(graphicsTimer, SIGNAL(timeout()), this, SLOT(updateGraphics()));
+
     drawPiano();
 }
 
@@ -36,15 +43,24 @@ void Passerine::drawPiano(int startNote, int endNote)
         if(note == 0 || note == 2 || note == 4 || note == 5 || note == 7 || note == 9 || note == 11)
             numberOfWhiteNotesInRange++;
     }
-    qDebug() << ui->graphicsView->width() << " " << ui->graphicsView->height();
+ //   qDebug() << ui->graphicsView->width() << " " << ui->graphicsView->height();
     float y = 0;//TEMP!!!
     scene->clear();
 
-    qDebug() << numberOfWhiteNotesInRange;
+ //   qDebug() << numberOfWhiteNotesInRange;
 
     float x, width, height;
     width = scene->width()/6;
 
+    QBrush brBlack(Qt::black);
+    QBrush brWhite(Qt::white);
+    QBrush brGray(Qt::gray);
+
+    int q = 0;
+//    for(auto i = noteStates.cbegin(); i != noteStates.cend(); i++, q++)
+//    {
+//        qDebug() << q << " is now " << *i;
+//    }
     for(int j = startNote; j < endNote; j++)
     {
         int i = (j % 12);
@@ -56,11 +72,27 @@ void Passerine::drawPiano(int startNote, int endNote)
             pen.setWidth(0);
             height /= 1.5;
             x+=(width*4/7);
-            scene->addRect(x, y - height/2, width*3/7, height, pen, QBrush(Qt::black))->setZValue(10);
+            if(noteStates[j] == true)
+            {
+                scene->addRect(x, y - height/2, width*3/7, height, pen, brGray)->setZValue(10);
+                scene->addRect(x + width*3/7, y-height/2, height, height, QPen(Qt::black), QBrush(QPixmap("slika.jpg").scaled(height, height, Qt::IgnoreAspectRatio)))->setZValue(100);
+            }
+            else
+                scene->addRect(x, y - height/2, width*3/7, height, pen, brBlack)->setZValue(10);
         }
         else
         {
-            scene->addRect(x, y, width, height, QPen(Qt::black), QBrush(Qt::white))->setZValue(0);
+            if(noteStates[j] == true)
+            {
+                scene->addRect(x, y, width, height, QPen(Qt::black), brGray)->setZValue(0);
+                scene->addRect(x + width, y-height/2, height, height, QPen(Qt::black), QBrush(QPixmap("slika.jpg").scaled(height, height, Qt::IgnoreAspectRatio)))->setZValue(100);
+//                qDebug() << j << " is now " << (noteStates[j] ? "Gray" : "White");
+            }
+            else
+            {
+                scene->addRect(x, y, width, height, QPen(Qt::black), brWhite)->setZValue(0);
+//                qDebug() << j << " is now " << (noteStates[j] ? "Gray" : "White");
+            }
             y += height;
         }
     }
@@ -75,7 +107,16 @@ void Passerine::resizeEvent(QResizeEvent* event)
 
 void Passerine::noteChanged(MidiEvent &m)
 {
-    qDebug() << "I've been notified of a " << m[1] << "note change. Sincerely, passerine.cpp";
+    if(m.isNoteOn())
+    {
+        noteStates[m[1]-12] = true;// -12 because the first key on our keyboard is the 12th key in the midi standard
+//        qDebug() << m[1]-12 << "is now " << noteStates[m[1]-12];
+    }
+    else if(m.isNoteOff())
+    {
+        noteStates[m[1]-12] = false;
+//        qDebug() << m[1]-12 << "is now " << noteStates[m[1]-12];
+    }
 }
 
 Passerine::~Passerine()
@@ -151,7 +192,7 @@ void Passerine::on_actionOpen_triggered()
       delete midiout;
     }
 
-    songPlayer = new SongPlayer(&midifile, 0, 60, midiout);
+    songPlayer = new SongPlayer(&midifile, 0, 60, midiout, this);
 
     ui->playPauseButton->setText("Play");
     ui->playPauseButton->setEnabled(true);
@@ -193,11 +234,13 @@ void Passerine::on_playPauseButton_clicked()
             qDebug() << "Playing from: " << songPlayer->getCurrentTime();
             songPlayer->PlaySong(songPlayer->getCurrentTime());
             ui->playPauseButton->setText("Pause");
+            graphicsTimer->start(33);
         }
         else{
             songPlayer->setPlaying(false);
             qDebug() << "Stopping";
             ui->playPauseButton->setText("Play");
+            graphicsTimer->stop();
         }
     }
 }
@@ -211,8 +254,15 @@ void Passerine::on_stopButton_clicked()
             songPlayer->setPlaying(false);
             qDebug() << "Stopping";
             ui->playPauseButton->setText("Play");
+            graphicsTimer->stop();
         }
         qDebug() << "Set time to: " << songPlayer->getCurrentTime();
         songPlayer->setCurrentTime(0);
     }
+}
+
+void Passerine::updateGraphics()
+{
+    drawPiano();
+
 }

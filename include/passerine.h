@@ -16,6 +16,7 @@
 
 #include <include/MidiFile.h>
 #include <include/SongPlayer.h>
+#include <QTimer>
 namespace Ui {
 class Passerine;
 }
@@ -44,6 +45,8 @@ private slots:
 
     void on_stopButton_clicked();
 
+    void updateGraphics();
+
 private:
     Ui::Passerine *ui;
 
@@ -51,6 +54,9 @@ private:
     RtMidiOut *midiout;
     MidiFile midifile;
     QGraphicsScene *scene;
+    std::vector<bool> noteStates;
+
+    QTimer *graphicsTimer;
 
     bool chooseMidiPort( RtMidiOut *rtmidi );
     void drawPiano(int startNote = 0, int endNote = 96);

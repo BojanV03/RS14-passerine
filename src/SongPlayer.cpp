@@ -1,4 +1,5 @@
 #include <include/SongPlayer.h>
+#include <QTimer>
 #include <QDebug>
 #if defined(__WINDOWS_MM__)
   #include <windows.h>
@@ -8,11 +9,12 @@
   #define SLEEP( milliseconds ) usleep( (unsigned long) (milliseconds * 1000.0) )
 #endif
 
-SongPlayer::SongPlayer(MidiFile *_song, int _instrument, int _tempo, RtMidiOut *_outputPort) :
+SongPlayer::SongPlayer(MidiFile *_song, int _instrument, int _tempo, RtMidiOut *_outputPort, Passerine *_main) :
     song(_song),
     instrument(_instrument),
     tempo(_tempo),
-    outputPort(_outputPort)
+    outputPort(_outputPort),
+    main(_main)
 {
     playing = false;
 }
@@ -77,7 +79,7 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
     double prevSeconds = startTime;
     for(int currentEvent = 0; isPlaying() && currentEvent < song->getEventCount(0); currentEvent++)
     {
-        qDebug() << currentEvent;
+   //     qDebug() << currentEvent;
         MidiEvent curr = song->getEvent(0, currentEvent);
         currentTime = curr.seconds;
         if(curr.seconds < startTime)
@@ -97,6 +99,8 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
             usleep((curr.seconds - prevSeconds)*1000000);
             outputPort->sendMessage( &message);
 
+            if(main != nullptr)
+                main->noteChanged(curr);
 
 //            if(curr.isNoteOn())
 //                qDebug() << "NoteOn: " << message[0] << message[1] << message[2];
@@ -111,7 +115,7 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
             {
                 S.append(curr[3+j]);
             }
-            qDebug() << S;
+ //           qDebug() << S;
             prevSeconds = curr.seconds;
         }
     }
