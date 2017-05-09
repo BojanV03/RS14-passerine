@@ -15,12 +15,9 @@ Passerine::Passerine(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Passerine)
 {
-    songPlayer = nullptr;
-
-    // TODO: UNHACK
-    for(int i = 0; i < 128; i++)
-        noteStates.push_back(false);
     ui->setupUi(this);
+
+    songPlayer = new SongPlayer();
 
     scene = new QGraphicsScene(this);
     ui->graphicsView->setScene(scene);
@@ -36,6 +33,7 @@ Passerine::Passerine(QWidget *parent) :
 
 void Passerine::drawPiano(int startNote, int endNote)
 {
+
     scene->setSceneRect(0, 0, ui->graphicsView->width()-10, ui->graphicsView->height()-10);
 
     int numberOfWhiteNotesInRange = 0;
@@ -59,7 +57,7 @@ void Passerine::drawPiano(int startNote, int endNote)
     QBrush brWhite(Qt::white);
     QBrush brGray(Qt::gray);
 
-    int q = 0;
+//    int q = 0;
 //    for(auto i = noteStates.cbegin(); i != noteStates.cend(); i++, q++)
 //    {
 //        qDebug() << q << " is now " << *i;
@@ -75,7 +73,7 @@ void Passerine::drawPiano(int startNote, int endNote)
             pen.setWidth(0);
             height /= 1.5;
             x+=(width*4/7);
-            if(noteStates[j] == true)
+            if(songPlayer->getNoteState(j) == true)
             {
                 scene->addRect(x, y - height/2, width*3/7, height, pen, brGray)->setZValue(10);
                 scene->addRect(x + width*3/7, y-height/2, height, height, QPen(Qt::black), QBrush(QPixmap("slika.jpg").scaled(height, height, Qt::IgnoreAspectRatio)))->setZValue(100);
@@ -85,7 +83,7 @@ void Passerine::drawPiano(int startNote, int endNote)
         }
         else
         {
-            if(noteStates[j] == true)
+            if(songPlayer->getNoteState(j) == true)
             {
                 scene->addRect(x, y, width, height, QPen(Qt::black), brGray)->setZValue(0);
                 scene->addRect(x + width, y-height/2, height, height, QPen(Qt::black), QBrush(QPixmap("slika.jpg").scaled(height, height, Qt::IgnoreAspectRatio)))->setZValue(100);
@@ -106,20 +104,6 @@ void Passerine::resizeEvent(QResizeEvent* event)
    QMainWindow::resizeEvent(event);
 
    drawPiano();
-}
-
-void Passerine::noteChanged(MidiEvent &m)
-{
-    if(m.isNoteOn())
-    {
-        noteStates[m[1]-12] = true;// -12 because the first key on our keyboard is the 12th key in the midi standard
-//        qDebug() << m[1]-12 << "is now " << noteStates[m[1]-12];
-    }
-    else if(m.isNoteOff())
-    {
-        noteStates[m[1]-12] = false;
-//        qDebug() << m[1]-12 << "is now " << noteStates[m[1]-12];
-    }
 }
 
 Passerine::~Passerine()
@@ -195,7 +179,7 @@ void Passerine::on_actionOpen_triggered()
       delete midiout;
     }
 
-    songPlayer = new SongPlayer(&midifile, 0, 60, midiout, this);
+    songPlayer = new SongPlayer(&midifile, 0, 60, midiout);
 
     ui->playPauseButton->setText("\u25B6");
     ui->playPauseButton->setEnabled(true);
@@ -230,7 +214,7 @@ bool Passerine::chooseMidiPort( RtMidiOut *rtmidi )
 
 void Passerine::on_playPauseButton_clicked()
 {
-     if(songPlayer != nullptr){
+     if(songPlayer->getSong() != nullptr){
         if(songPlayer->isPlaying() == false){
             songPlayer->setPlaying(true);
             qDebug() << "Playing";
@@ -250,24 +234,28 @@ void Passerine::on_playPauseButton_clicked()
 
 void Passerine::on_stopButton_clicked()
 {
-    if(songPlayer != nullptr)
-    {
-        if(songPlayer->isPlaying())
-        {
-            songPlayer->setPlaying(false);
-            qDebug() << "Stopping";
-            ui->playPauseButton->setText("\u25B6");
-            graphicsTimer->stop();
-        }
-        qDebug() << "Set time to: " << songPlayer->getCurrentTime();
-        songPlayer->setCurrentTime(0);
+    if(songPlayer->getSong() == nullptr)
+        return;
+
+    if(songPlayer->isPlaying()){
+        songPlayer->setPlaying(false);
+        qDebug() << "Stopping";
+        ui->playPauseButton->setText("\u25B6");
+        graphicsTimer->stop();
     }
+
+    qDebug() << "Set time to: " << songPlayer->getCurrentTime();
+    songPlayer->setCurrentTime(0);
+
+    for(int i = 0; i < 128; i++)
+        songPlayer->setNoteState(i, false);
+
+    updateGraphics();
 }
 
 void Passerine::updateGraphics()
 {
     drawPiano();
-
 }
 
 // \u23F9 stop znak

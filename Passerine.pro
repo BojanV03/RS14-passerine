@@ -54,7 +54,7 @@ HEADERS  += include/passerine.h \
     include/Octave.h \
     include/GraphicsEntity.h \
     include/Octave.h \
-    src/Key.h \
+    include/Key.h \
     include/Key.h \
     include/GraphicsEntity.h
 
