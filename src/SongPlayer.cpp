@@ -117,7 +117,7 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
     {
    //     qDebug() << currentEvent;
         MidiEvent curr = song->getEvent(0, currentEvent);
-        currentTime = curr.seconds;
+        currentTime = prevSeconds;
         if(curr.seconds < startTime)
         {
             continue;
@@ -132,7 +132,12 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
             message[0] = curr[0];
             message[1] = curr[1];
             message[2] = curr[2];
-            usleep((curr.seconds - prevSeconds)*1000000);
+            while(currentTime < curr.seconds -0.033)
+            {
+                currentTime += 0.033;
+                usleep(0.033*1000000);
+            }
+    //        usleep((curr.seconds - prevSeconds)*1000000);
             outputPort->sendMessage( &message);
 
             noteChanged(curr);

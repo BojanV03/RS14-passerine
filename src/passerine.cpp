@@ -289,7 +289,7 @@ void Passerine::on_playPauseButton_clicked()
             songPlayer->PlaySong(songPlayer->getCurrentTime());
 
             ui->playPauseButton->setText("\u2016");
-            graphicsTimer->start(200);
+            graphicsTimer->start(33);
         }
         else{
             songPlayer->setPlaying(false);
