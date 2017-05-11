@@ -27,17 +27,25 @@ SongPlayer::SongPlayer(MidiFile *_song, int _instrument, int _tempo, RtMidiOut *
         int numEvent;
         numEvent = _song->getEventCount(0);
 
-
-
         for(unsigned i = 0; i< numEvent; i++)
         {
+            double end;
 
             MidiEvent event = _song->getEvent(0,i);
             if(event.isNoteOn())
             {
+                for(unsigned j = i; j< numEvent; j++)
+                {
+                    if(_song->getEvent(0,j).isNoteOff() && event[1] == _song->getEvent(0,j)[1])
+                    {
+                        end = _song->getEvent(0,j).seconds;
+                        break;
+
+                    }
+                }
                // std::cout<<"Ide"<<std::endl;
-                std::cout<<event[1]<<" "<<event.seconds<<" "<<event.getDurationInSeconds()<<endl;
-                Note n = Note(event[1], event.seconds, event.seconds + event.getDurationInSeconds());
+                std::cout<<event[1]<<" "<<event.seconds<<" "<< end - event.seconds<<endl;
+                Note n = Note(event[1], event.seconds, end);
 
                 notes.push_back(n);
             }
