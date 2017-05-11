@@ -155,6 +155,7 @@ void Passerine::on_actionOpen_triggered()
     }
     qDebug() << "Time: " << midifile.getTotalTimeInSeconds();
 
+    ui->songProgressBar->setMaximum(midifile.getTotalTimeInSeconds());
     // RtMidiOut constructor
     try {
       midiout = new RtMidiOut();
@@ -220,6 +221,7 @@ void Passerine::on_playPauseButton_clicked()
             qDebug() << "Playing";
             qDebug() << "Playing from: " << songPlayer->getCurrentTime();
             songPlayer->PlaySong(songPlayer->getCurrentTime());
+
             ui->playPauseButton->setText("\u2016");
             graphicsTimer->start(33);
         }
@@ -256,6 +258,12 @@ void Passerine::on_stopButton_clicked()
 void Passerine::updateGraphics()
 {
     drawPiano();
+    ui->songProgressBar->setValue(songPlayer->getCurrentTime());
 }
 
 // \u23F9 stop znak
+
+void Passerine::on_songProgressBar_valueChanged(int value)
+{
+
+}

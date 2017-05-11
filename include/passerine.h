@@ -47,6 +47,8 @@ private slots:
 
     void updateGraphics();
 
+    void on_songProgressBar_valueChanged(int value);
+
 private:
     Ui::Passerine *ui;
 
