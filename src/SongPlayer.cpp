@@ -43,8 +43,7 @@ SongPlayer::SongPlayer(MidiFile *_song, int _instrument, int _tempo, RtMidiOut *
 
                     }
                 }
-               // std::cout<<"Ide"<<std::endl;
-                std::cout<<event[1]<<" "<<event.seconds<<" "<< end - event.seconds<<endl;
+                std::cout<<event[1]<<" "<<event.seconds<<" "<< end <<endl;
                 Note n = Note(event[1], event.seconds, end);
 
                 notes.push_back(n);
