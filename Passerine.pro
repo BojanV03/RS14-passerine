@@ -38,6 +38,10 @@ SOURCES += src/main.cpp\
     src/Octave.cpp \
     src/GraphicsEntity.cpp \
     src/Key.cpp \
+<<<<<<< HEAD
+=======
+    include/note.cpp
+>>>>>>> 291dab15d4d4e84dd156f44617205c6405099485
 
 HEADERS  += include/passerine.h \
     include/Binasc.h \
