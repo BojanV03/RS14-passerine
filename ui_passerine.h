@@ -86,6 +86,7 @@ public:
         songProgressBar = new QProgressBar(centralWidget);
         songProgressBar->setObjectName(QStringLiteral("songProgressBar"));
         songProgressBar->setValue(0);
+        songProgressBar->setTextVisible(true);
 
         verticalLayout->addWidget(songProgressBar);
 

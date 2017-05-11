@@ -62,7 +62,8 @@ SOURCES       = src/main.cpp \
 		src/SongPlayer.cpp \
 		src/Octave.cpp \
 		src/GraphicsEntity.cpp \
-		src/Key.cpp moc_passerine.cpp \
+		src/Key.cpp \
+		src/note.cpp moc_passerine.cpp \
 		moc_portselector.cpp
 OBJECTS       = main.o \
 		passerine.o \
@@ -79,6 +80,7 @@ OBJECTS       = main.o \
 		Octave.o \
 		GraphicsEntity.o \
 		Key.o \
+		note.o \
 		moc_passerine.o \
 		moc_portselector.o
 DIST          = ../../Qt5.7.0/5.7/gcc_64/mkspecs/features/spec_pre.prf \
@@ -266,7 +268,8 @@ DIST          = ../../Qt5.7.0/5.7/gcc_64/mkspecs/features/spec_pre.prf \
 		src/SongPlayer.cpp \
 		src/Octave.cpp \
 		src/GraphicsEntity.cpp \
-		src/Key.cpp
+		src/Key.cpp \
+		src/note.cpp
 QMAKE_TARGET  = Passerine
 DESTDIR       = 
 TARGET        = Passerine
@@ -608,7 +611,7 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents include/passerine.h include/Binasc.h include/MidiEvent.h include/MidiEventList.h include/MidiFile.h include/MidiMessage.h include/Options.h include/RtMidi.h include/rtmidi_c.h include/portselector.h include/SongPlayer.h include/SongPlayer.h include/Octave.h include/GraphicsEntity.h include/Octave.h include/Key.h include/Key.h include/GraphicsEntity.h include/note.h $(DISTDIR)/
-	$(COPY_FILE) --parents src/main.cpp src/passerine.cpp src/Binasc.cpp src/MidiEvent.cpp src/MidiEventList.cpp src/MidiFile.cpp src/MidiMessage.cpp src/Options.cpp src/RtMidi.cpp src/rtmidi_c.cpp src/portselector.cpp src/SongPlayer.cpp src/Octave.cpp src/GraphicsEntity.cpp src/Key.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents src/main.cpp src/passerine.cpp src/Binasc.cpp src/MidiEvent.cpp src/MidiEventList.cpp src/MidiFile.cpp src/MidiMessage.cpp src/Options.cpp src/RtMidi.cpp src/rtmidi_c.cpp src/portselector.cpp src/SongPlayer.cpp src/Octave.cpp src/GraphicsEntity.cpp src/Key.cpp src/note.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ui/passerine.ui ui/portselector.ui $(DISTDIR)/
 
 
@@ -1275,6 +1278,8 @@ passerine.o: src/passerine.cpp include/passerine.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qmenu.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QMenuBar \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qmenubar.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QProgressBar \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qprogressbar.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QPushButton \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qpushbutton.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qabstractbutton.h \
@@ -1708,6 +1713,13 @@ Key.o: src/Key.cpp include/Key.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qtransform.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/QColor
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Key.o src/Key.cpp
+
+note.o: src/note.cpp include/note.h \
+		include/MidiFile.h \
+		include/MidiEventList.h \
+		include/MidiEvent.h \
+		include/MidiMessage.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o note.o src/note.cpp
 
 moc_passerine.o: moc_passerine.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_passerine.o moc_passerine.cpp
