@@ -8,6 +8,7 @@
 #include <include/MidiMessage.h>
 #include <include/Options.h>
 #include <include/RtMidi.h>
+#include <include/note.h>
 
 #include <thread>
 #include <float.h>
@@ -38,6 +39,9 @@ public:
     void PlaySong(float startTime = 0, float endTime = FLT_MAX);
     void noteChanged(MidiEvent &m);
 
+    std::vector<Note> getNotes() const;
+    void setNotes(const std::vector<Note> &value);
+
 private:
     MidiFile *song;
     int instrument, tempo;
@@ -47,6 +51,8 @@ private:
     std::vector<bool> noteStates;
 
     float currentTime = 0;
+
+    std::vector<Note> notes;
 
     static void playSongWrapper(SongPlayer* player, float startTime, float endTime);
     void PlaySongInNewThread(float startTime = 0, float endTime = FLT_MAX);

@@ -1,4 +1,5 @@
 #include <include/SongPlayer.h>
+#include <include/note.h>
 #include <QTimer>
 #include <QDebug>
 #if defined(__WINDOWS_MM__)
@@ -16,7 +17,35 @@ SongPlayer::SongPlayer(MidiFile *_song, int _instrument, int _tempo, RtMidiOut *
     outputPort(_outputPort),
     noteStates(128, false)
 {
+
     playing = false;
+
+    if(_song != nullptr)
+    {
+        _song->joinTracks();
+        _song->sortTracks();
+        int numEvent;
+        numEvent = _song->getEventCount(0);
+
+
+
+        for(unsigned i = 0; i< numEvent; i++)
+        {
+
+            MidiEvent event = _song->getEvent(0,i);
+            if(event.isNoteOn())
+            {
+               // std::cout<<"Ide"<<std::endl;
+                std::cout<<event[1]<<" "<<event.seconds<<" "<<event.getDurationInSeconds()<<endl;
+                Note n = Note(event[1], event.seconds, event.seconds + event.getDurationInSeconds());
+
+                notes.push_back(n);
+            }
+
+        }
+
+
+    }
 }
 
 void SongPlayer::PlaySong(float startTime, float endTime)
@@ -150,6 +179,16 @@ void SongPlayer::noteChanged(MidiEvent &m)
 //        qDebug() << m[1]-12 << "is now " << noteStates[m[1]-12];
     }
 }
+std::vector<Note> SongPlayer::getNotes() const
+{
+    return notes;
+}
+
+void SongPlayer::setNotes(const std::vector<Note> &value)
+{
+    notes = value;
+}
+
 
 MidiFile* SongPlayer::getSong() const
 {

@@ -6,18 +6,18 @@
 class Note
 {
 public:
-    Note(std::string n, int tb, int te);
-    std::string getName() const;
-    void setName(std::string n);
-    int getTimeBegin() const;
-    void setTimeBegin(int t);
-    int getTimeEnd() const;
-    void setTimeEnd(int t);
+    Note(char n, double tb, double te);
+    char getId() const;
+    void setId(char n);
+    double getTimeBegin() const;
+    void setTimeBegin(double t);
+    double getTimeEnd() const;
+    void setTimeEnd(double t);
 
 private:
-    std::string _name;
-    int _timeBegin;
-    int _timeEnd;
+    char _id;
+    double _timeBegin;
+    double _timeEnd;
 };
 
 #endif // NOTE_H

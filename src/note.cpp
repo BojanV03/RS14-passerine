@@ -1,35 +1,35 @@
 #include <include/note.h>
 
-Note::Note(std::string n, int tb, int te)
-    :_name(n), _timeBegin(tb), _timeEnd(te)
+Note::Note(char n, double tb, double te)
+    :_id(n), _timeBegin(tb), _timeEnd(te)
     {}
 
-std::string Note::getName() const
+char Note::getId() const
 {
-    return _name;
+    return _id;
 }
 
-void Note::setName(std::string n)
+void Note::setId(char n)
 {
-    _name = n;
+    _id = n;
 }
 
-int Note::getTimeBegin() const
+double Note::getTimeBegin() const
 {
     return _timeBegin;
 }
 
-void Note::setTimeBegin(int t)
+void Note::setTimeBegin(double t)
 {
     _timeBegin = t;
 }
 
-int Note::getTimeEnd() const
+double Note::getTimeEnd() const
 {
     return _timeEnd;
 }
 
-void Note::setTimeEnd(int t)
+void Note::setTimeEnd(double t)
 {
     _timeEnd = t;
 }
