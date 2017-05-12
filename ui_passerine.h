@@ -22,6 +22,7 @@
 #include <QtWidgets/QProgressBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QTextEdit>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
@@ -40,6 +41,7 @@ public:
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout;
     QSpacerItem *verticalSpacer_2;
+    QTextEdit *tbLyrics;
     QProgressBar *songProgressBar;
     QGraphicsView *graphicsView;
     QHBoxLayout *horizontalLayout;
@@ -79,9 +81,15 @@ public:
         verticalLayout->setSpacing(6);
         verticalLayout->setContentsMargins(11, 11, 11, 11);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Fixed);
+        verticalSpacer_2 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Fixed);
 
         verticalLayout->addItem(verticalSpacer_2);
+
+        tbLyrics = new QTextEdit(centralWidget);
+        tbLyrics->setObjectName(QStringLiteral("tbLyrics"));
+        tbLyrics->setMaximumSize(QSize(16777215, 75));
+
+        verticalLayout->addWidget(tbLyrics);
 
         songProgressBar = new QProgressBar(centralWidget);
         songProgressBar->setObjectName(QStringLiteral("songProgressBar"));

@@ -43,13 +43,14 @@ SongPlayer::SongPlayer(MidiFile *_song, int _instrument, int _tempo, RtMidiOut *
 
                     }
                 }
-                std::cout<<event[1]<<" "<<event.seconds<<" "<< end <<endl;
+   //             std::cout<<event[1]<<" "<<event.seconds<<" "<< end <<endl;
                 Note n = Note(event[1], event.seconds, end);
 
                 notes.push_back(n);
             }
 
         }
+        qDebug() << "Number of notes" << notes.size();
 
 
     }
@@ -132,10 +133,10 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
             message[0] = curr[0];
             message[1] = curr[1];
             message[2] = curr[2];
-            while(currentTime < curr.seconds -0.033)
+            while(currentTime < curr.seconds -0.016)
             {
-                currentTime += 0.033;
-                usleep(0.033*1000000);
+                currentTime += 0.016;
+                usleep(0.016*1000000);
             }
     //        usleep((curr.seconds - prevSeconds)*1000000);
             outputPort->sendMessage( &message);
@@ -149,11 +150,15 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
         }
         else if(curr.isMeta() && curr[1] == 5)
         {
-            usleep((curr.seconds - prevSeconds)*1000000);
+            while(currentTime < curr.seconds -0.016)
+            {
+                currentTime += 0.016;
+                usleep(0.016*1000000);
+            }
             QString S;
             for(int j = 0; j < curr[2]; j++)
             {
-                S.append(curr[3+j]);
+                lyrics.append(curr[3+j]);
             }
  //           qDebug() << S;
             prevSeconds = curr.seconds;
@@ -201,6 +206,10 @@ void SongPlayer::setNotes(const std::vector<Note> &value)
     notes = value;
 }
 
+QString SongPlayer::getLyrics() const
+{
+    return lyrics;
+}
 
 MidiFile* SongPlayer::getSong() const
 {

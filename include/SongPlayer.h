@@ -12,6 +12,7 @@
 
 #include <thread>
 #include <float.h>
+#include <QString>
 
 class Passerine;
 
@@ -42,6 +43,10 @@ public:
     std::vector<Note> getNotes() const;
     void setNotes(const std::vector<Note> &value);
 
+
+    QString getLyrics() const;
+    void setLyrics(const QString &value);
+
 private:
     MidiFile *song;
     int instrument, tempo;
@@ -53,6 +58,7 @@ private:
     float currentTime = 0;
 
     std::vector<Note> notes;
+    QString lyrics;
 
     static void playSongWrapper(SongPlayer* player, float startTime, float endTime);
     void PlaySongInNewThread(float startTime = 0, float endTime = FLT_MAX);

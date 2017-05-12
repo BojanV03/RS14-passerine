@@ -97,17 +97,32 @@ void Passerine::drawPiano(int _startNote, int _endNote)
 
 void Passerine::drawNotes()
 {
-    qDebug() << "DrawingNotes" << songPlayer->getNotes().size();
+//    qDebug() << "DrawingNotes" << songPlayer->getNotes().size();
 
-    float noteViewDistance = 10; // in seconds
-    for(int i = 0; i < songPlayer->getNotes().size(); i++)
+    float noteViewDistance = 10    ; // in seconds
+    int i;
+    static int firstNote = 0;
+    static float longestNote = 0;
+
+    ui->tbLyrics->setText(songPlayer->getLyrics());
+
+    for(i = firstNote; i < songPlayer->getNotes().size(); i++)
     {
         Note tempNote = songPlayer->getNotes()[i];
+
+        if(tempNote.getTimeBegin() < songPlayer->getCurrentTime())
+        {
+            if(tempNote.getTimeEnd() > longestNote+1)
+            {
+                firstNote = i;
+                longestNote = tempNote.getTimeEnd();
+            }
+        }
         if(tempNote.getTimeEnd() < songPlayer->getCurrentTime())
         {
             continue;
         }
-        else if(tempNote.getTimeBegin() > songPlayer->getCurrentTime() + 10)
+        else if(tempNote.getTimeBegin() > songPlayer->getCurrentTime() + noteViewDistance)
         {
             break;
         }
@@ -115,7 +130,7 @@ void Passerine::drawNotes()
         {
             float height = scene->height() / whiteNotesInRange;
             float keyboardWidth = scene->width() / 6;
-            float pixelsPerSecond = scene->width() - keyboardWidth; // cela scena - sirina nota
+            float pixelsPerSecond = scene->width() - keyboardWidth;               // cela scena - sirina nota
             pixelsPerSecond /= noteViewDistance;                                  // podeljeno sa 10 sekundi koliko je vidljivo na ekranu
 
             float noteStartPixel = tempNote.getTimeBegin() - songPlayer->getCurrentTime();
@@ -128,20 +143,22 @@ void Passerine::drawNotes()
             noteEndPixel = noteEndPixel < (noteViewDistance*pixelsPerSecond) ? noteEndPixel : (noteViewDistance*pixelsPerSecond);
             noteEndPixel += keyboardWidth;
 
-
+            QPen rPen = QPen(Qt::red);
+            rPen.setWidth(3);
             if(isWhiteNote(tempNote.getId()))
             {
-                qDebug() << "Drawn a white note " << tempNote.getId();
-                scene->addRect(noteStartPixel, countNumberOfWhiteNotesInRange(startNote, tempNote.getId()-12)*height, noteEndPixel-noteStartPixel, height, QPen(Qt::red), QBrush(Qt::black));
+      //          qDebug() << "Drawn a white note " << tempNote.getId();
+                scene->addRect(noteStartPixel, countNumberOfWhiteNotesInRange(startNote, tempNote.getId()-12)*height, noteEndPixel-noteStartPixel, height, rPen, QBrush(Qt::black));
             }
             else
             {
-                qDebug() << "Drawn a black note " << tempNote.getId();
-               scene->addRect(noteStartPixel, countNumberOfWhiteNotesInRange(startNote, tempNote.getId()-12)*height - (height/1.5)/2, noteEndPixel-noteStartPixel, height/1.5, QPen(Qt::red), QBrush(Qt::black));
+      //          qDebug() << "Drawn a black note " << tempNote.getId();
+               scene->addRect(noteStartPixel, countNumberOfWhiteNotesInRange(startNote, tempNote.getId()-12)*height - (height/1.5)/2, noteEndPixel-noteStartPixel, height/1.5, rPen, QBrush(Qt::black));
             }
         }
 
     }
+    qDebug() << "went through notes" << i - firstNote << "out of " << i << "notes";
 }
 
 int Passerine::countNumberOfWhiteNotesInRange(int _startNote, int _endNote)
@@ -289,7 +306,7 @@ void Passerine::on_playPauseButton_clicked()
             songPlayer->PlaySong(songPlayer->getCurrentTime());
 
             ui->playPauseButton->setText("\u2016");
-            graphicsTimer->start(33);
+            graphicsTimer->start(16);
         }
         else{
             songPlayer->setPlaying(false);
