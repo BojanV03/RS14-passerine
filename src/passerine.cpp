@@ -18,18 +18,18 @@ Passerine::Passerine(QWidget *parent) :
     ui->setupUi(this);
 
     songPlayer = new SongPlayer();
+    widthCoef = 200;
 
     scene = new QGraphicsScene(this);
     ui->graphicsView->setScene(scene);
 
-    graphicsTimer = new QTimer(this);
-    connect(graphicsTimer, SIGNAL(timeout()), this, SLOT(updateGraphics()));
+    group = new AnimationGroup();
+
+    pianoTimer = new QTimer(this);
+    connect(pianoTimer, SIGNAL(timeout()), this, SLOT(updateGraphics()));
 
     ui->playPauseButton->setText("\u25B6");
     ui->stopButton->setText("\u23F9");
-
-
-    drawPiano();
 }
 
 void Passerine::drawPiano(int _startNote, int _endNote)
@@ -51,7 +51,7 @@ void Passerine::drawPiano(int _startNote, int _endNote)
 
     QBrush brBlack(Qt::black);
     QBrush brWhite(Qt::white);
-    QBrush brGray(Qt::gray);
+//    QBrush brGray(Qt::gray);
 
 //    int q = 0;
 //    for(auto i = noteStates.cbegin(); i != noteStates.cend(); i++, q++)
@@ -60,105 +60,55 @@ void Passerine::drawPiano(int _startNote, int _endNote)
 //    }
     for(int j = startNote; j < endNote; j++)
     {
+        QRect *key;
+
         int i = (j % 12);
         height = scene->height() / whiteNotesInRange;
         x = 0;
+
         if(!isWhiteNote(i)) // Black Key
         {
             QPen pen(Qt::black);
             pen.setWidth(0);
             height /= 1.5;
             x+=(width*4/7);
-            if(songPlayer->getNoteState(j) == true)
-            {
-                scene->addRect(x, y - height/2, width*3/7, height, pen, brGray)->setZValue(10);
-//                scene->addRect(x + width*3/7, y-height/2, height, height, QPen(Qt::black), QBrush(QPixmap("slika.jpg").scaled(height, height, Qt::IgnoreAspectRatio)))->setZValue(100);
-            }
-            else
-                scene->addRect(x, y - height/2, width*3/7, height, pen, brBlack)->setZValue(10);
+
+            key = new QRect(x, y - height/2, width*3/7, height);
+
+            scene->addRect(*key, pen, brBlack)->setZValue(10);
         }
         else // White Key
         {
-            if(songPlayer->getNoteState(j) == true)
-            {
-                scene->addRect(x, y, width, height, QPen(Qt::black), brGray)->setZValue(0);
-//                scene->addRect(x + width, y-height/2, height, height, QPen(Qt::black), QBrush(QPixmap("slika.jpg").scaled(height, height, Qt::IgnoreAspectRatio)))->setZValue(100);
-//                qDebug() << j << " is now " << (noteStates[j] ? "Gray" : "White");
-            }
-            else
-            {
-                scene->addRect(x, y, width, height, QPen(Qt::black), brWhite)->setZValue(0);
-//                qDebug() << j << " is now " << (noteStates[j] ? "Gray" : "White");
-            }
+            key = new QRect(x, y, width, height);
+
+            scene->addRect(*key, QPen(Qt::black), brWhite)->setZValue(0);
+//          qDebug() << j << " is now " << (noteStates[j] ? "Gray" : "White");
+
             y += height;
         }
+
+        pianoKeys.push_back(key);
     }
 }
 
-void Passerine::drawNotes()
+void Passerine::makeNoteGroup()
 {
-//    qDebug() << "DrawingNotes" << songPlayer->getNotes().size();
+    std::vector<Note> n = songPlayer->getNotes();
 
-    float noteViewDistance = 10    ; // in seconds
-    int i;
-    static int firstNote = 0;
-    static float longestNote = 0;
+    float height = scene->height() / whiteNotesInRange;
+    float width;
 
-    ui->tbLyrics->setText(songPlayer->getLyrics());
-
-    for(i = firstNote; i < songPlayer->getNotes().size(); i++)
-    {
-        Note tempNote = songPlayer->getNotes()[i];
-
-        if(tempNote.getTimeBegin() < songPlayer->getCurrentTime())
-        {
-            if(tempNote.getTimeEnd() > longestNote+1)
-            {
-                firstNote = i;
-                longestNote = tempNote.getTimeEnd();
-            }
+    for(unsigned i = 0; i < n.size(); i++){
+        width = (n[i].getTimeEnd() - n[i].getTimeBegin()) * (float)widthCoef;
+        if(isWhiteNote(n[i].getId())){
+  //          qDebug() << "Drawn a white note " << tempNote.getId();
+            group->addToGroup(new QGraphicsRectItem(n[i].getTimeBegin() * widthCoef, countNumberOfWhiteNotesInRange(0, n[i].getId()-12)*height, width, whiteNoteHeight()));
         }
-        if(tempNote.getTimeEnd() < songPlayer->getCurrentTime())
-        {
-            continue;
+        else{
+  //          qDebug() << "Drawn a black note " << tempNote.getId();
+            group->addToGroup(new QGraphicsRectItem(n[i].getTimeBegin() * widthCoef, countNumberOfWhiteNotesInRange(0, n[i].getId()-12) * height -  (height/1.5)/2, width, blackNoteHeight()));
         }
-        else if(tempNote.getTimeBegin() > songPlayer->getCurrentTime() + noteViewDistance)
-        {
-            break;
-        }
-        else
-        {
-            float height = scene->height() / whiteNotesInRange;
-            float keyboardWidth = scene->width() / 6;
-            float pixelsPerSecond = scene->width() - keyboardWidth;               // cela scena - sirina nota
-            pixelsPerSecond /= noteViewDistance;                                  // podeljeno sa 10 sekundi koliko je vidljivo na ekranu
-
-            float noteStartPixel = tempNote.getTimeBegin() - songPlayer->getCurrentTime();
-            noteStartPixel *= pixelsPerSecond;
-            noteStartPixel = noteStartPixel > 0? noteStartPixel : 0;
-            noteStartPixel += keyboardWidth;
-
-            float noteEndPixel = tempNote.getTimeEnd() - songPlayer->getCurrentTime();
-            noteEndPixel *= pixelsPerSecond;
-            noteEndPixel = noteEndPixel < (noteViewDistance*pixelsPerSecond) ? noteEndPixel : (noteViewDistance*pixelsPerSecond);
-            noteEndPixel += keyboardWidth;
-
-            QPen rPen = QPen(Qt::red);
-            rPen.setWidth(3);
-            if(isWhiteNote(tempNote.getId()))
-            {
-      //          qDebug() << "Drawn a white note " << tempNote.getId();
-                scene->addRect(noteStartPixel, countNumberOfWhiteNotesInRange(startNote, tempNote.getId()-12)*height, noteEndPixel-noteStartPixel, height, rPen, QBrush(Qt::black));
-            }
-            else
-            {
-      //          qDebug() << "Drawn a black note " << tempNote.getId();
-               scene->addRect(noteStartPixel, countNumberOfWhiteNotesInRange(startNote, tempNote.getId()-12)*height - (height/1.5)/2, noteEndPixel-noteStartPixel, height/1.5, rPen, QBrush(Qt::black));
-            }
-        }
-
     }
-    qDebug() << "went through notes" << i - firstNote << "out of " << i << "notes";
 }
 
 int Passerine::countNumberOfWhiteNotesInRange(int _startNote, int _endNote)
@@ -178,7 +128,6 @@ void Passerine::resizeEvent(QResizeEvent* event)
    QMainWindow::resizeEvent(event);
 
    drawPiano();
-   drawNotes();
 }
 
 Passerine::~Passerine()
@@ -261,6 +210,8 @@ void Passerine::on_actionOpen_triggered()
     ui->playPauseButton->setEnabled(true);
     ui->stopButton->setEnabled("true");
 
+    noteGraphicsInit();
+
     return;
 }
 
@@ -288,6 +239,26 @@ bool Passerine::chooseMidiPort( RtMidiOut *rtmidi )
   return true;
 }
 
+void Passerine::noteGraphicsInit()
+{
+    makeNoteGroup();
+    scene->addItem(group);
+    noteAnimation = new QPropertyAnimation(group, "pos");
+//    noteAnimation->setDuration(songPlayer->getSong()->getTotalTimeInSeconds() * 1000);
+//    std::cout << songPlayer->getSong()->getTotalTimeInSeconds() << std::endl;
+//    noteAnimation->setStartValue(group->pos());
+
+    QPointF end = group->pos();
+    end.setX(group->pos().x() - songPlayer->getSong()->getTotalTimeInSeconds() * widthCoef);
+
+    noteAnimation->setEndValue(end);
+    noteAnimation->setDuration(songPlayer->getSong()->getTotalTimeInSeconds() * 1000);
+
+//    noteAnimation->setEasingCurve(QEasingCurve::Linear);
+
+    group->show();
+}
+
 bool Passerine::isWhiteNote(int i)
 {
     int note = i % 12;
@@ -306,13 +277,14 @@ void Passerine::on_playPauseButton_clicked()
             songPlayer->PlaySong(songPlayer->getCurrentTime());
 
             ui->playPauseButton->setText("\u2016");
-            graphicsTimer->start(16);
-        }
+            noteAnimation->start();
+         }
         else{
             songPlayer->setPlaying(false);
             qDebug() << "Stopping";
             ui->playPauseButton->setText("\u25B6");
-            graphicsTimer->stop();
+            pianoTimer->stop();
+            noteAnimation->pause();
         }
     }
 }
@@ -326,7 +298,7 @@ void Passerine::on_stopButton_clicked()
         songPlayer->setPlaying(false);
         qDebug() << "Stopping";
         ui->playPauseButton->setText("\u25B6");
-        graphicsTimer->stop();
+        pianoTimer->stop();
     }
 
     qDebug() << "Set time to: " << songPlayer->getCurrentTime();
@@ -335,19 +307,54 @@ void Passerine::on_stopButton_clicked()
     for(int i = 0; i < 128; i++)
         songPlayer->setNoteState(i, false);
 
+    noteAnimation->pause();
+    noteAnimation->setCurrentTime(0);
     updateGraphics();
+}
+
+void Passerine::pianoKeyPress()
+{
+    for(unsigned i = 0; i < pianoKeys.size(); i++){
+        int k = i % 12;
+        QPainter qp(ui->graphicsView);
+
+        if(isWhiteNote(k)){
+            if(songPlayer->getNoteState(i) == true)
+               qp.fillRect(*pianoKeys[i], Qt::gray);
+            else
+               qp.fillRect(*pianoKeys[i], Qt::white);
+        }
+        else{
+            if(songPlayer->getNoteState(i) == true)
+               qp.fillRect(*pianoKeys[i], Qt::gray);
+            else
+               qp.fillRect(*pianoKeys[i], Qt::black);
+        }
+
+        qp.end();
+    }
 }
 
 void Passerine::updateGraphics()
 {
-    drawPiano();
+    pianoKeyPress();
     ui->songProgressBar->setValue(songPlayer->getCurrentTime());
-    drawNotes();
 }
+
+double Passerine::whiteNoteHeight()
+{
+    return scene->height() / countNumberOfWhiteNotesInRange();
+}
+
+double Passerine::blackNoteHeight()
+{
+    return whiteNoteHeight() / 1.5;
+}
+
 
 // \u23F9 stop znak
 
-void Passerine::on_songProgressBar_valueChanged(int value)
-{
+//void Passerine::on_songProgressBar_valueChanged(int value)
+//{
 
-}
+//}

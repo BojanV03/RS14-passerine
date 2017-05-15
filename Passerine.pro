@@ -38,7 +38,8 @@ SOURCES += src/main.cpp\
     src/Octave.cpp \
     src/GraphicsEntity.cpp \
     src/Key.cpp \
-    src/note.cpp
+    src/note.cpp \
+    src/AnimationGroup.cpp
 
 HEADERS  += include/passerine.h \
     include/Binasc.h \
@@ -58,7 +59,8 @@ HEADERS  += include/passerine.h \
     include/Key.h \
     include/Key.h \
     include/GraphicsEntity.h \
-    include/note.h
+    include/note.h \
+    include/AnimationGroup.h
 
 FORMS    += ui/passerine.ui \
     ui/portselector.ui
