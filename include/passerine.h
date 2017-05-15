@@ -9,15 +9,20 @@
 #include <QMessageBox>
 #include <QDebug>
 #include <QFileDialog>
-#include <include/RtMidi.h>
-#include <include/portselector.h>
 #include <QGraphicsScene>
 #include <QGraphicsRectItem>
+#include <QGraphicsItemGroup>
+#include <QTimer>
+#include <QPropertyAnimation>
+#include <QPainter>
 
+#include <include/RtMidi.h>
+#include <include/portselector.h>
 #include <include/MidiFile.h>
 #include <include/SongPlayer.h>
 #include <include/note.h>
-#include <QTimer>
+#include <include/AnimationGroup.h>
+
 namespace Ui {
 class Passerine;
 }
@@ -48,7 +53,7 @@ private slots:
 
     void updateGraphics();
 
-    void on_songProgressBar_valueChanged(int value);
+//    void on_songProgressBar_valueChanged(int value);
 
 
 private:
@@ -58,19 +63,26 @@ private:
     RtMidiOut *midiout;
     MidiFile midifile;
     QGraphicsScene *scene;
+    AnimationGroup *group;
+    QPropertyAnimation *noteAnimation;
 
     int startNote;
     int endNote;
     int whiteNotesInRange;
-//    std::vector<bool> noteStates;
+    int widthCoef;
+    std::vector<QRect*> pianoKeys;
 
-    QTimer *graphicsTimer;
+    QTimer *pianoTimer;
 
     bool chooseMidiPort( RtMidiOut *rtmidi );
     bool isWhiteNote(int i);
     void drawPiano(int startNote = 0, int endNote = 96);
-    void drawNotes();
     int countNumberOfWhiteNotesInRange(int _startNote = 0, int _endNote = 96);
+    double blackNoteHeight();
+    double whiteNoteHeight();
+    void makeNoteGroup();
+    void noteGraphicsInit();
+    void pianoKeyPress();
 };
 
 #endif // PASSERINE_H
