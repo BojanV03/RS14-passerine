@@ -1,8 +1,6 @@
 #ifndef OCTAVE_H
 #define OCTAVE_H
 
-#include <QGraphicsItem>
-#include <QColor>
 
 class GraphicsEntity: public QGraphicsItem
 {

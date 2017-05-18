@@ -163,6 +163,19 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
  //           qDebug() << S;
             prevSeconds = curr.seconds;
         }
+        else
+        {
+            message[0] = curr[0];
+            message[1] = curr[1];
+            message[2] = curr[2];
+            while(currentTime < curr.seconds -0.016)
+            {
+                currentTime += 0.016;
+                usleep(0.016*1000000);
+            }
+            outputPort->sendMessage( &message);
+            prevSeconds = curr.seconds;
+        }
     }
 
     // Control Change: 176, 7, 40

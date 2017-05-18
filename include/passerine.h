@@ -83,6 +83,7 @@ private:
     void makeNoteGroup();
     void noteGraphicsInit();
     void pianoKeyPress();
+    void ResizePiano(int _startNote = 0, int _endNote = 96);
 };
 
 #endif // PASSERINE_H
