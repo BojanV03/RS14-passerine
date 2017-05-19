@@ -22,6 +22,7 @@
 #include <include/SongPlayer.h>
 #include <include/note.h>
 #include <include/AnimationGroup.h>
+#include <include/Key.h>
 
 namespace Ui {
 class Passerine;
@@ -53,6 +54,8 @@ private slots:
 
     void updateGraphics();
 
+    int countNumberOfWhiteNotesInRange(int _startNote = 0, int _endNote = 96);
+
 //    void on_songProgressBar_valueChanged(int value);
 
 
@@ -63,21 +66,19 @@ private:
     RtMidiOut *midiout;
     MidiFile midifile;
     QGraphicsScene *scene;
-    AnimationGroup *group;
-    QPropertyAnimation *noteAnimation;
+    QGraphicsItemGroup *group;
 
     int startNote;
     int endNote;
     int whiteNotesInRange;
     int widthCoef;
-    std::vector<QRect*> pianoKeys;
+    std::vector<Key*> pianoKeys;
 
     QTimer *pianoTimer;
 
     bool chooseMidiPort( RtMidiOut *rtmidi );
     bool isWhiteNote(int i);
     void drawPiano(int startNote = 0, int endNote = 96);
-    int countNumberOfWhiteNotesInRange(int _startNote = 0, int _endNote = 96);
     double blackNoteHeight();
     double whiteNoteHeight();
     void makeNoteGroup();

@@ -44,7 +44,7 @@ SongPlayer::SongPlayer(MidiFile *_song, int _instrument, int _tempo, RtMidiOut *
                     }
                 }
    //             std::cout<<event[1]<<" "<<event.seconds<<" "<< end <<endl;
-                Note n = Note(event[1], event.seconds, end);
+                Note *n = new Note(event[1], event.seconds, end);
 
                 notes.push_back(n);
             }
@@ -209,14 +209,14 @@ void SongPlayer::noteChanged(MidiEvent &m)
 //        qDebug() << m[1]-12 << "is now " << noteStates[m[1]-12];
     }
 }
-std::vector<Note> SongPlayer::getNotes() const
+std::vector<Note*> SongPlayer::getNotes() const
 {
     return notes;
 }
 
 void SongPlayer::setNotes(const std::vector<Note> &value)
 {
-    notes = value;
+//    notes = value;
 }
 
 QString SongPlayer::getLyrics() const

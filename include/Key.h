@@ -2,12 +2,17 @@
 #define KEY_H
 
 #include <QGraphicsItem>
+#include <QBrush>
 #include <QColor>
+#include <QRect>
+#include <QPainter>
+#include <QGraphicsItem>
+#include <QDebug>
 
 class Key : public QGraphicsItem
 {
 public:
-    Key(int midiID);
+    Key(int midiID, QRect rect);
 
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
@@ -27,10 +32,15 @@ public:
     int getMidiID() const;
     void setMidiID(int value);
 
+    QRect getRect() const;
+    void setRect(const QRect &value);
+    void setRect(float x, float y, float width, float height);
+
 private:
     bool isPressed;
     QBrush standardColor;
     QBrush pressedColor;
+    QRect rect;
     int midiID;
 };
 

@@ -1,40 +1,58 @@
 #include <include/Key.h>
-#include <QPainter>
-#include <QGraphicsItem>
 
-Key::Key()
+Key::Key(int midiID, QRect _rect)
 {
+    int note = midiID % 12;
 
+    if(note == 0 || note == 2 || note == 4 || note == 5 || note == 7 || note == 9 || note == 11)
+        standardColor.setColor(Qt::white);
+    else
+        standardColor.setColor(Qt::black);
+
+    pressedColor.setColor(Qt::gray);
+
+    pressedColor.setStyle(Qt::SolidPattern);
+    standardColor.setStyle(Qt::SolidPattern);
+
+    rect = _rect;
 }
 
 QRectF Key::boundingRect() const
 {
-    return QRectF(0, 0, 100, 100);
+    return rect;
 }
 
 void Key::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    QRectF rect = boundingRect();
-
+    if(painter == nullptr)
+        return;
     if(isPressed)
     {
+        painter->setBrush(pressedColor);
+        painter->setBackground(pressedColor);
         painter->fillRect(rect, pressedColor);
+ //       qDebug() << "Filled with Pressed";
     }
     else
     {
+        painter->setBrush(standardColor);
+        painter->setBackground(standardColor);
         painter->fillRect(rect, standardColor);
+ //       qDebug() << "Filled with Standard";
     }
-
+    painter->drawRect(rect);
 }
 
 void Key::pressKey()
 {
-
+    isPressed = true;
+    update();
 }
 
 void Key::releaseKey()
 {
-
+    isPressed = false;
+    update();
 }
 
 bool Key::getIsPressed() const
@@ -75,4 +93,19 @@ int Key::getMidiID() const
 void Key::setMidiID(int value)
 {
     midiID = value;
+}
+
+QRect Key::getRect() const
+{
+    return rect;
+}
+
+void Key::setRect(const QRect &value)
+{
+    rect = value;
+}
+
+void Key::setRect(float x, float y, float width, float height)
+{
+    rect = QRect(x, y, width, height);
 }

@@ -40,7 +40,7 @@ public:
     void PlaySong(float startTime = 0, float endTime = FLT_MAX);
     void noteChanged(MidiEvent &m);
 
-    std::vector<Note> getNotes() const;
+    std::vector<Note*> getNotes() const;
     void setNotes(const std::vector<Note> &value);
 
 
@@ -57,7 +57,7 @@ private:
 
     float currentTime = 0;
 
-    std::vector<Note> notes;
+    std::vector<Note*> notes;
     QString lyrics;
 
     static void playSongWrapper(SongPlayer* player, float startTime, float endTime);

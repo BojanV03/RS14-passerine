@@ -36,7 +36,6 @@ SOURCES += src/main.cpp\
     src/portselector.cpp \
     src/SongPlayer.cpp \
     src/Octave.cpp \
-    src/GraphicsEntity.cpp \
     src/Key.cpp \
     src/note.cpp \
     src/AnimationGroup.cpp
@@ -54,11 +53,9 @@ HEADERS  += include/passerine.h \
     include/SongPlayer.h \
     include/SongPlayer.h \
     include/Octave.h \
-    include/GraphicsEntity.h \
     include/Octave.h \
     include/Key.h \
     include/Key.h \
-    include/GraphicsEntity.h \
     include/note.h \
     include/AnimationGroup.h
 
