@@ -341,7 +341,7 @@ void Passerine::on_playPauseButton_clicked()
             ui->playPauseButton->setText("\u25B6");
             pianoTimer->stop();
 
-            midiout->sendMessage(&songPlayer->allNotesOffSignal);
+            songPlayer->killSound();
         }
     }
 }
@@ -357,8 +357,7 @@ void Passerine::on_stopButton_clicked()
         ui->playPauseButton->setText("\u25B6");
         pianoTimer->stop();
 
-
-        midiout->sendMessage(&songPlayer->allNotesOffSignal);
+        songPlayer->killSound();
     }
 
     songPlayer->stop();

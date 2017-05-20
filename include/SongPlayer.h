@@ -50,6 +50,8 @@ public:
 
     std::vector<unsigned char> allNotesOffSignal = {0xB0, 0x7B, 0x00};
 
+    void killSound();
+
     bool getStopped() const;
     void setStopped(bool value);
 

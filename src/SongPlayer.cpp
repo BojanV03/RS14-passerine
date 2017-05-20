@@ -193,6 +193,18 @@ QString SongPlayer::getLyrics() const
     return lyrics;
 }
 
+void SongPlayer::killSound()
+{
+    for(int i = 0; i < 16; i++)
+    {
+        std::vector<unsigned char> v;
+        v.push_back(0xB0+i);
+        v.push_back(0x7B);
+        v.push_back(0x00);
+        outputPort->sendMessage(&v);
+    }
+}
+
 bool SongPlayer::getStopped() const
 {
     return stopped;
