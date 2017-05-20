@@ -51,12 +51,12 @@
      </widget>
     </item>
     <item>
-     <widget class="QProgressBar" name="songProgressBar">
-      <property name="value">
-       <number>0</number>
+     <widget class="QSlider" name="songSlider">
+      <property name="enabled">
+       <bool>false</bool>
       </property>
-      <property name="textVisible">
-       <bool>true</bool>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
      </widget>
     </item>

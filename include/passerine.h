@@ -57,9 +57,7 @@ private slots:
 
     int countNumberOfWhiteNotesInRange(int _startNote = 0, int _endNote = 96);
 
-
-//    void on_songProgressBar_valueChanged(int value);
-
+    void on_songSlider_sliderMoved(int position);
 
 private:
     Ui::Passerine *ui;
