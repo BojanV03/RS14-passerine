@@ -47,6 +47,12 @@ public:
     QString getLyrics() const;
     void setLyrics(const QString &value);
 
+    std::vector<unsigned char> allNotesOffSignal = {0xB0, 0x7B, 0x00};
+
+    bool getStopped() const;
+    void setStopped(bool value);
+
+    void stop();
 private:
     MidiFile *song;
     int instrument, tempo;
@@ -60,9 +66,12 @@ private:
     std::vector<Note*> notes;
     QString lyrics;
 
+    bool threadCreated = false;
+
+    std::thread playThread;
+
     static void playSongWrapper(SongPlayer* player, float startTime, float endTime);
     void PlaySongInNewThread(float startTime = 0, float endTime = FLT_MAX);
-
 
 };
 

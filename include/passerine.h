@@ -23,6 +23,7 @@
 #include <include/note.h>
 #include <include/AnimationGroup.h>
 #include <include/Key.h>
+#include <chrono>
 
 namespace Ui {
 class Passerine;
@@ -56,6 +57,7 @@ private slots:
 
     int countNumberOfWhiteNotesInRange(int _startNote = 0, int _endNote = 96);
 
+
 //    void on_songProgressBar_valueChanged(int value);
 
 
@@ -85,6 +87,9 @@ private:
     void noteGraphicsInit();
     void pianoKeyPress();
     void ResizePiano(int _startNote = 0, int _endNote = 96);
+
+    chrono::microseconds currentTime;
+    chrono::microseconds previousTime;
 };
 
 #endif // PASSERINE_H

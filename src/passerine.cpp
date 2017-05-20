@@ -1,4 +1,5 @@
 #include <include/passerine.h>
+
 #include "ui_passerine.h"
 
 
@@ -300,7 +301,7 @@ void Passerine::on_playPauseButton_clicked()
             songPlayer->setPlaying(true);
             songPlayer->PlaySong(songPlayer->getCurrentTime());
 
-            pianoTimer->start(16);
+            pianoTimer->start();
             ui->playPauseButton->setText("\u2016");
          }
         else
@@ -308,6 +309,8 @@ void Passerine::on_playPauseButton_clicked()
             songPlayer->setPlaying(false);
             ui->playPauseButton->setText("\u25B6");
             pianoTimer->stop();
+
+            midiout->sendMessage(&songPlayer->allNotesOffSignal);
         }
     }
 }
@@ -317,14 +320,17 @@ void Passerine::on_stopButton_clicked()
     if(songPlayer->getSong() == nullptr)
         return;
 
-    if(songPlayer->isPlaying())
+    if(songPlayer->isPlaying() == true)
     {
         songPlayer->setPlaying(false);
         ui->playPauseButton->setText("\u25B6");
         pianoTimer->stop();
+
+
+        midiout->sendMessage(&songPlayer->allNotesOffSignal);
     }
 
-    songPlayer->setCurrentTime(0);
+    songPlayer->stop();
 
     for(int i = 0; i < 128; i++)
         songPlayer->setNoteState(i, false);
@@ -344,10 +350,20 @@ void Passerine::pianoKeyPress()
                pianoKeys[i]->releaseKey();
         }
     }
-
 }
 void Passerine::updateGraphics()
 {
+
+    currentTime = chrono::duration_cast< chrono::microseconds >(
+                chrono::system_clock::now().time_since_epoch()
+            );
+    chrono::microseconds difference = (currentTime - previousTime);
+    qDebug() << difference.count();
+    previousTime = chrono::duration_cast< chrono::microseconds >(
+                chrono::system_clock::now().time_since_epoch()
+            );
+
+
     ui->songProgressBar->setValue(songPlayer->getCurrentTime());
     pianoKeyPress();
     group->setX(scene->width()/6 - songPlayer->getCurrentTime()*widthCoef);

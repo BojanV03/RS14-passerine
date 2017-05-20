@@ -18,6 +18,7 @@ SongPlayer::SongPlayer(MidiFile *_song, int _instrument, int _tempo, RtMidiOut *
     noteStates(128, false)
 {
 
+
     playing = false;
 
     if(_song != nullptr)
@@ -59,8 +60,9 @@ SongPlayer::SongPlayer(MidiFile *_song, int _instrument, int _tempo, RtMidiOut *
 void SongPlayer::PlaySong(float startTime, float endTime)
 {
     setPlaying(true);
-    std::thread t1 (SongPlayer::playSongWrapper, this, startTime, endTime);
-    t1.detach();
+    stopped = false;
+    playThread = std::thread(SongPlayer::playSongWrapper, this, startTime, endTime);
+    playThread.detach();
     return;
 }
 
@@ -83,6 +85,7 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
 {
     std::vector<unsigned char> message;
 
+    qDebug() << "Thread is now running";
     song->joinTracks();
     song->sortTracks();
 
@@ -97,8 +100,8 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
     //qDebug() << "Sent: " << message;
     outputPort->sendMessage( &message );
 
-    qDebug() << "Number of tracks: " << song->getNumTracks();
-    qDebug() << "EventCount: " << song->getEventCount(0);
+//    qDebug() << "Number of tracks: " << song->getNumTracks();
+//    qDebug() << "EventCount: " << song->getEventCount(0);
 
     message[0] = 0xF1;  //System common- undefined?
     message[1] = 60;
@@ -116,7 +119,8 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
     double prevSeconds = startTime;
     for(int currentEvent = 0; isPlaying() && currentEvent < song->getEventCount(0); currentEvent++)
     {
-   //     qDebug() << currentEvent;
+        if(stopped)
+            break;
         MidiEvent curr = song->getEvent(0, currentEvent);
         currentTime = prevSeconds;
         if(curr.seconds < startTime)
@@ -133,18 +137,15 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
             message[0] = curr[0];
             message[1] = curr[1];
             message[2] = curr[2];
-            while(currentTime < curr.seconds -0.016)
+            while(currentTime < curr.seconds - 0.016)
             {
+                if(!playing || stopped)
+                    return;
                 currentTime += 0.016;
                 usleep(0.016*1000000);
             }
-    //        usleep((curr.seconds - prevSeconds)*1000000);
             outputPort->sendMessage( &message);
-
             noteChanged(curr);
-
-//            if(curr.isNoteOn())
-//                qDebug() << "NoteOn: " << message[0] << message[1] << message[2];
             prevSeconds = curr.seconds;
 
         }
@@ -152,6 +153,8 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
         {
             while(currentTime < curr.seconds -0.016)
             {
+                if(!playing || stopped)
+                    return;
                 currentTime += 0.016;
                 usleep(0.016*1000000);
             }
@@ -160,7 +163,6 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
             {
                 lyrics.append(curr[3+j]);
             }
- //           qDebug() << S;
             prevSeconds = curr.seconds;
         }
         else
@@ -170,10 +172,12 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
             message[2] = curr[2];
             while(currentTime < curr.seconds -0.016)
             {
+                if(!playing || stopped)
+                    return;
                 currentTime += 0.016;
                 usleep(0.016*1000000);
             }
-            outputPort->sendMessage( &message);
+            outputPort->sendMessage( &curr);
             prevSeconds = curr.seconds;
         }
     }
@@ -184,7 +188,7 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
     message[2] = 100;
     outputPort->sendMessage( &message );
 
-    SLEEP( 500 );
+//    SLEEP( 500 );
 
     // Sysex: 240, 67, 4, 3, 2, 247
     message[0] = 240;
@@ -222,6 +226,22 @@ void SongPlayer::setNotes(const std::vector<Note> &value)
 QString SongPlayer::getLyrics() const
 {
     return lyrics;
+}
+
+bool SongPlayer::getStopped() const
+{
+    return stopped;
+}
+
+void SongPlayer::setStopped(bool value)
+{
+    stopped = value;
+}
+
+void SongPlayer::stop()
+{
+    currentTime = 0;
+    stopped = true;
 }
 
 MidiFile* SongPlayer::getSong() const
