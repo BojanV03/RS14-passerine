@@ -24,14 +24,14 @@ Passerine::Passerine(QWidget *parent) :
     ui->graphicsView->setScene(scene);
 
     group = new QGraphicsItemGroup();
-;
+
     pianoTimer = new QTimer(this);
     connect(pianoTimer, SIGNAL(timeout()), this, SLOT(updateGraphics()));
 
     ui->playPauseButton->setText("\u25B6");
     ui->stopButton->setText("\u23F9");
 
-    scene->setSceneRect(0, 0, ui->graphicsView->width()-10, ui->graphicsView->height()-10);
+    scene->setSceneRect(0, 0, ui->graphicsView->width(), ui->graphicsView->height()-10);
     drawPiano();
 }
 
@@ -39,7 +39,7 @@ void Passerine::ResizePiano(int _startNote, int _endNote)
 {
     startNote = _startNote;
     endNote = _endNote;
-    scene->setSceneRect(0, 0, ui->graphicsView->width()-10, ui->graphicsView->height()-10);
+    scene->setSceneRect(0, 0, ui->graphicsView->width(), ui->graphicsView->height()-10);
 
     whiteNotesInRange = countNumberOfWhiteNotesInRange(_startNote, _endNote);
 
@@ -79,7 +79,7 @@ void Passerine::drawPiano(int _startNote, int _endNote)
 
     whiteNotesInRange = countNumberOfWhiteNotesInRange(_startNote, _endNote);
 
-    float y = 0;//TEMP!!!
+    float y = 0;
     scene->clear();
 
     float x, width, height;
@@ -95,8 +95,6 @@ void Passerine::drawPiano(int _startNote, int _endNote)
 
         if(!isWhiteNote(i)) // Black Key
         {
-            QPen pen(Qt::black);
-            pen.setWidth(0);
             height /= 1.5;
             x+=(width*4/7);
 
@@ -203,26 +201,32 @@ void Passerine::on_actionOpen_triggered()
 
     int n = midifile.read(filename.toUtf8().constData());
 
-    if(n == 0){
+    if(n == 0)
+    {
         qDebug() << "Neuspesno citanje fajla";
         return;
     }
+
     qDebug() << "Time: " << midifile.getTotalTimeInSeconds();
 
     ui->songProgressBar->setMaximum(midifile.getTotalTimeInSeconds());
     // RtMidiOut constructor
-    try {
+    try
+    {
       midiout = new RtMidiOut();
     }
-    catch ( RtMidiError &error ) {
+    catch ( RtMidiError &error )
+    {
       qDebug() << "Failed to create rtMidiOut!!!: ";
       error.printMessage();
       exit( EXIT_FAILURE );
     }
     // Call function to select port.
-    try {
-      if ( chooseMidiPort( midiout ) == false ){
-          qDebug() << "Failed to port: ";
+    try
+    {
+      if ( chooseMidiPort( midiout ) == false )
+      {
+          qDebug() << "Failed to connect to port: ";
           delete midiout;
           return;
       }
@@ -249,7 +253,8 @@ bool Passerine::chooseMidiPort( RtMidiOut *rtmidi )
 {
   std::string portName;
   unsigned int nPorts = rtmidi->getPortCount();
-  if ( nPorts == 0 ) {
+  if ( nPorts == 0 )
+  {
     std::cout << "No output ports available!" << std::endl;
     return false;
   }
@@ -273,7 +278,7 @@ void Passerine::noteGraphicsInit()
 {
     makeNoteGroup();
     scene->addItem(group);
-    group->setPos(group->pos().x() + scene->width()/6, group->pos().y());
+    group->setPos(scene->width()/6, group->pos().y());
 
     group->show();
 }
@@ -288,19 +293,19 @@ bool Passerine::isWhiteNote(int i)
 
 void Passerine::on_playPauseButton_clicked()
 {
-     if(songPlayer->getSong() != nullptr){
-        if(songPlayer->isPlaying() == false){
+     if(songPlayer->getSong() != nullptr)
+     {
+        if(songPlayer->isPlaying() == false)
+        {
             songPlayer->setPlaying(true);
-            qDebug() << "Playing";
-            qDebug() << "Playing from: " << songPlayer->getCurrentTime();
             songPlayer->PlaySong(songPlayer->getCurrentTime());
 
             pianoTimer->start(16);
             ui->playPauseButton->setText("\u2016");
          }
-        else{
+        else
+        {
             songPlayer->setPlaying(false);
-            qDebug() << "Stopping";
             ui->playPauseButton->setText("\u25B6");
             pianoTimer->stop();
         }
@@ -312,14 +317,13 @@ void Passerine::on_stopButton_clicked()
     if(songPlayer->getSong() == nullptr)
         return;
 
-    if(songPlayer->isPlaying()){
+    if(songPlayer->isPlaying())
+    {
         songPlayer->setPlaying(false);
-        qDebug() << "Stopping";
         ui->playPauseButton->setText("\u25B6");
         pianoTimer->stop();
     }
 
-    qDebug() << "Set time to: " << songPlayer->getCurrentTime();
     songPlayer->setCurrentTime(0);
 
     for(int i = 0; i < 128; i++)
@@ -332,7 +336,8 @@ void Passerine::pianoKeyPress()
 {
     if(ui->graphicsView->viewport())
     {
-        for(unsigned i = 0; i < pianoKeys.size(); i++){
+        for(unsigned i = 0; i < pianoKeys.size(); i++)
+        {
             if(songPlayer->getNoteState(i) == true)
                pianoKeys[i]->pressKey();
             else
@@ -346,7 +351,6 @@ void Passerine::updateGraphics()
     ui->songProgressBar->setValue(songPlayer->getCurrentTime());
     pianoKeyPress();
     group->setX(scene->width()/6 - songPlayer->getCurrentTime()*widthCoef);
-    qDebug() << group->x();
 }
 
 double Passerine::whiteNoteHeight()
@@ -358,11 +362,3 @@ double Passerine::blackNoteHeight()
 {
     return whiteNoteHeight() / 1.5;
 }
-
-
-// \u23F9 stop znak
-
-//void Passerine::on_songProgressBar_valueChanged(int value)
-//{
-
-//}

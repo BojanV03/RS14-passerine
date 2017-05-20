@@ -65,6 +65,12 @@
       <property name="layoutDirection">
        <enum>Qt::LeftToRight</enum>
       </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
       <property name="sceneRect">
        <rectf>
         <x>0.000000000000000</x>

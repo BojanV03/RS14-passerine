@@ -101,6 +101,8 @@ public:
         graphicsView = new QGraphicsView(centralWidget);
         graphicsView->setObjectName(QStringLiteral("graphicsView"));
         graphicsView->setLayoutDirection(Qt::LeftToRight);
+        graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         graphicsView->setSceneRect(QRectF(0, 0, 0, 0));
 
         verticalLayout->addWidget(graphicsView);
