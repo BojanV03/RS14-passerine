@@ -59,6 +59,8 @@ private slots:
 
     void on_songSlider_sliderMoved(int position);
 
+    void on_songSlider_sliderReleased();
+
 private:
     Ui::Passerine *ui;
 
@@ -85,6 +87,7 @@ private:
     void noteGraphicsInit();
     void pianoKeyPress();
     void ResizePiano(int _startNote = 0, int _endNote = 96);
+    void resetPiano();
 
     chrono::microseconds currentTime;
     chrono::microseconds previousTime;
