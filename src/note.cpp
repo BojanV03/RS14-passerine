@@ -12,7 +12,7 @@ QRectF Note::boundingRect() const
     return rect;
 }
 
-void Note::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void Note::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     QPen p = QPen(Qt::white);
     p.setWidth(3);

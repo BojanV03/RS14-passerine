@@ -42,7 +42,7 @@ void Passerine::ResizeNotes(int _startNote, int _endNote)
     std::vector<Note*> n = songPlayer->getNotes();
     float width;
 
-    for(int i = 0; i < n.size(); i++)
+    for(unsigned i = 0; i < n.size(); i++)
     {
         width = (n[i]->getTimeEnd() - n[i]->getTimeBegin()) * (float)widthCoef;
         if(isWhiteNote(n[i]->getId()))
@@ -71,7 +71,7 @@ void Passerine::ResizePiano(int _startNote, int _endNote)
     width = scene->width()/6;
 
 
-    for(int j = 0; j < pianoKeys.size(); j++)
+    for(unsigned j = 0; j < pianoKeys.size(); j++)
     {
         int i = (j % 12);
         x = 0;
@@ -233,7 +233,7 @@ void Passerine::on_actionOpen_triggered()
 
     qDebug() << "Time: " << midifile.getTotalTimeInSeconds();
 
-    ui->songProgressBar->setMaximum(midifile.getTotalTimeInSeconds());
+    ui->songSlider->setMaximum(midifile.getTotalTimeInSeconds());
     // RtMidiOut constructor
     try
     {
@@ -275,6 +275,8 @@ void Passerine::on_actionOpen_triggered()
     ui->playPauseButton->setText("\u25B6");
     ui->playPauseButton->setEnabled(true);
     ui->stopButton->setEnabled("true");
+    ui->songSlider->setValue(0);
+    ui->songSlider->setDisabled(true);
 
     noteGraphicsInit();
 
@@ -334,12 +336,14 @@ void Passerine::on_playPauseButton_clicked()
 
             pianoTimer->start();
             ui->playPauseButton->setText("\u2016");
+            ui->songSlider->setDisabled(true);
          }
         else
         {
             songPlayer->setPlaying(false);
             ui->playPauseButton->setText("\u25B6");
             pianoTimer->stop();
+            ui->songSlider->setDisabled(false);
 
             songPlayer->killSound();
         }
@@ -356,6 +360,7 @@ void Passerine::on_stopButton_clicked()
         songPlayer->setPlaying(false);
         ui->playPauseButton->setText("\u25B6");
         pianoTimer->stop();
+        ui->songSlider->setDisabled(false);
 
         songPlayer->killSound();
     }
@@ -393,8 +398,7 @@ void Passerine::updateGraphics()
                 chrono::system_clock::now().time_since_epoch()
             );
 
-
-    ui->songProgressBar->setValue(songPlayer->getCurrentTime());
+    ui->songSlider->setValue(songPlayer->getCurrentTime());
     pianoKeyPress();
     group->setX(scene->width()/6 - songPlayer->getCurrentTime()*widthCoef);
 }
@@ -407,4 +411,9 @@ double Passerine::whiteNoteHeight()
 double Passerine::blackNoteHeight()
 {
     return whiteNoteHeight() / 1.5;
+}
+
+void Passerine::on_songSlider_sliderMoved(int position)
+{
+    songPlayer->setCurrentTime(position);
 }
