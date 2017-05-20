@@ -416,4 +416,18 @@ double Passerine::blackNoteHeight()
 void Passerine::on_songSlider_sliderMoved(int position)
 {
     songPlayer->setCurrentTime(position);
+    updateGraphics();
+}
+
+void Passerine::resetPiano()
+{
+    for(unsigned i = 0; i < pianoKeys.size(); i++){
+        pianoKeys[i]->releaseKey();
+        songPlayer->setNoteState(i, false);
+    }
+}
+
+void Passerine::on_songSlider_sliderReleased()
+{
+    resetPiano();
 }

@@ -16,7 +16,7 @@ soundfont /usr/share/soundfonts/FluidR3_GM.sf2
 
 ## Usage
 
-It's pretty useless at the moment.
+It supports playback of MIDI songs, at the moment. You can use the seek bar to play the song from whichever part you want!
 
 ## Progress
 
