@@ -17,44 +17,9 @@ SongPlayer::SongPlayer(MidiFile *_song, int _instrument, int _tempo, RtMidiOut *
     outputPort(_outputPort),
     noteStates(128, false)
 {
-
-
     playing = false;
 
-    if(_song != nullptr)
-    {
-        _song->joinTracks();
-        _song->sortTracks();
-        int numEvent;
-        numEvent = _song->getEventCount(0);
-
-        for(unsigned i = 0; i< numEvent; i++)
-        {
-            double end;
-
-            MidiEvent event = _song->getEvent(0,i);
-            if(event.isNoteOn())
-            {
-                for(unsigned j = i; j< numEvent; j++)
-                {
-                    if(_song->getEvent(0,j).isNoteOff() && event[1] == _song->getEvent(0,j)[1])
-                    {
-                        end = _song->getEvent(0,j).seconds;
-                        break;
-
-                    }
-                }
-   //             std::cout<<event[1]<<" "<<event.seconds<<" "<< end <<endl;
-                Note *n = new Note(event[1], event.seconds, end);
-
-                notes.push_back(n);
-            }
-
-        }
-        qDebug() << "Number of notes" << notes.size();
-
-
-    }
+    setSong(_song);
 }
 
 void SongPlayer::PlaySong(float startTime, float endTime)
@@ -240,6 +205,7 @@ void SongPlayer::setStopped(bool value)
 
 void SongPlayer::stop()
 {
+    playing = false;
     currentTime = 0;
     stopped = true;
 }
@@ -273,7 +239,39 @@ bool SongPlayer::isPlaying() const
 
 void SongPlayer::setSong(MidiFile *_song)
 {
-    song = _song;
+    clearNotes();
+
+    if(_song != nullptr)
+    {
+        _song->joinTracks();
+        _song->sortTracks();
+        int numEvent;
+        numEvent = _song->getEventCount(0);
+
+        for(unsigned i = 0; i< numEvent; i++)
+        {
+            double end;
+
+            MidiEvent event = _song->getEvent(0,i);
+            if(event.isNoteOn())
+            {
+                for(unsigned j = i; j< numEvent; j++)
+                {
+                    if(_song->getEvent(0,j).isNoteOff() && event[1] == _song->getEvent(0,j)[1])
+                    {
+                        end = _song->getEvent(0,j).seconds;
+                        break;
+
+                    }
+                }
+                Note *n = new Note(event[1], event.seconds, end);
+
+                notes.push_back(n);
+            }
+        }
+        qDebug() << "Number of notes" << notes.size();
+        song = _song;
+    }
 }
 void SongPlayer::setInstrument(int _instrument)
 {
@@ -296,4 +294,18 @@ void SongPlayer::setPlaying(bool _playing)
 void SongPlayer::setNoteState(int pos, bool state)
 {
     noteStates[pos] = state;
+}
+
+void SongPlayer::clearNotes()
+{
+    if(notes.size() != 0)
+    {
+        for(int i = 0; i < notes.size(); i++)
+        {
+            delete notes[i];
+            qDebug() << "Removed notes";
+        }
+    }
+    notes.clear();
+    qDebug() << "Left " << notes.size() << " notes";
 }

@@ -36,6 +36,28 @@ Passerine::Passerine(QWidget *parent) :
     drawPiano();
 }
 
+void Passerine::ResizeNotes(int _startNote, int _endNote)
+{
+    float height = scene->height()/countNumberOfWhiteNotesInRange(_startNote, _endNote);
+    std::vector<Note*> n = songPlayer->getNotes();
+    float width;
+
+    for(int i = 0; i < n.size(); i++)
+    {
+        width = (n[i]->getTimeEnd() - n[i]->getTimeBegin()) * (float)widthCoef;
+        if(isWhiteNote(n[i]->getId()))
+        {
+            n[i]->setRect(n[i]->getRect().x(), countNumberOfWhiteNotesInRange(0, n[i]->getId()-12)*height, width, whiteNoteHeight());
+        }
+        else
+        {
+
+            n[i]->setRect(n[i]->getRect().x(), countNumberOfWhiteNotesInRange(0, n[i]->getId()-12) * height -  (height/1.5)/2, width, blackNoteHeight());
+        }
+    }
+    updateGraphics();
+}
+
 void Passerine::ResizePiano(int _startNote, int _endNote)
 {
     startNote = _startNote;
@@ -156,6 +178,7 @@ void Passerine::resizeEvent(QResizeEvent* event)
    QMainWindow::resizeEvent(event);
 
    ResizePiano();
+   ResizeNotes();
    updateGraphics();
 }
 
@@ -190,7 +213,7 @@ void Passerine::on_actionAbout_Qt_triggered()
 void Passerine::on_actionOpen_triggered()
 {
     if(songPlayer != nullptr){
-        songPlayer->setPlaying(false);
+        songPlayer->stop();
     }
 
     QString filename = QFileDialog::getOpenFileName(
@@ -239,8 +262,16 @@ void Passerine::on_actionOpen_triggered()
       delete midiout;
     }
 
-    songPlayer = new SongPlayer(&midifile, 0, 60, midiout);
-
+    if(songPlayer == nullptr)
+    {
+        songPlayer = new SongPlayer(&midifile, 0, 60, midiout);
+    }
+    else
+    {
+        songPlayer->setSong(&midifile);
+        songPlayer->setCurrentTime(0);
+        songPlayer->setPort(midiout);
+    }
     ui->playPauseButton->setText("\u25B6");
     ui->playPauseButton->setEnabled(true);
     ui->stopButton->setEnabled("true");
@@ -358,7 +389,7 @@ void Passerine::updateGraphics()
                 chrono::system_clock::now().time_since_epoch()
             );
     chrono::microseconds difference = (currentTime - previousTime);
-    qDebug() << difference.count();
+//    qDebug() << difference.count();
     previousTime = chrono::duration_cast< chrono::microseconds >(
                 chrono::system_clock::now().time_since_epoch()
             );

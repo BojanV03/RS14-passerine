@@ -90,6 +90,7 @@ private:
 
     chrono::microseconds currentTime;
     chrono::microseconds previousTime;
+    void ResizeNotes(int _startNote = 0, int _endNote = 96);
 };
 
 #endif // PASSERINE_H
