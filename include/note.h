@@ -33,10 +33,14 @@ public:
     QBrush getStandardBrush() const;
     void setStandardBrush(const QBrush &value);
 
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 private:
     char _id;
     double _timeBegin;
     double _timeEnd;
+
 
     QBrush standardBrush;
     QRect rect;

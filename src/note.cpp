@@ -80,3 +80,13 @@ void Note::setStandardBrush(const QBrush &value)
     standardBrush = value;
 }
 
+void Note::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    qDebug() << "Pressed";
+}
+
+void Note::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    qDebug() << "Released";
+}
+

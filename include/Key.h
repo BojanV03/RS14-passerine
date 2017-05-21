@@ -36,6 +36,9 @@ public:
     void setRect(const QRect &value);
     void setRect(float x, float y, float width, float height);
 
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 private:
     bool isPressed;
     QBrush standardColor;

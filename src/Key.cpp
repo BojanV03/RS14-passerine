@@ -109,3 +109,13 @@ void Key::setRect(float x, float y, float width, float height)
 {
     rect = QRect(x, y, width, height);
 }
+
+void Key::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    qDebug() << "Pressed";
+}
+
+void Key::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    qDebug() << "Released";
+}

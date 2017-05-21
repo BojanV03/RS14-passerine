@@ -102,12 +102,12 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
             message[0] = curr[0];
             message[1] = curr[1];
             message[2] = curr[2];
-            while(currentTime < curr.seconds - 0.016)
+            while(currentTime < curr.seconds - 0.001)
             {
                 if(!playing || stopped)
                     return;
-                currentTime += 0.016;
-                usleep(0.016*1000000);
+                currentTime += 0.001;
+                usleep(0.001*1000000);
             }
             outputPort->sendMessage( &message);
             noteChanged(curr);
