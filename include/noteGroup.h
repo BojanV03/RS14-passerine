@@ -1,6 +1,8 @@
 #ifndef NOTEGROUP_H
 #define NOTEGROUP_H
 
+#include <QGraphicsItem>
+
 class noteGroup
 {
 public:

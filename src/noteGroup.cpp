@@ -1,4 +1,4 @@
-#include "noteGroup.h"
+#include <include/noteGroup.h>
 
 noteGroup::noteGroup()
 {

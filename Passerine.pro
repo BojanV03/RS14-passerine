@@ -39,7 +39,6 @@ SOURCES += src/main.cpp\
     src/Key.cpp \
     src/note.cpp \
     src/AnimationGroup.cpp \
-    include/noteGroup.cpp \
     src/noteGroup.cpp
 
 HEADERS  += include/passerine.h \
