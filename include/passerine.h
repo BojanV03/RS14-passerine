@@ -25,6 +25,8 @@
 #include <include/Key.h>
 #include <chrono>
 
+#include <include/noteGroup.h>
+
 namespace Ui {
 class Passerine;
 }
