@@ -4,7 +4,6 @@
 #include <QColor>
 #include <QRect>
 #include <QPainter>
-#include <QGraphicsItem>
 #include <QDebug>
 
 #include <include/MidiFile.h>
