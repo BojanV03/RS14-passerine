@@ -24,15 +24,15 @@ Passerine::Passerine(QWidget *parent) :
     scene = new QGraphicsScene(this);
     ui->graphicsView->setScene(scene);
 
-    group = new QGraphicsItemGroup();
-
+    group = new noteGroup();
+    group->setWidthCoef(widthCoef);
     pianoTimer = new QTimer(this);
     connect(pianoTimer, SIGNAL(timeout()), this, SLOT(updateGraphics()));
 
     ui->playPauseButton->setText("\u25B6");
     ui->stopButton->setText("\u23F9");
 
-    scene->setSceneRect(0, 0, ui->graphicsView->width(), ui->graphicsView->height()-10);
+    scene->setSceneRect(0, 0, ui->graphicsView->width(), ui->graphicsView->height());
     drawPiano();
 }
 
@@ -51,9 +51,9 @@ void Passerine::ResizeNotes(int _startNote, int _endNote)
         }
         else
         {
-
             n[i]->setRect(n[i]->getRect().x(), countNumberOfWhiteNotesInRange(0, n[i]->getId()-12) * height -  (height/1.5)/2, width, blackNoteHeight());
         }
+        group->setRect(QRect(0, 0, songPlayer->getSong()->getTotalTimeInSeconds()*widthCoef, ui->graphicsView->scene()->height()));
     }
     updateGraphics();
 }
@@ -62,7 +62,7 @@ void Passerine::ResizePiano(int _startNote, int _endNote)
 {
     startNote = _startNote;
     endNote = _endNote;
-    scene->setSceneRect(0, 0, ui->graphicsView->width(), ui->graphicsView->height()-10);
+    scene->setSceneRect(0, 0, ui->graphicsView->width(), ui->graphicsView->height());
 
     whiteNotesInRange = countNumberOfWhiteNotesInRange(_startNote, _endNote);
 
@@ -70,6 +70,10 @@ void Passerine::ResizePiano(int _startNote, int _endNote)
     float x, width, height;
     width = scene->width()/6;
 
+    group->setStartX(width);
+    group->setPianoTopKey(startNote);
+    group->setPianoBottomKey(endNote);
+    group->setNumOfWhiteNotes(whiteNotesInRange);
 
     for(unsigned j = 0; j < pianoKeys.size(); j++)
     {
@@ -98,7 +102,7 @@ void Passerine::drawPiano(int _startNote, int _endNote)
     startNote = _startNote;
     endNote = _endNote;
 
-    scene->setSceneRect(0, 0, ui->graphicsView->width()-10, ui->graphicsView->height()-10);
+    scene->setSceneRect(0, 0, ui->graphicsView->width(), ui->graphicsView->height());
 
     whiteNotesInRange = countNumberOfWhiteNotesInRange(_startNote, _endNote);
 
@@ -114,6 +118,7 @@ void Passerine::drawPiano(int _startNote, int _endNote)
 
         int i = (j % 12);
         height = scene->height() / whiteNotesInRange;
+        qDebug() << "Passerine.cpp height: " << height;
         x = 0;
 
         if(!isWhiteNote(i)) // Black Key
@@ -145,18 +150,18 @@ void Passerine::makeNoteGroup()
 
     float height = scene->height() / whiteNotesInRange;
     float width;
-
+    group->setPlayerRef(songPlayer);
     for(unsigned i = 0; i < n.size(); i++){
         width = (n[i]->getTimeEnd() - n[i]->getTimeBegin()) * (float)widthCoef;
         if(isWhiteNote(n[i]->getId()))
         {
             group->addToGroup(n[i]);
-            n[i]->setRect(n[i]->getTimeBegin() * widthCoef + scene->width()/6, countNumberOfWhiteNotesInRange(0, n[i]->getId()-12)*height, width, whiteNoteHeight());
+            n[i]->setRect(n[i]->getTimeBegin() * widthCoef, countNumberOfWhiteNotesInRange(0, n[i]->getId()-12)*height, width, whiteNoteHeight());
         }
         else
         {
             group->addToGroup(n[i]);
-            n[i]->setRect(n[i]->getTimeBegin() * widthCoef + scene->width()/6, countNumberOfWhiteNotesInRange(0, n[i]->getId()-12) * height -  (height/1.5)/2, width, blackNoteHeight());
+            n[i]->setRect(n[i]->getTimeBegin() * widthCoef, countNumberOfWhiteNotesInRange(0, n[i]->getId()-12) * height -  (height/1.5)/2, width, blackNoteHeight());
         }
     }
 }
@@ -313,6 +318,7 @@ void Passerine::noteGraphicsInit()
     makeNoteGroup();
     scene->addItem(group);
     group->setPos(scene->width()/6, group->pos().y());
+    group->setRect(QRect(0, 0, songPlayer->getSong()->getTotalTimeInSeconds()*widthCoef, ui->graphicsView->scene()->height()));
 
     group->show();
 }

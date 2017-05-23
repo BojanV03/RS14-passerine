@@ -112,6 +112,8 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
             outputPort->sendMessage( &message);
             noteChanged(curr);
             prevSeconds = curr.seconds;
+            if(curr.isNoteOff())
+            qDebug() << curr.seconds;
 
         }
         else if(curr.isMeta() && curr[1] == 5)
@@ -320,4 +322,23 @@ void SongPlayer::clearNotes()
     }
     notes.clear();
     qDebug() << "Left " << notes.size() << " notes";
+}
+
+Note* SongPlayer::addNote(int id, float time, float duration)
+{
+    qDebug() << "Added note " << id << " starting at: " << time << " seconds and lasting " << duration << " seconds";
+
+    Note *n = new Note(id, time, duration);
+    notes.push_back(n);
+
+    int index = song->addNoteOn(0, song->getAbsoluteTickTime(time), 0, id, 90);
+
+    qDebug() << "start time: " << song->getEvent(0, index).seconds;
+    song->getEvent(0, index).seconds = time;
+    index = song->addNoteOff(0, song->getAbsoluteTickTime(time+duration), 0, id, 90);
+
+    qDebug() << "end time: " << song->getEvent(0, index).seconds;
+    song->getEvent(0, index).seconds = time+duration;
+//    qDebug() << "Note starting at: " << song->getAbsoluteTickTime(time) << " and ending at " << song->getAbsoluteTickTime(time+duration);
+    return n;
 }

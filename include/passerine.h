@@ -70,7 +70,7 @@ private:
     RtMidiOut *midiout;
     MidiFile midifile;
     QGraphicsScene *scene;
-    QGraphicsItemGroup *group;
+    noteGroup *group;
 
     int startNote;
     int endNote;

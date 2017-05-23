@@ -14,8 +14,8 @@ QRectF Note::boundingRect() const
 
 void Note::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    QPen p = QPen(Qt::white);
-    p.setWidth(3);
+    QPen p = QPen(Qt::black);
+    p.setWidth(1);
     painter->setPen(p);
     standardBrush.setColor(Qt::darkGreen);
     standardBrush.setStyle(Qt::SolidPattern);

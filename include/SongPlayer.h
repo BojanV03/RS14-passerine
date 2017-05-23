@@ -37,6 +37,7 @@ public:
     void setCurrentTime(float value);
     void setNoteState(int pos, bool state);
     void clearNotes();
+    Note* addNote(int id = 64, float time = 0, float duration = 1);
 
     void PlaySong(float startTime = 0, float endTime = FLT_MAX);
     void noteChanged(MidiEvent &m);
