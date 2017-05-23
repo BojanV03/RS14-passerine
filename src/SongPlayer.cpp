@@ -333,12 +333,15 @@ Note* SongPlayer::addNote(int id, float time, float duration)
 
     int index = song->addNoteOn(0, song->getAbsoluteTickTime(time), 0, id, 90);
 
-    qDebug() << "start time: " << song->getEvent(0, index).seconds;
     song->getEvent(0, index).seconds = time;
-    index = song->addNoteOff(0, song->getAbsoluteTickTime(time+duration), 0, id, 90);
+    qDebug() << "start time: " << song->getEvent(0, index).seconds;
+    index = song->addNoteOff(0, song->getAbsoluteTickTime(time+duration), 0, id);
 
-    qDebug() << "end time: " << song->getEvent(0, index).seconds;
+    qDebug() << "Tracks: " << song->getNumTracks();
     song->getEvent(0, index).seconds = time+duration;
+    qDebug() << "end time: " << song->getEvent(0, index).seconds;
+
 //    qDebug() << "Note starting at: " << song->getAbsoluteTickTime(time) << " and ending at " << song->getAbsoluteTickTime(time+duration);
+    song->sortTracks();         // ensure tick times are in correct order
     return n;
 }

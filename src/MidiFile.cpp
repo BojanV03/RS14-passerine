@@ -2019,7 +2019,9 @@ void MidiFile::sortTrack(MidiEventList& trackData) {
 // MidiFile::sortTracks -- sort all tracks in the MidiFile.
 //
 
+#include <QDebug>
 void MidiFile::sortTracks(void) {
+   qDebug() << "SORTING";
    if (theTimeState == TIME_STATE_ABSOLUTE) {
       for (int i=0; i<getTrackCount(); i++) {
          sortTrack(*events[i]);
@@ -2031,7 +2033,7 @@ void MidiFile::sortTracks(void) {
 
 //////////////////////////////
 //
-// MidiFile::getTrackCountAsType1 --  Return the number of tracks in the
+//    MidiFile::getTrackCountAsType1 --  Return the number of tracks in the
 //    MIDI file.  Returns the size of the events if not in joined state.
 //    If in joined state, reads track 0 to find the maximum track
 //    value from the original unjoined tracks.
@@ -2144,6 +2146,7 @@ double MidiFile::getTotalTimeInSeconds(void) {
    if (timemapvalid == 0) {
       buildTimeMap();
       if (timemapvalid == 0) {
+         std::cout << "Midifile::getTotalTimeInSeconds: INVALID TIME MAP!!";
          return -1.0;    // something went wrong
       }
    }
@@ -2153,6 +2156,7 @@ double MidiFile::getTotalTimeInSeconds(void) {
          output = events[i]->last().seconds;
       }
    }
+
    return output;
 }
 
@@ -2420,7 +2424,7 @@ void MidiFile::buildTimeMap(void) {
    // convert the MIDI file to absolute time representation
    // in single track mode (and undo if the MIDI file was not
    // in that state when this function was called.
-   //
+
    int trackstate = getTrackState();
    int timestate  = getTickState();
 
@@ -2736,10 +2740,10 @@ int eventcompare(const void* a, const void* b) {
    MidiEvent& aevent = **((MidiEvent**)a);
    MidiEvent& bevent = **((MidiEvent**)b);
 
-   if (aevent.tick > bevent.tick) {
+   if (aevent.seconds > bevent.seconds) { // Changed from ticks to seconds
       // aevent occurs after bevent
       return +1;
-   } else if (aevent.tick < bevent.tick) {
+   } else if (aevent.seconds < bevent.seconds) {
       // aevent occurs before bevent
       return -1;
    } else if (aevent.seq > bevent.seq) {

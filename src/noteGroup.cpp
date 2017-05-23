@@ -42,11 +42,12 @@ void noteGroup::mousePressEvent(QGraphicsSceneMouseEvent *event)
         addToGroup(n);
         n->setRect(n->getTimeBegin() * widthCoef, countNumberOfWhiteNotesInRange(0, n->getId()-12) * height -  (height/1.5)/2, width, height/1.5);
     }
+
+    qDebug() << playerRef->getSong()->getTotalTimeInSeconds();
 }
 
 void noteGroup::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-
 }
 
 float noteGroup::getStartX() const
@@ -164,6 +165,9 @@ void noteGroup::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
             y += whiteNoteHeight;
         }
     }
+    rect.setWidth(playerRef->getSong()->getTotalTimeInSeconds()*widthCoef);
+
+    update();
 //    qDebug() << "Rect is: " << rect.topLeft() << ": " << rect.bottomRight();
 }
 
@@ -197,7 +201,6 @@ int noteGroup::calculateNoteIdFromLocation(QPointF location)
         }
         else
         {
-
             if(targetY > y && targetY < y + whiteNoteHeight) // naisli smo na belu, setujemo privremeni rezultat i idemo dalje.
             {
                 qDebug() << i;
