@@ -5,11 +5,26 @@ Note::Note(char n, double tb, double te)
     :_id(n), _timeBegin(tb), _timeEnd(te)
 {
     setFlag(ItemIsMovable);
+    setFlag(ItemSendsGeometryChanges);
 }
 
 QRectF Note::boundingRect() const
 {
     return rect;
+}
+
+QVariant Note::itemChange(GraphicsItemChange change, const QVariant &value)
+{
+    if (change == ItemPositionChange)
+    {
+        float difference = pos().x() - value.toPointF().x();
+
+        onEvent->seconds = onEvent->seconds - difference/200;
+        offEvent->seconds= offEvent->seconds- difference/200;
+
+        return QPointF(value.toPointF().x(), pos().y());
+    }
+    return QGraphicsItem::itemChange( change, value );
 }
 
 void Note::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
@@ -88,5 +103,38 @@ void Note::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void Note::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     qDebug() << "Released";
+}
+
+MidiEvent *Note::getOffEvent() const
+{
+    return offEvent;
+}
+
+void Note::setOffEvent(MidiEvent *value)
+{
+    offEvent = value;
+}
+
+void Note::wheelEvent(QGraphicsSceneWheelEvent *event)
+{
+    if(offEvent->seconds + (event->delta()/12)/200.0 < onEvent->seconds) // Ako skrolom dovedemo notu do negativne duzine
+    {
+        offEvent->seconds = onEvent->seconds + 0.01;                    // stavimo joj duzinu na 0.01s
+        setRect(QRect(rect.left(), rect.top(), 0.01*200, rect.height()));
+    }
+    else
+    {
+        offEvent->seconds = offEvent->seconds + (event->delta()/12)/200.0;
+        setRect(QRect(rect.left(), rect.top(), rect.width()+event->delta()/12, rect.height()));
+    }
+}
+MidiEvent *Note::getOnEvent() const
+{
+    return onEvent;
+}
+
+void Note::setOnEvent(MidiEvent *value)
+{
+    onEvent = value;
 }
 

@@ -2143,6 +2143,16 @@ int MidiFile::getAbsoluteTickTime(double starttime) {
 //
 
 double MidiFile::getTotalTimeInSeconds(void) {
+   bool leave = true;
+   for(int i = 0; i < getNumTracks(); i++)
+   {
+       if(getNumEvents(i) >= 2)   // Modified for empty songs
+       {
+            leave = false;
+       }
+   }
+   if(leave) return 0;
+
    if (timemapvalid == 0) {
       buildTimeMap();
       if (timemapvalid == 0) {

@@ -34,6 +34,35 @@ Passerine::Passerine(QWidget *parent) :
 
     scene->setSceneRect(0, 0, ui->graphicsView->width(), ui->graphicsView->height());
     drawPiano();
+
+
+    // RtMidiOut constructor
+    try
+    {
+      midiout = new RtMidiOut();
+    }
+    catch ( RtMidiError &error )
+    {
+      qDebug() << "Failed to create rtMidiOut!!!: ";
+      error.printMessage();
+      exit( EXIT_FAILURE );
+    }
+    // Call function to select port.
+    try
+    {
+      if ( chooseMidiPort( midiout ) == false )
+      {
+          qDebug() << "Failed to connect to port: ";
+          delete midiout;
+          return;
+      }
+    }
+    catch ( RtMidiError &error )
+    {
+      error.printMessage();
+      qDebug() << "Exception: ";
+      delete midiout;
+    }
 }
 
 void Passerine::ResizeNotes(int _startNote, int _endNote)
@@ -240,33 +269,6 @@ void Passerine::on_actionOpen_triggered()
     qDebug() << "Time: " << midifile.getTotalTimeInSeconds();
 
     ui->songSlider->setMaximum(midifile.getTotalTimeInSeconds());
-    // RtMidiOut constructor
-    try
-    {
-      midiout = new RtMidiOut();
-    }
-    catch ( RtMidiError &error )
-    {
-      qDebug() << "Failed to create rtMidiOut!!!: ";
-      error.printMessage();
-      exit( EXIT_FAILURE );
-    }
-    // Call function to select port.
-    try
-    {
-      if ( chooseMidiPort( midiout ) == false )
-      {
-          qDebug() << "Failed to connect to port: ";
-          delete midiout;
-          return;
-      }
-    }
-    catch ( RtMidiError &error )
-    {
-      error.printMessage();
-      qDebug() << "Exception: ";
-      delete midiout;
-    }
 
     if(songPlayer == nullptr)
     {
@@ -282,7 +284,7 @@ void Passerine::on_actionOpen_triggered()
     ui->playPauseButton->setEnabled(true);
     ui->stopButton->setEnabled("true");
     ui->songSlider->setValue(0);
-    ui->songSlider->setDisabled(true);
+    ui->songSlider->setDisabled(false);
 
     noteGraphicsInit();
 
@@ -437,4 +439,19 @@ void Passerine::resetPiano()
 void Passerine::on_songSlider_sliderReleased()
 {
     resetPiano();
+}
+
+void Passerine::on_actionNew_triggered()
+{
+    MidiFile *m = new MidiFile();
+
+    songPlayer->setSong(m);
+    songPlayer->setSong(&midifile);
+    songPlayer->setCurrentTime(0);
+    songPlayer->setPort(midiout);
+    noteGraphicsInit();
+    ui->songSlider->setValue(0);
+    ui->playPauseButton->setEnabled(true);
+    ui->stopButton->setEnabled("true");
+    ui->songSlider->setDisabled(false);
 }

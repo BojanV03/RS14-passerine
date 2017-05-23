@@ -63,6 +63,8 @@ private slots:
 
     void on_songSlider_sliderReleased();
 
+    void on_actionNew_triggered();
+
 private:
     Ui::Passerine *ui;
 

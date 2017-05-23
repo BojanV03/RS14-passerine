@@ -269,7 +269,8 @@ void SongPlayer::setSong(MidiFile *_song)
             MidiEvent event = _song->getEvent(0,i);
             if(event.isNoteOn())
             {
-                for(unsigned j = i; j< numEvent; j++)
+                unsigned j;
+                for(j = i; j< numEvent; j++)
                 {
                     if(_song->getEvent(0,j).isNoteOff() && event[1] == _song->getEvent(0,j)[1])
                     {
@@ -279,7 +280,8 @@ void SongPlayer::setSong(MidiFile *_song)
                     }
                 }
                 Note *n = new Note(event[1], event.seconds, end);
-
+                n->setOnEvent(&_song->getEvent(0, i));
+                n->setOffEvent(&_song->getEvent(0, j));
                 notes.push_back(n);
             }
         }
@@ -329,21 +331,22 @@ Note* SongPlayer::addNote(int id, float time, float duration)
     qDebug() << "Added note " << id << " starting at: " << time << " seconds and lasting " << duration << " seconds";
 
     Note *n = new Note(id, time, duration);
-    notes.push_back(n);
 
     int index = song->addNoteOn(0, song->getAbsoluteTickTime(time), 0, id, 90);
-
     song->getEvent(0, index).seconds = time;
     song->getEvent(0, index).tick = song->getAbsoluteTickTime(time+duration);
     qDebug() << "start time: " << song->getEvent(0, index).seconds;
+    n->setOnEvent(&song->getEvent(0, index));
     index = song->addNoteOff(0, song->getAbsoluteTickTime(time+duration), 0, id);
 
     qDebug() << "Tracks: " << song->getNumTracks();
     song->getEvent(0, index).seconds = time+duration;
     song->getEvent(0, index).tick = song->getAbsoluteTickTime(time+duration);
+    n->setOffEvent(&song->getEvent(0, index));
     qDebug() << "end time: " << song->getEvent(0, index).seconds;
 
     qDebug() << "Note starting at: " << song->getAbsoluteTickTime(time) << " and ending at " << song->getAbsoluteTickTime(time+duration);
     song->sortTracks();         // ensure tick times are in correct order
+    notes.push_back(n);
     return n;
 }

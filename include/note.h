@@ -5,6 +5,7 @@
 #include <QRect>
 #include <QPainter>
 #include <QDebug>
+#include <QGraphicsSceneWheelEvent>
 
 #include <include/MidiFile.h>
 #ifndef NOTE_H
@@ -28,9 +29,17 @@ public:
     QRect getRect() const;
     void setRect(const QRect &value);
     void setRect(float x, float y, float width, float height);
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
     QBrush getStandardBrush() const;
     void setStandardBrush(const QBrush &value);
+
+    MidiEvent *getOnEvent() const;
+    void setOnEvent(MidiEvent *value);
+
+    MidiEvent *getOffEvent() const;
+    void setOffEvent(MidiEvent *value);
+    virtual void wheelEvent(QGraphicsSceneWheelEvent * event);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
@@ -40,6 +49,8 @@ private:
     double _timeBegin;
     double _timeEnd;
 
+    MidiEvent *onEvent;
+    MidiEvent *offEvent;
 
     QBrush standardBrush;
     QRect rect;
