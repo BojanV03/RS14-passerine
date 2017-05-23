@@ -53,7 +53,8 @@ void Passerine::ResizeNotes(int _startNote, int _endNote)
         {
             n[i]->setRect(n[i]->getRect().x(), countNumberOfWhiteNotesInRange(0, n[i]->getId()-12) * height -  (height/1.5)/2, width, blackNoteHeight());
         }
-        group->setRect(QRect(0, 0, songPlayer->getSong()->getTotalTimeInSeconds()*widthCoef, ui->graphicsView->scene()->height()));
+        group->setRect(QRect(0, 0, songPlayer->getSong()->getTotalTimeInSeconds()*widthCoef + 5*scene->width()/6, ui->graphicsView->scene()->height()));
+        group->setSceneWidth(scene->width());
     }
     updateGraphics();
 }
@@ -318,8 +319,8 @@ void Passerine::noteGraphicsInit()
     makeNoteGroup();
     scene->addItem(group);
     group->setPos(scene->width()/6, group->pos().y());
-    group->setRect(QRect(0, 0, songPlayer->getSong()->getTotalTimeInSeconds()*widthCoef, ui->graphicsView->scene()->height()));
-
+    group->setRect(QRect(0, 0, songPlayer->getSong()->getTotalTimeInSeconds()*widthCoef + 5*scene->width()/6, ui->graphicsView->scene()->height()));
+    group->setSceneWidth(scene->width());
     group->show();
 }
 

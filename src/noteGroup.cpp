@@ -43,11 +43,23 @@ void noteGroup::mousePressEvent(QGraphicsSceneMouseEvent *event)
         n->setRect(n->getTimeBegin() * widthCoef, countNumberOfWhiteNotesInRange(0, n->getId()-12) * height -  (height/1.5)/2, width, height/1.5);
     }
 
+
     qDebug() << playerRef->getSong()->getTotalTimeInSeconds();
 }
 
 void noteGroup::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
+
+}
+
+float noteGroup::getSceneWidth() const
+{
+    return sceneWidth;
+}
+
+void noteGroup::setSceneWidth(float value)
+{
+    sceneWidth = value;
 }
 
 float noteGroup::getStartX() const
@@ -165,7 +177,7 @@ void noteGroup::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
             y += whiteNoteHeight;
         }
     }
-    rect.setWidth(playerRef->getSong()->getTotalTimeInSeconds()*widthCoef);
+    rect.setWidth(playerRef->getSong()->getTotalTimeInSeconds()*widthCoef + 5*sceneWidth/6);
 
     update();
 //    qDebug() << "Rect is: " << rect.topLeft() << ": " << rect.bottomRight();

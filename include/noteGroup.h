@@ -38,6 +38,10 @@ public:
     float getStartX() const;
     void setStartX(float value);
 
+
+    float getSceneWidth() const;
+    void setSceneWidth(float value);
+
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
@@ -49,6 +53,7 @@ private:
     int numOfWhiteNotes;
     float widthCoef;
     SongPlayer *playerRef;
+    float sceneWidth;
 
     float startX;
     float startY = 0;
