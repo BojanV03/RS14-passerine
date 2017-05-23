@@ -2,7 +2,7 @@
 
 noteGroup::noteGroup()
 {
-
+noteGroup::setZValue(-1000);
 }
 
 QRect noteGroup::getRect() const

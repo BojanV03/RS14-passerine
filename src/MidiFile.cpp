@@ -2746,6 +2746,12 @@ int eventcompare(const void* a, const void* b) {
    } else if (aevent.seconds < bevent.seconds) {
       // aevent occurs before bevent
       return -1;
+   } else if (aevent.tick > bevent.tick) { // Changed from ticks to seconds
+      // aevent occurs after bevent
+      return +1;
+   } else if (aevent.tick < bevent.tick) {
+      // aevent occurs before bevent
+      return -1;
    } else if (aevent.seq > bevent.seq) {
       // aevent sequencing state occurs after bevent
       // see MidiFile::markSequence()
