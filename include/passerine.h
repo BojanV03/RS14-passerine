@@ -65,6 +65,8 @@ private slots:
 
     void on_actionNew_triggered();
 
+    void on_actionSuperSecretButton1_triggered();
+
 private:
     Ui::Passerine *ui;
 

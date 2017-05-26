@@ -256,7 +256,7 @@ void Passerine::on_actionOpen_triggered()
                 "Open Midi File",
                 "",
                 tr("MIDI (*.mid);;All files (*.*)" )
-        );;
+        );
 
     int n = midifile.read(filename.toUtf8().constData());
 
@@ -454,4 +454,9 @@ void Passerine::on_actionNew_triggered()
     ui->playPauseButton->setEnabled(true);
     ui->stopButton->setEnabled("true");
     ui->songSlider->setDisabled(false);
+}
+
+void Passerine::on_actionSuperSecretButton1_triggered()
+{
+
 }
