@@ -446,17 +446,51 @@ void Passerine::on_actionNew_triggered()
     MidiFile *m = new MidiFile();
 
     songPlayer->setSong(m);
-    songPlayer->setSong(&midifile);
     songPlayer->setCurrentTime(0);
     songPlayer->setPort(midiout);
-    noteGraphicsInit();
     ui->songSlider->setValue(0);
     ui->playPauseButton->setEnabled(true);
     ui->stopButton->setEnabled("true");
     ui->songSlider->setDisabled(false);
 }
 
-void Passerine::on_actionSuperSecretButton1_triggered()
-{
+#include <QLabel>
+#include <QPixmap>
+#include <QImage>
+#include <ui/piceditor.h>
 
+void Passerine::on_actionLoadImage_triggered()
+{
+    QString filename = QFileDialog::getOpenFileName(
+                this,
+                "Open Midi File",
+                "",
+                tr("PNG (*.png);;BMP (*.bmp);;JPEG (*.jpg);;All files (*.*)" )
+        );
+    QImage image(filename);
+
+    picEditor *pe = new picEditor(this, &image);
+
+    pe->setPlayerRef(songPlayer);
+    pe->exec();
+
+    ui->songSlider->setMaximum(songPlayer->getSong()->getTotalTimeInSeconds());
+    midifile.read("GeneratedMidi.mid");
+//    songPlayer->setSong(&midifile);
+    songPlayer->setCurrentTime(0);
+    songPlayer->setPort(midiout);
+
+    qDebug() << "Izasao " << songPlayer->getSong()->getTotalTimeInSeconds();
+    updateGraphics();
+    noteGraphicsInit();
+    updateGraphics();
+
+    delete pe;
+}
+
+void Passerine::on_actionSave_triggered()
+{
+    midifile.joinTracks();
+    midifile.sortTracks();
+    midifile.write("FinalnaVerzija1.mid");
 }
