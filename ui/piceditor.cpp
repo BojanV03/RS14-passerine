@@ -59,7 +59,7 @@ void picEditor::refreshImage()
         QImage imagetmp(*originalImage);
 
 
-        image = imagetmp.scaledToHeight(96);
+        image = imagetmp.scaledToHeight(numberOfKeys);
 
         for (int ii = 0; ii < image.height(); ii++)
         {
@@ -81,6 +81,34 @@ void picEditor::refreshImage()
             image.invertPixels();
         }
         ui->picLabel->setPixmap(QPixmap::fromImage(image.scaled(width()-20, height()-20, Qt::KeepAspectRatio), Qt::AutoColor));
+    }
+}
+
+bool picEditor::isWhiteNote(int i)
+{
+    int note = i % 12;
+
+    if(note == 0 || note == 2 || note == 4 || note == 5 || note == 7 || note == 9 || note == 11)
+        return true;
+
+    return false;
+}
+
+int picEditor::getKeyInScale(int n)
+{
+    if(!ui->cbLockToScale->isChecked())
+        return n;
+
+    else
+    {
+        int j=0;
+        for(int i = 0; i < 96; i++)
+        {
+            if(isWhiteNote(i))
+              j++;
+            if(j == n)
+                return i;
+        }
     }
 }
 
@@ -111,7 +139,7 @@ void picEditor::on_buttonBox_accepted()
     Midi->addTracks(2);    // Add another two tracks to the MIDI file
     int tpq = 100;            // ticks per quarter note
     Midi->setTicksPerQuarterNote(tpq);
-    tpq = 10;
+    tpq = 10 * (96.0/numberOfKeys);
     // Add some expression track (track 0) messages:
     Midi->addTrackName(0, 0, "Test");
     Midi->addTempo(0, 0, 120);
@@ -131,17 +159,15 @@ void picEditor::on_buttonBox_accepted()
             // NoteOn event generisemo samo ako je pocetni pixel beo ili ako je prethodni bio crn a trenutni beo
             if((isWhite(currPixel) && j == 0) || (isWhite(currPixel) && !isWhite(prevPixel)))
             {
-                qDebug() << "Note on: 0 " << j << " 0 " << i+1 << " 60";
-                int n = Midi->addNoteOn(0, tpq*j, 0, i+12, 60);
-         //     Midi->getEvent(0, n).seconds = j/100.0;
+                int n = Midi->addNoteOn(0, tpq*j, 0, getKeyInScale(i)+12, 60);
+
                 noteOnCounter++;
             }
             // NoteOff event generisemo samo ako je trenutni pixel crn a prethodni beo ili ako je trenutni/zadnji pixel beo
             if((isWhite(currPixel) && (j + 1 == image.width()) || (isWhite(currPixel) && !isWhite(nextPixel))))
             {
-                qDebug() << "Note off: 0 " << j << " 0 " << i+1;
-                int n = Midi->addNoteOff(0, tpq*(j+1), 0, i+12);
-        //        Midi->getEvent(0, n).seconds = j/100.0;
+                int n = Midi->addNoteOff(0, tpq*(j+1), 0, getKeyInScale(i)+12);
+
                 noteOffCounter++;
             }
         }
@@ -150,10 +176,10 @@ void picEditor::on_buttonBox_accepted()
     Midi->getTotalTimeInSeconds();
     Midi->joinTracks();
     Midi->sortTracks();
-//    Midi->buildTimeMap();
+
     Midi->write("GeneratedMidi.mid");
     playerRef->setSong(Midi);
-//    delete Midi;
+
     qDebug() << noteOnCounter << " je on; " << noteOffCounter << " je off.";
 }
 
@@ -166,8 +192,19 @@ void picEditor::setPlayerRef(SongPlayer *value)
 {
     playerRef = value;
 }
+#define NUMBER_OF_OCTAVES 8
+#define KEYS_PER_OCTAVE 12
+#define KEYS_PER_SCALE 7
 
 void picEditor::on_cbLockToScale_toggled(bool checked)
 {
-
+    if(!checked)
+    {
+        numberOfKeys = NUMBER_OF_OCTAVES * KEYS_PER_OCTAVE;
+    }
+    else
+    {
+        numberOfKeys = NUMBER_OF_OCTAVES * KEYS_PER_SCALE;
+    }
+    refreshImage();
 }

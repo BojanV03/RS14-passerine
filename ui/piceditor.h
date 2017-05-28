@@ -37,12 +37,16 @@ private slots:
     void on_cbLockToScale_toggled(bool checked);
 
 private:
+    int numberOfKeys;
     SongPlayer *playerRef;
     void refreshImage();
     Ui::picEditor *ui;
     QImage *originalImage;
     QImage image;
     MidiFile *Midi = new MidiFile();
+
+    int getKeyInScale(int n);
+    bool isWhiteNote(int i);
 };
 
 #endif // PICEDITOR_H
