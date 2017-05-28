@@ -162,7 +162,7 @@
     <addaction name="actionSave_As"/>
     <addaction name="separator"/>
     <addaction name="actionClose"/>
-    <addaction name="actionSuperSecretButton1"/>
+    <addaction name="actionLoadImage"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
@@ -224,9 +224,12 @@
     <string>About Qt...</string>
    </property>
   </action>
-  <action name="actionSuperSecretButton1">
+  <action name="actionLoadImage">
    <property name="text">
-    <string>SuperSecretButton</string>
+    <string>Load Image</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
    </property>
   </action>
  </widget>

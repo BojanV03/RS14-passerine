@@ -257,36 +257,36 @@ void SongPlayer::setSong(MidiFile *_song)
 
     if(_song != nullptr)
     {
-        _song->joinTracks();
-        _song->sortTracks();
+        song = _song;
+        song->joinTracks();
+        song->sortTracks();
         int numEvent;
-        numEvent = _song->getEventCount(0);
+        numEvent = song->getEventCount(0);
 
         for(unsigned i = 0; i< numEvent; i++)
         {
             double end;
 
-            MidiEvent event = _song->getEvent(0,i);
+            MidiEvent event = song->getEvent(0,i);
             if(event.isNoteOn())
             {
                 unsigned j;
                 for(j = i; j< numEvent; j++)
                 {
-                    if(_song->getEvent(0,j).isNoteOff() && event[1] == _song->getEvent(0,j)[1])
+                    if(song->getEvent(0,j).isNoteOff() && event[1] == song->getEvent(0,j)[1])
                     {
-                        end = _song->getEvent(0,j).seconds;
+                        end = song->getEvent(0,j).seconds;
                         break;
 
                     }
                 }
                 Note *n = new Note(event[1], event.seconds, end);
-                n->setOnEvent(&_song->getEvent(0, i));
-                n->setOffEvent(&_song->getEvent(0, j));
+                n->setOnEvent(&song->getEvent(0, i));
+                n->setOffEvent(&song->getEvent(0, j));
                 notes.push_back(n);
             }
         }
         qDebug() << "Number of notes" << notes.size();
-        song = _song;
     }
 }
 void SongPlayer::setInstrument(int _instrument)

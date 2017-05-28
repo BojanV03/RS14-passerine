@@ -39,7 +39,10 @@ SOURCES += src/main.cpp\
     src/Key.cpp \
     src/note.cpp \
     src/AnimationGroup.cpp \
-    src/noteGroup.cpp
+    src/noteGroup.cpp \
+    ui/piceditor.cpp \
+    src/Instrument.cpp \
+    src/GeneralMidi.cpp
 
 HEADERS  += include/passerine.h \
     include/Binasc.h \
@@ -59,10 +62,14 @@ HEADERS  += include/passerine.h \
     include/Key.h \
     include/note.h \
     include/AnimationGroup.h \
-    include/noteGroup.h
+    include/noteGroup.h \
+    ui/piceditor.h \
+    src/Instrument.h \
+    src/GeneralMidi.h
 
 FORMS    += ui/passerine.ui \
-    ui/portselector.ui
+    ui/portselector.ui \
+    ui/piceditor.ui
 
 unix:!macx: LIBS += -lasound
 
