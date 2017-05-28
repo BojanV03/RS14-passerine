@@ -144,8 +144,11 @@ void picEditor::on_buttonBox_accepted()
     Midi->addTrackName(0, 0, "Test");
     Midi->addTempo(0, 0, 120);
 
+    Midi->addPatchChange(0, 0, 0, 6);
+
     int noteOnCounter = 0;
     int noteOffCounter = 0;
+
     for (int i = 0; i < image.height(); i++)
     {
         uchar* scan = image.scanLine(i);
