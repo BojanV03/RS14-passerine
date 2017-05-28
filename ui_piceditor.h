@@ -14,6 +14,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QHBoxLayout>
@@ -38,6 +39,7 @@ public:
     QCheckBox *cbPreview;
     QCheckBox *cbInvert;
     QCheckBox *cbLockToScale;
+    QComboBox *comboInstrument;
     QDialogButtonBox *buttonBox;
 
     void setupUi(QDialog *picEditor)
@@ -84,6 +86,11 @@ public:
         cbLockToScale->setObjectName(QStringLiteral("cbLockToScale"));
 
         horizontalLayout_2->addWidget(cbLockToScale);
+
+        comboInstrument = new QComboBox(verticalLayoutWidget);
+        comboInstrument->setObjectName(QStringLiteral("comboInstrument"));
+
+        horizontalLayout_2->addWidget(comboInstrument);
 
         buttonBox = new QDialogButtonBox(verticalLayoutWidget);
         buttonBox->setObjectName(QStringLiteral("buttonBox"));

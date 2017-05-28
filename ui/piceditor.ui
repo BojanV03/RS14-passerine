@@ -80,6 +80,9 @@
        </widget>
       </item>
       <item>
+       <widget class="QComboBox" name="comboInstrument"/>
+      </item>
+      <item>
        <widget class="QDialogButtonBox" name="buttonBox">
         <property name="enabled">
          <bool>true</bool>

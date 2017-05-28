@@ -1,11 +1,22 @@
 #include "piceditor.h"
 #include "ui_piceditor.h"
-
+#include "src/GeneralMidi.h"
 picEditor::picEditor(QWidget *parent, QImage *_originalImage) :
     QDialog(parent), originalImage(_originalImage), ui(new Ui::picEditor)
 {
+
     ui->setupUi(this);
     ui->picLabel->setPixmap(QPixmap::fromImage((*originalImage).scaled(width()-20, height()-20, Qt::KeepAspectRatio), Qt::AutoColor));
+
+    GeneralMidi *gm = new GeneralMidi();
+
+    for(int i = 0; i < 128; i++)
+    {
+        QString str1 = *gm->getNameFromId(i);
+        QByteArray ba = str1.toLatin1();
+        const char *c_str2 = ba.data();
+        ui->comboInstrument->addItem(tr(c_str2));
+    }
 }
 
 picEditor::~picEditor()
@@ -144,8 +155,8 @@ void picEditor::on_buttonBox_accepted()
     Midi->addTrackName(0, 0, "Test");
     Midi->addTempo(0, 0, 120);
 
-    Midi->addPatchChange(0, 0, 0, 6);
-
+    Midi->addPatchChange(0, 0, 0, ui->comboInstrument->currentIndex()-1);
+    qDebug() << "selected instrument: " << ui->comboInstrument->currentIndex()-1;
     int noteOnCounter = 0;
     int noteOffCounter = 0;
 
