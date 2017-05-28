@@ -454,6 +454,8 @@ void Passerine::on_actionNew_triggered()
     ui->playPauseButton->setEnabled(true);
     ui->stopButton->setEnabled("true");
     ui->songSlider->setDisabled(false);
+
+
 }
 
 void Passerine::on_actionSuperSecretButton1_triggered()
@@ -471,7 +473,7 @@ void Passerine::on_actionSave_triggered()
 
 }
 
-void Passerine::on_actionSaveAs_triggered()
+void Passerine::on_actionSave_As_triggered()
 {
     QString filename = QFileDialog::getSaveFileName(this, "Save file", "", ".mid");
     QFile f(filename);
