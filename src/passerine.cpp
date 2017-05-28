@@ -452,6 +452,8 @@ void Passerine::on_actionNew_triggered()
     ui->playPauseButton->setEnabled(true);
     ui->stopButton->setEnabled("true");
     ui->songSlider->setDisabled(false);
+
+
 }
 
 #include <QLabel>
@@ -493,4 +495,24 @@ void Passerine::on_actionSave_triggered()
     midifile.joinTracks();
     midifile.sortTracks();
     midifile.write("FinalnaVerzija1.mid");
+}
+
+void Passerine::on_actionSave_triggered()
+{
+        QString filename = QFileDialog::getSaveFileName(this, "Save file", "", ".mid");
+        QFile f(filename);
+        f.open( QIODevice::WriteOnly );
+        midifile.write(filename.toUtf8().constData());
+        f.close();
+
+}
+
+void Passerine::on_actionSave_As_triggered()
+{
+    QString filename = QFileDialog::getSaveFileName(this, "Save file", "", ".mid");
+    QFile f(filename);
+    f.open( QIODevice::WriteOnly );
+    midifile.write(filename.toUtf8().constData());
+    f.close();
+
 }
