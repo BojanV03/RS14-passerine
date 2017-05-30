@@ -1,6 +1,6 @@
-#include "piceditor.h"
+#include <include/piceditor.h>
 #include "ui_piceditor.h"
-#include "src/GeneralMidi.h"
+#include <include/GeneralMidi.h>
 picEditor::picEditor(QWidget *parent, QImage *_originalImage) :
     QDialog(parent), originalImage(_originalImage), ui(new Ui::picEditor)
 {
@@ -37,7 +37,6 @@ void picEditor::on_cbPreview_toggled(bool checked)
 
 void picEditor::refreshImage()
 {
-
     int value = ui->horizontalSlider->value();
 
     if(!ui->cbPreview->isChecked())
@@ -47,7 +46,7 @@ void picEditor::refreshImage()
         for (int ii = 0; ii < image.height(); ii++)
         {
             uchar* scan = image.scanLine(ii);
-            int depth =4;
+            int depth = 4;
             for (int jj = 0; jj < image.width(); jj++)
             {
 
@@ -69,13 +68,12 @@ void picEditor::refreshImage()
     {
         QImage imagetmp(*originalImage);
 
-
         image = imagetmp.scaledToHeight(numberOfKeys);
 
         for (int ii = 0; ii < image.height(); ii++)
         {
             uchar* scan = image.scanLine(ii);
-            int depth =4;
+            int depth = 4;
             for (int jj = 0; jj < image.width(); jj++)
             {
 

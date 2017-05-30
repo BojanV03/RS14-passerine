@@ -65,7 +65,7 @@ SOURCES       = src/main.cpp \
 		src/note.cpp \
 		src/AnimationGroup.cpp \
 		src/noteGroup.cpp \
-		ui/piceditor.cpp \
+		src/piceditor.cpp \
 		src/Instrument.cpp \
 		src/GeneralMidi.cpp moc_passerine.cpp \
 		moc_portselector.cpp \
@@ -267,9 +267,9 @@ DIST          = ../../Qt5.7.0/5.7/gcc_64/mkspecs/features/spec_pre.prf \
 		include/note.h \
 		include/AnimationGroup.h \
 		include/noteGroup.h \
-		ui/piceditor.h \
-		src/Instrument.h \
-		src/GeneralMidi.h src/main.cpp \
+		include/piceditor.h \
+		include/Instrument.h \
+		include/GeneralMidi.h src/main.cpp \
 		src/passerine.cpp \
 		src/Binasc.cpp \
 		src/MidiEvent.cpp \
@@ -286,7 +286,7 @@ DIST          = ../../Qt5.7.0/5.7/gcc_64/mkspecs/features/spec_pre.prf \
 		src/note.cpp \
 		src/AnimationGroup.cpp \
 		src/noteGroup.cpp \
-		ui/piceditor.cpp \
+		src/piceditor.cpp \
 		src/Instrument.cpp \
 		src/GeneralMidi.cpp
 QMAKE_TARGET  = Passerine
@@ -629,8 +629,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents include/passerine.h include/Binasc.h include/MidiEvent.h include/MidiEventList.h include/MidiFile.h include/MidiMessage.h include/Options.h include/RtMidi.h include/rtmidi_c.h include/portselector.h include/SongPlayer.h include/SongPlayer.h include/Octave.h include/Octave.h include/Key.h include/Key.h include/note.h include/AnimationGroup.h include/noteGroup.h ui/piceditor.h src/Instrument.h src/GeneralMidi.h $(DISTDIR)/
-	$(COPY_FILE) --parents src/main.cpp src/passerine.cpp src/Binasc.cpp src/MidiEvent.cpp src/MidiEventList.cpp src/MidiFile.cpp src/MidiMessage.cpp src/Options.cpp src/RtMidi.cpp src/rtmidi_c.cpp src/portselector.cpp src/SongPlayer.cpp src/Octave.cpp src/Key.cpp src/note.cpp src/AnimationGroup.cpp src/noteGroup.cpp ui/piceditor.cpp src/Instrument.cpp src/GeneralMidi.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents include/passerine.h include/Binasc.h include/MidiEvent.h include/MidiEventList.h include/MidiFile.h include/MidiMessage.h include/Options.h include/RtMidi.h include/rtmidi_c.h include/portselector.h include/SongPlayer.h include/SongPlayer.h include/Octave.h include/Octave.h include/Key.h include/Key.h include/note.h include/AnimationGroup.h include/noteGroup.h include/piceditor.h include/Instrument.h include/GeneralMidi.h $(DISTDIR)/
+	$(COPY_FILE) --parents src/main.cpp src/passerine.cpp src/Binasc.cpp src/MidiEvent.cpp src/MidiEventList.cpp src/MidiFile.cpp src/MidiMessage.cpp src/Options.cpp src/RtMidi.cpp src/rtmidi_c.cpp src/portselector.cpp src/SongPlayer.cpp src/Octave.cpp src/Key.cpp src/note.cpp src/AnimationGroup.cpp src/noteGroup.cpp src/piceditor.cpp src/Instrument.cpp src/GeneralMidi.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ui/passerine.ui ui/portselector.ui ui/piceditor.ui $(DISTDIR)/
 
 
@@ -1171,9 +1171,9 @@ moc_piceditor.cpp: ../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QDialog \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QGraphicsSceneWheelEvent \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qgraphicssceneevent.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/QString \
-		ui/piceditor.h \
+		include/piceditor.h \
 		../../Qt5.7.0/5.7/gcc_64/bin/moc
-	/home/bk/Qt5.7.0/5.7/gcc_64/bin/moc $(DEFINES) -I/home/bk/Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++ -I/home/bk/Desktop/RS14-passerine -I/home/bk/Qt5.7.0/5.7/gcc_64/include -I/home/bk/Qt5.7.0/5.7/gcc_64/include/QtWidgets -I/home/bk/Qt5.7.0/5.7/gcc_64/include/QtGui -I/home/bk/Qt5.7.0/5.7/gcc_64/include/QtCore -I/usr/include/c++/6 -I/usr/include/x86_64-linux-gnu/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/x86_64-linux-gnu/6/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/6/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ui/piceditor.h -o moc_piceditor.cpp
+	/home/bk/Qt5.7.0/5.7/gcc_64/bin/moc $(DEFINES) -I/home/bk/Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++ -I/home/bk/Desktop/RS14-passerine -I/home/bk/Qt5.7.0/5.7/gcc_64/include -I/home/bk/Qt5.7.0/5.7/gcc_64/include/QtWidgets -I/home/bk/Qt5.7.0/5.7/gcc_64/include/QtGui -I/home/bk/Qt5.7.0/5.7/gcc_64/include/QtCore -I/usr/include/c++/6 -I/usr/include/x86_64-linux-gnu/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/x86_64-linux-gnu/6/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/6/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include include/piceditor.h -o moc_piceditor.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -1590,8 +1590,7 @@ passerine.o: src/passerine.cpp include/passerine.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QLabel \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qlabel.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/QPixmap \
-		../../Qt5.7.0/5.7/gcc_64/include/QtGui/QImage \
-		ui/piceditor.h
+		../../Qt5.7.0/5.7/gcc_64/include/QtGui/QImage
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o passerine.o src/passerine.cpp
 
 Binasc.o: src/Binasc.cpp include/Binasc.h
@@ -2415,11 +2414,10 @@ noteGroup.o: src/noteGroup.cpp include/noteGroup.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QGraphicsSceneMouseEvent
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o noteGroup.o src/noteGroup.cpp
 
-piceditor.o: ui/piceditor.cpp ui/piceditor.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QDialog \
-		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qdialog.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qwidget.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qwindowdefs.h \
+piceditor.o: src/piceditor.cpp ui_piceditor.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/QVariant \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qvariant.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qglobal.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qconfig.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qfeatures.h \
@@ -2432,26 +2430,21 @@ piceditor.o: ui/piceditor.cpp ui/piceditor.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsysinfo.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qlogging.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qflags.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qglobalstatic.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qmutex.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qnumeric.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qversiontagging.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qbasicatomic.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic_bootstrap.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qgenericatomic.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic_cxx11.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic_msvc.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qglobalstatic.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qmutex.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qnumeric.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qversiontagging.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qobjectdefs.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qnamespace.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qobjectdefs_impl.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qwindowdefs_win.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qobject.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qstring.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qchar.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qbytearray.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qrefcount.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qnamespace.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qarraydata.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qstring.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qchar.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qstringbuilder.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qlist.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qalgorithms.h \
@@ -2462,86 +2455,65 @@ piceditor.o: ui/piceditor.cpp ui/piceditor.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qstringlist.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qregexp.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qstringmatcher.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qcoreevent.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qscopedpointer.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qmetatype.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qvarlengtharray.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qobjectdefs.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qmap.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qdebug.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qhash.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qtextstream.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qiodevice.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qobject.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qcoreevent.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qscopedpointer.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qobject_impl.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qlocale.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qshareddata.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qvector.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qpoint.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qset.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsharedpointer.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QAction \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qaction.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qkeysequence.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qwidget.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qwindowdefs.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qwindowdefs_win.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qmargins.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qpaintdevice.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qrect.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsize.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qpoint.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qpalette.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qcolor.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qrgb.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qrgba64.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qbrush.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qvector.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qmatrix.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qpolygon.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qregion.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qdatastream.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qiodevice.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qline.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qtransform.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qpainterpath.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qimage.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qpixelformat.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qpixmap.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsharedpointer.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qshareddata.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qhash.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsharedpointer_impl.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qfont.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qfontmetrics.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qfontinfo.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qsizepolicy.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qcursor.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qkeysequence.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qevent.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qvariant.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qmap.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qdebug.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qtextstream.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qlocale.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qset.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qcontiguouscache.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qurl.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qurlquery.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qfile.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qfiledevice.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qvector2d.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qtouchdevice.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtGui/QImage \
-		../../Qt5.7.0/5.7/gcc_64/include/QtGui/QPixmap \
-		include/SongPlayer.h \
-		include/Binasc.h \
-		include/MidiEvent.h \
-		include/MidiMessage.h \
-		include/MidiEventList.h \
-		include/MidiFile.h \
-		include/Options.h \
-		include/RtMidi.h \
-		include/note.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QGraphicsItem \
-		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qgraphicsitem.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtGui/QBrush \
-		../../Qt5.7.0/5.7/gcc_64/include/QtGui/QColor \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/QRect \
-		../../Qt5.7.0/5.7/gcc_64/include/QtGui/QPainter \
-		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qpainter.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qtextoption.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qpen.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/QDebug \
-		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QGraphicsSceneWheelEvent \
-		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qgraphicssceneevent.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/QString \
-		ui_piceditor.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/QVariant \
-		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QAction \
-		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qaction.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qicon.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qactiongroup.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QApplication \
@@ -2571,6 +2543,8 @@ piceditor.o: ui/piceditor.cpp ui/piceditor.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qrubberband.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qframe.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qabstractitemmodel.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QDialog \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qdialog.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QDialogButtonBox \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QHBoxLayout \
@@ -2588,74 +2562,18 @@ piceditor.o: ui/piceditor.cpp ui/piceditor.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QSlider \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QSpacerItem \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QVBoxLayout \
-		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QWidget
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o piceditor.o ui/piceditor.cpp
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QWidget \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/QDebug \
+		include/MidiFile.h \
+		include/MidiEventList.h \
+		include/MidiEvent.h \
+		include/MidiMessage.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o piceditor.o src/piceditor.cpp
 
-Instrument.o: src/Instrument.cpp src/Instrument.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/QString \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qstring.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qchar.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qglobal.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qconfig.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qfeatures.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsystemdetection.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qprocessordetection.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qcompilerdetection.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qtypeinfo.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qtypetraits.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qisenum.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsysinfo.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qlogging.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qflags.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qbasicatomic.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic_bootstrap.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qgenericatomic.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic_cxx11.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic_msvc.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qglobalstatic.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qmutex.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qnumeric.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qversiontagging.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qbytearray.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qrefcount.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qnamespace.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qarraydata.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qstringbuilder.h
+Instrument.o: src/Instrument.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Instrument.o src/Instrument.cpp
 
-GeneralMidi.o: src/GeneralMidi.cpp src/GeneralMidi.h \
-		src/Instrument.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/QString \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qstring.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qchar.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qglobal.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qconfig.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qfeatures.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsystemdetection.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qprocessordetection.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qcompilerdetection.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qtypeinfo.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qtypetraits.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qisenum.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsysinfo.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qlogging.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qflags.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qbasicatomic.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic_bootstrap.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qgenericatomic.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic_cxx11.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic_msvc.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qglobalstatic.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qmutex.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qnumeric.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qversiontagging.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qbytearray.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qrefcount.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qnamespace.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qarraydata.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qstringbuilder.h
+GeneralMidi.o: src/GeneralMidi.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o GeneralMidi.o src/GeneralMidi.cpp
 
 moc_passerine.o: moc_passerine.cpp 

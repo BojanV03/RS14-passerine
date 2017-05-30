@@ -37,7 +37,7 @@ private slots:
     void on_cbLockToScale_toggled(bool checked);
 
 private:
-    int numberOfKeys;
+    int numberOfKeys = 96;
     SongPlayer *playerRef;
     void refreshImage();
     Ui::picEditor *ui;

@@ -40,7 +40,7 @@ SOURCES += src/main.cpp\
     src/note.cpp \
     src/AnimationGroup.cpp \
     src/noteGroup.cpp \
-    ui/piceditor.cpp \
+    src/piceditor.cpp \
     src/Instrument.cpp \
     src/GeneralMidi.cpp
 
@@ -63,9 +63,9 @@ HEADERS  += include/passerine.h \
     include/note.h \
     include/AnimationGroup.h \
     include/noteGroup.h \
-    ui/piceditor.h \
-    src/Instrument.h \
-    src/GeneralMidi.h
+    include/piceditor.h \
+    include/Instrument.h \
+    include/GeneralMidi.h
 
 FORMS    += ui/passerine.ui \
     ui/portselector.ui \

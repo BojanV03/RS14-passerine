@@ -2,7 +2,7 @@
 #define GENERALMIDI_H
 
 #include <vector>
-#include <src/Instrument.h>
+#include <include/Instrument.h>
 
 class GeneralMidi
 {

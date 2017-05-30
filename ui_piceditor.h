@@ -123,7 +123,7 @@ public:
         picLabel->setText(QApplication::translate("picEditor", "TextLabel", 0));
         cbPreview->setText(QApplication::translate("picEditor", "Preview", 0));
         cbInvert->setText(QApplication::translate("picEditor", "Invert", 0));
-        cbLockToScale->setText(QApplication::translate("picEditor", "CheckBox", 0));
+        cbLockToScale->setText(QApplication::translate("picEditor", "Lock Scale", 0));
     } // retranslateUi
 
 };

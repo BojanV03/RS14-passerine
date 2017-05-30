@@ -75,7 +75,7 @@
       <item>
        <widget class="QCheckBox" name="cbLockToScale">
         <property name="text">
-         <string>CheckBox</string>
+         <string>Lock Scale</string>
         </property>
        </widget>
       </item>
