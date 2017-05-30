@@ -20,8 +20,11 @@ QVariant Note::itemChange(GraphicsItemChange change, const QVariant &value)
         float difference = pos().x() - value.toPointF().x();
 
         onEvent->seconds = onEvent->seconds - difference/200;
+        onEvent->tick = song->getAbsoluteTickTime(onEvent->seconds);
         offEvent->seconds= offEvent->seconds- difference/200;
+        offEvent->tick = song->getAbsoluteTickTime(offEvent->seconds);
 
+        qDebug() << "OffEvent->tick = " << offEvent->tick;
         return QPointF(value.toPointF().x(), pos().y());
     }
     return QGraphicsItem::itemChange( change, value );
@@ -102,7 +105,17 @@ void Note::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void Note::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    qDebug() << "Released";
+    song->sortTracks();
+}
+
+MidiFile *Note::getSong()
+{
+    return song;
+}
+
+void Note::setSong(MidiFile *value)
+{
+    song = value;
 }
 
 MidiEvent *Note::getOffEvent() const
@@ -119,14 +132,17 @@ void Note::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
     if(offEvent->seconds + (event->delta()/12)/200.0 < onEvent->seconds) // Ako skrolom dovedemo notu do negativne duzine
     {
-        offEvent->seconds = onEvent->seconds + 0.01;                    // stavimo joj duzinu na 0.01s
-        setRect(QRect(rect.left(), rect.top(), 0.01*200, rect.height()));
+        offEvent->seconds = onEvent->seconds + 0.05;                    // stavimo joj duzinu na 0.01s
+        setRect(QRect(rect.left(), rect.top(), 0.05*200, rect.height()));
+        offEvent->tick = song->getAbsoluteTickTime(offEvent->seconds);
     }
     else
     {
         offEvent->seconds = offEvent->seconds + (event->delta()/12)/200.0;
         setRect(QRect(rect.left(), rect.top(), rect.width()+event->delta()/12, rect.height()));
+        offEvent->tick = song->getAbsoluteTickTime(offEvent->seconds);
     }
+    song->sortTracks();
 }
 MidiEvent *Note::getOnEvent() const
 {

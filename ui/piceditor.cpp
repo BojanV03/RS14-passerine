@@ -155,8 +155,8 @@ void picEditor::on_buttonBox_accepted()
     Midi->addTrackName(0, 0, "Test");
     Midi->addTempo(0, 0, 120);
 
-    Midi->addPatchChange(0, 0, 0, ui->comboInstrument->currentIndex()-1);
-    qDebug() << "selected instrument: " << ui->comboInstrument->currentIndex()-1;
+    Midi->addPatchChange(0, 0, 0, ui->comboInstrument->currentIndex());
+    qDebug() << "selected instrument: " << ui->comboInstrument->currentIndex();
     int noteOnCounter = 0;
     int noteOffCounter = 0;
 
