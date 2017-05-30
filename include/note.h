@@ -41,9 +41,15 @@ public:
     void setOffEvent(MidiEvent *value);
     virtual void wheelEvent(QGraphicsSceneWheelEvent * event);
 
+    MidiFile *getSong();
+    void setSong(MidiFile *value);
+
+    MidiFile *song;
+
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+
 private:
     char _id;
     double _timeBegin;
@@ -51,6 +57,7 @@ private:
 
     MidiEvent *onEvent;
     MidiEvent *offEvent;
+
 
     QBrush standardBrush;
     QRect rect;

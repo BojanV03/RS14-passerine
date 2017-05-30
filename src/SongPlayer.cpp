@@ -258,6 +258,7 @@ void SongPlayer::setSong(MidiFile *_song)
     if(_song != nullptr)
     {
         song = _song;
+
         song->joinTracks();
         song->sortTracks();
         int numEvent;
@@ -283,7 +284,9 @@ void SongPlayer::setSong(MidiFile *_song)
                 Note *n = new Note(event[1], event.seconds, end);
                 n->setOnEvent(&song->getEvent(0, i));
                 n->setOffEvent(&song->getEvent(0, j));
+                n->setSong(song);
                 notes.push_back(n);
+
             }
         }
         qDebug() << "Number of notes" << notes.size();
@@ -328,25 +331,24 @@ void SongPlayer::clearNotes()
 
 Note* SongPlayer::addNote(int id, float time, float duration)
 {
-    qDebug() << "Added note " << id << " starting at: " << time << " seconds and lasting " << duration << " seconds";
+//    qDebug() << "Added note " << id << " starting at: " << time << " seconds and lasting " << duration << " seconds";
 
     Note *n = new Note(id, time, duration);
 
     int index = song->addNoteOn(0, song->getAbsoluteTickTime(time), 0, id, 90);
-    song->getEvent(0, index).seconds = time;
-    song->getEvent(0, index).tick = song->getAbsoluteTickTime(time+duration);
+  //  song->getEvent(0, index).tick = song->getAbsoluteTickTime(time);
+    song->getEvent(0, index).seconds=song->getTimeInSeconds(0, index);
+
     qDebug() << "start time: " << song->getEvent(0, index).seconds;
-    n->setOnEvent(&song->getEvent(0, index));
     index = song->addNoteOff(0, song->getAbsoluteTickTime(time+duration), 0, id);
 
-    qDebug() << "Tracks: " << song->getNumTracks();
-    song->getEvent(0, index).seconds = time+duration;
-    song->getEvent(0, index).tick = song->getAbsoluteTickTime(time+duration);
+  //  song->getEvent(0, index).seconds = time+duration;
+  //  song->getEvent(0, index).tick = song->getAbsoluteTickTime(time+duration);
     n->setOffEvent(&song->getEvent(0, index));
-    qDebug() << "end time: " << song->getEvent(0, index).seconds;
+    song->getEvent(0, index).seconds=song->getTimeInSeconds(0, index);
 
+    song->sortTracks();
     qDebug() << "Note starting at: " << song->getAbsoluteTickTime(time) << " and ending at " << song->getAbsoluteTickTime(time+duration);
-    song->sortTracks();         // ensure tick times are in correct order
     notes.push_back(n);
     return n;
 }
