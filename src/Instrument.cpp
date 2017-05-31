@@ -1,4 +1,4 @@
-#include "Instrument.h"
+#include <include/Instrument.h>
 
 Instrument::Instrument(int _id, QString *_name)
 {

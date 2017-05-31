@@ -1,4 +1,4 @@
-#include "GeneralMidi.h"
+#include <include/GeneralMidi.h>
 
 GeneralMidi::GeneralMidi()
 {

@@ -1,20 +1,21 @@
 #ifndef NOTEGROUP_H
 #define NOTEGROUP_H
 
-#include <QGraphicsItem>
+#include <QGraphicsItemGroup>
 #include <include/note.h>
 #include <include/SongPlayer.h>
 #include <QGraphicsSceneMouseEvent>
 
-class noteGroup : public QGraphicsItem {
+class NoteGroup : public QGraphicsItemGroup {
 public:
-    noteGroup();
+    NoteGroup();
+
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     QRectF boundingRect() const;
 
     QRect getRect() const;
     void setRect(const QRect &value);
-    void addToGroup(Note *n);
+    void addToGroup(Note * n);
 
     SongPlayer *getPlayerRef() const;
     void setPlayerRef(SongPlayer *value);
@@ -41,6 +42,12 @@ public:
 
     float getSceneWidth() const;
     void setSceneWidth(float value);
+
+    std::list<Note *> getChildNotes() const;
+    void setChildNotes(const std::list<Note * > &value);
+    void childErase(int pos);
+
+    std::list<Note *> childNotes;
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
