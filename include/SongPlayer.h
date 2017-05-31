@@ -34,15 +34,15 @@ public:
     void setTempo(int);
     void setPort(RtMidiOut *);
     void setPlaying(bool);
-    void setCurrentTime(float value);
+//    void setCurrentTime(float value);
     void setNoteState(int pos, bool state);
     void clearNotes();
-    Note* addNote(int id = 64, float time = 0, float duration = 1);
+    Note * addNote(int id = 64, float time = 0, float duration = 1);
 
     void PlaySong(float startTime = 0, float endTime = FLT_MAX);
     void noteChanged(MidiEvent &m);
 
-    std::vector<Note*> getNotes() const;
+    std::vector<Note *> getNotes() const;
     void setNotes(const std::vector<Note> &value);
 
 
@@ -57,6 +57,10 @@ public:
     void setStopped(bool value);
 
     void stop();
+
+signals:
+    void setCurrentTime(float value);
+
 private:
     MidiFile *song;
     int instrument, tempo;
@@ -67,7 +71,7 @@ private:
 
     float currentTime = 0;
 
-    std::vector<Note*> notes;
+    std::vector<Note *> notes;
     QString lyrics;
 
     bool threadCreated = false;

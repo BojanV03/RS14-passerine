@@ -1,33 +1,34 @@
 #include <include/noteGroup.h>
 
-noteGroup::noteGroup()
+NoteGroup::NoteGroup() : childNotes()
 {
-noteGroup::setZValue(-1000);
+    NoteGroup::setZValue(-1000);
 }
 
-QRect noteGroup::getRect() const
+QRect NoteGroup::getRect() const
 {
     return rect;
 }
 
-void noteGroup::setRect(const QRect &value)
+void NoteGroup::setRect(const QRect &value)
 {
     rect = value;
     update();
 }
 
-void noteGroup::addToGroup(Note *n)
+void NoteGroup::addToGroup(Note * n)
 {
     n->setParentItem(this);
+    childNotes.push_back(n);
 }
 
-void noteGroup::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void NoteGroup::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     QPointF clickLocation = event->pos();
     qreal x = clickLocation.rx() + this->x() - startX;    // podesavamo X tako da uvek pocetak bude na kraju dirki klavira
 
     int i = calculateNoteIdFromLocation(QPointF(x, clickLocation.ry()));
-    Note *n = playerRef->addNote(i + 12, playerRef->getCurrentTime() + x/widthCoef, 1);
+    Note * n = playerRef->addNote(i + 12, playerRef->getCurrentTime() + x/widthCoef, 1);
 
     float height = 1.0 * rect.height()/numOfWhiteNotes;
     float width = 1.0 * widthCoef;
@@ -43,46 +44,61 @@ void noteGroup::mousePressEvent(QGraphicsSceneMouseEvent *event)
         n->setRect(n->getTimeBegin() * widthCoef, countNumberOfWhiteNotesInRange(0, n->getId()-12) * height -  (height/1.5)/2, width, height/1.5);
     }
 
-
     qDebug() << playerRef->getSong()->getTotalTimeInSeconds();
 }
 
-void noteGroup::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+void NoteGroup::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
 
 }
 
-float noteGroup::getSceneWidth() const
+std::list<Note * > NoteGroup::getChildNotes() const
+{
+    return childNotes;
+}
+
+void NoteGroup::setChildNotes(const std::list<Note * > &value)
+{
+    childNotes = value;
+}
+
+void NoteGroup::childErase(int pos)
+{
+//    delete *childNotes[pos];
+//    childNotes.erase(childNotes.begin() + pos);
+}
+
+float NoteGroup::getSceneWidth() const
 {
     return sceneWidth;
 }
 
-void noteGroup::setSceneWidth(float value)
+void NoteGroup::setSceneWidth(float value)
 {
     sceneWidth = value;
 }
 
-float noteGroup::getStartX() const
+float NoteGroup::getStartX() const
 {
     return startX;
 }
 
-void noteGroup::setStartX(float value)
+void NoteGroup::setStartX(float value)
 {
     startX = value;
 }
 
-float noteGroup::getWidthCoef() const
+float NoteGroup::getWidthCoef() const
 {
     return widthCoef;
 }
 
-void noteGroup::setWidthCoef(float value)
+void NoteGroup::setWidthCoef(float value)
 {
     widthCoef = value;
 }
 
-bool noteGroup::isWhiteNote(int i)
+bool NoteGroup::isWhiteNote(int i)
 {
     int note = i % 12;
     if(note == 0 || note == 2 || note == 4 || note == 5 || note == 7 || note == 9 || note == 11)
@@ -90,7 +106,7 @@ bool noteGroup::isWhiteNote(int i)
     return false;
 }
 
-int noteGroup::countNumberOfWhiteNotesInRange(int _startNote, int _endNote)
+int NoteGroup::countNumberOfWhiteNotesInRange(int _startNote, int _endNote)
 {
     int _whiteNotesInRange = 0;
     for(int i = _startNote; i < _endNote; i++)
@@ -102,53 +118,53 @@ int noteGroup::countNumberOfWhiteNotesInRange(int _startNote, int _endNote)
     return _whiteNotesInRange;
 }
 
-int noteGroup::getNumOfWhiteNotes() const
+int NoteGroup::getNumOfWhiteNotes() const
 {
     return numOfWhiteNotes;
 }
 
-void noteGroup::setNumOfWhiteNotes(int value)
+void NoteGroup::setNumOfWhiteNotes(int value)
 {
     numOfWhiteNotes = value;
 }
 
 
-int noteGroup::getPianoBottomKey() const
+int NoteGroup::getPianoBottomKey() const
 {
     return pianoBottomKey;
 }
 
-void noteGroup::setPianoBottomKey(int value)
+void NoteGroup::setPianoBottomKey(int value)
 {
     pianoBottomKey = value;
 }
 
-int noteGroup::getPianoTopKey() const
+int NoteGroup::getPianoTopKey() const
 {
     return pianoTopKey;
 }
 
-void noteGroup::setPianoTopKey(int value)
+void NoteGroup::setPianoTopKey(int value)
 {
     pianoTopKey = value;
 }
 
-SongPlayer *noteGroup::getPlayerRef() const
+SongPlayer *NoteGroup::getPlayerRef() const
 {
     return playerRef;
 }
 
-void noteGroup::setPlayerRef(SongPlayer *value)
+void NoteGroup::setPlayerRef(SongPlayer *value)
 {
     playerRef = value;
 }
 
-QRectF noteGroup::boundingRect() const
+QRectF NoteGroup::boundingRect() const
 {
     return rect;
 }
 
-void noteGroup::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void NoteGroup::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     QPen p = QPen(Qt::black);
     QBrush standardBrush = QBrush();
@@ -190,7 +206,7 @@ void noteGroup::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
  * Ako pripada beloj dirki, setujemo privremeni rezultat na vrednost dirke i nastavimo da prolazimo kroz niz jer postoji sansa
  * da postoji preklapanje sa crnom dirkom.
  */
-int noteGroup::calculateNoteIdFromLocation(QPointF location)
+int NoteGroup::calculateNoteIdFromLocation(QPointF location)
 {
     float targetY = location.ry();
 

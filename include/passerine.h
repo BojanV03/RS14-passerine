@@ -15,6 +15,9 @@
 #include <QTimer>
 #include <QPropertyAnimation>
 #include <QPainter>
+#include <QLabel>
+#include <QPixmap>
+#include <QImage>
 
 #include <include/RtMidi.h>
 #include <include/portselector.h>
@@ -23,7 +26,9 @@
 #include <include/note.h>
 #include <include/AnimationGroup.h>
 #include <include/Key.h>
+#include <include/piceditor.h>
 #include <chrono>
+#include <algorithm>
 
 #include <include/noteGroup.h>
 
@@ -78,7 +83,7 @@ private:
     RtMidiOut *midiout;
     MidiFile midifile;
     QGraphicsScene *scene;
-    noteGroup *group;
+    NoteGroup *group;
 
     int startNote;
     int endNote;
@@ -98,6 +103,7 @@ private:
     void pianoKeyPress();
     void ResizePiano(int _startNote = 0, int _endNote = 96);
     void resetPiano();
+    void updateNoteGroup();
 
     chrono::microseconds currentTime;
     chrono::microseconds previousTime;

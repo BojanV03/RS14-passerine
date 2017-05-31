@@ -180,7 +180,7 @@ void SongPlayer::noteChanged(MidiEvent &m)
 //        qDebug() << m[1]-12 << "is now " << noteStates[m[1]-12];
     }
 }
-std::vector<Note*> SongPlayer::getNotes() const
+std::vector<Note *> SongPlayer::getNotes() const
 {
     return notes;
 }
@@ -281,7 +281,7 @@ void SongPlayer::setSong(MidiFile *_song)
 
                     }
                 }
-                Note *n = new Note(event[1], event.seconds, end);
+                Note * n(new Note(event[1], event.seconds, end));
                 n->setOnEvent(&song->getEvent(0, i));
                 n->setOffEvent(&song->getEvent(0, j));
                 n->setSong(song);
@@ -319,21 +319,18 @@ void SongPlayer::clearNotes()
 {
     if(notes.size() != 0)
     {
-        for(int i = 0; i < notes.size(); i++)
-        {
-            delete notes[i];
-            qDebug() << "Removed notes";
-        }
+        notes.erase(notes.begin(), notes.end());
+        qDebug() << "Removed notes";
     }
     notes.clear();
     qDebug() << "Left " << notes.size() << " notes";
 }
 
-Note* SongPlayer::addNote(int id, float time, float duration)
+Note * SongPlayer::addNote(int id, float time, float duration)
 {
 //    qDebug() << "Added note " << id << " starting at: " << time << " seconds and lasting " << duration << " seconds";
 
-    Note *n = new Note(id, time, duration);
+    Note * n(new Note(id, time, time + duration));
 
     int index = song->addNoteOn(0, song->getAbsoluteTickTime(time), 0, id, 90);
   //  song->getEvent(0, index).tick = song->getAbsoluteTickTime(time);

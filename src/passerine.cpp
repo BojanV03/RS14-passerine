@@ -24,7 +24,7 @@ Passerine::Passerine(QWidget *parent) :
     scene = new QGraphicsScene(this);
     ui->graphicsView->setScene(scene);
 
-    group = new noteGroup();
+    group = new NoteGroup();
     group->setWidthCoef(widthCoef);
     pianoTimer = new QTimer(this);
     connect(pianoTimer, SIGNAL(timeout()), this, SLOT(updateGraphics()));
@@ -68,7 +68,7 @@ Passerine::Passerine(QWidget *parent) :
 void Passerine::ResizeNotes(int _startNote, int _endNote)
 {
     float height = scene->height()/countNumberOfWhiteNotesInRange(_startNote, _endNote);
-    std::vector<Note*> n = songPlayer->getNotes();
+    std::vector<Note *> n = songPlayer->getNotes();
     float width;
 
     for(unsigned i = 0; i < n.size(); i++)
@@ -176,7 +176,7 @@ void Passerine::drawPiano(int _startNote, int _endNote)
 
 void Passerine::makeNoteGroup()
 {
-    std::vector<Note*> n = songPlayer->getNotes();
+    std::vector<Note *> n = songPlayer->getNotes();
 
     float height = scene->height() / whiteNotesInRange;
     float width;
@@ -193,6 +193,8 @@ void Passerine::makeNoteGroup()
             group->addToGroup(n[i]);
             n[i]->setRect(n[i]->getTimeBegin() * widthCoef, countNumberOfWhiteNotesInRange(0, n[i]->getId()-12) * height -  (height/1.5)/2, width, blackNoteHeight());
         }
+
+        n[i]->hide();
     }
 }
 
@@ -319,11 +321,12 @@ bool Passerine::chooseMidiPort( RtMidiOut *rtmidi )
 void Passerine::noteGraphicsInit()
 {
     makeNoteGroup();
+    updateNoteGroup();
+
     scene->addItem(group);
     group->setPos(scene->width()/6, group->pos().y());
     group->setRect(QRect(0, 0, songPlayer->getSong()->getTotalTimeInSeconds()*widthCoef + 5*scene->width()/6, ui->graphicsView->scene()->height()));
     group->setSceneWidth(scene->width());
-    group->show();
 }
 
 bool Passerine::isWhiteNote(int i)
@@ -344,7 +347,7 @@ void Passerine::on_playPauseButton_clicked()
             songPlayer->PlaySong(songPlayer->getCurrentTime());
 
             pianoTimer->start();
-            ui->playPauseButton->setText("\u2016");
+            ui->playPauseButton->setText("\u2016\u2016");
             ui->songSlider->setDisabled(true);
          }
         else
@@ -397,7 +400,6 @@ void Passerine::pianoKeyPress()
 }
 void Passerine::updateGraphics()
 {
-
     currentTime = chrono::duration_cast< chrono::microseconds >(
                 chrono::system_clock::now().time_since_epoch()
             );
@@ -406,6 +408,8 @@ void Passerine::updateGraphics()
     previousTime = chrono::duration_cast< chrono::microseconds >(
                 chrono::system_clock::now().time_since_epoch()
             );
+
+    updateNoteGroup();
 
     ui->songSlider->setValue(songPlayer->getCurrentTime());
     pianoKeyPress();
@@ -436,6 +440,24 @@ void Passerine::resetPiano()
     }
 }
 
+void Passerine::updateNoteGroup()
+{
+
+    auto tmp = group->childNotes;
+
+    std::vector<Note *> n = songPlayer->getNotes();
+
+    for(auto j = n.begin(); j != n.end(); j++){
+        if((*j)->getTimeBegin() > songPlayer->getCurrentTime() + 5)
+            continue;
+        else if((*j)->getTimeEnd() < songPlayer->getCurrentTime())
+            (*j)->hide();
+        else
+            (*j)->show();
+    }
+
+}
+
 void Passerine::on_songSlider_sliderReleased()
 {
     resetPiano();
@@ -455,11 +477,6 @@ void Passerine::on_actionNew_triggered()
 
 
 }
-
-#include <QLabel>
-#include <QPixmap>
-#include <QImage>
-#include <ui/piceditor.h>
 
 void Passerine::on_actionLoadImage_triggered()
 {
@@ -483,7 +500,7 @@ void Passerine::on_actionLoadImage_triggered()
     songPlayer->setPort(midiout);
 
     qDebug() << "Izasao " << songPlayer->getSong()->getTotalTimeInSeconds();
-    updateGraphics();
+//    updateGraphics();
     noteGraphicsInit();
     updateGraphics();
 
