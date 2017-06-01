@@ -7,7 +7,10 @@
 #include <QDebug>
 #include <QGraphicsSceneWheelEvent>
 
+#include <vector>
+
 #include <include/MidiFile.h>
+
 #ifndef NOTE_H
 #define NOTE_H
 
@@ -15,6 +18,7 @@ class Note : public QGraphicsItem
 {
 public:
     Note(char n, double tb, double te);
+    Note(char n, double tb, double te, int ch);
 
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
@@ -46,14 +50,21 @@ public:
 
     MidiFile *song;
 
+    int getChannelId() const;
+    void setChannelId(int channelId);
+
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+
+
 
 private:
     char _id;
     double _timeBegin;
     double _timeEnd;
+
+    int _channelId;
 
     MidiEvent *onEvent;
     MidiEvent *offEvent;
@@ -61,6 +72,7 @@ private:
 
     QBrush standardBrush;
     QRect rect;
+
 };
 
 #endif // NOTE_H

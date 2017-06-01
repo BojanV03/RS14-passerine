@@ -10,6 +10,7 @@
   #define SLEEP( milliseconds ) usleep( (unsigned long) (milliseconds * 1000.0) )
 #endif
 
+
 SongPlayer::SongPlayer(MidiFile *_song, int _instrument, int _tempo, RtMidiOut *_outputPort) :
     song(_song),
     instrument(_instrument),
@@ -281,12 +282,11 @@ void SongPlayer::setSong(MidiFile *_song)
 
                     }
                 }
-                Note * n(new Note(event[1], event.seconds, end));
+                Note * n(new Note(event[1], event.seconds, end, event.getChannel()));
                 n->setOnEvent(&song->getEvent(0, i));
                 n->setOffEvent(&song->getEvent(0, j));
                 n->setSong(song);
                 notes.push_back(n);
-
             }
         }
         qDebug() << "Number of notes" << notes.size();

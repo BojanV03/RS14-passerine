@@ -170,7 +170,7 @@ void NoteGroup::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
     QBrush standardBrush = QBrush();
     p.setWidth(1);
     painter->setPen(p);
-    standardBrush.setColor(Qt::gray);
+    standardBrush.setColor("#dddddd");
     standardBrush.setStyle(Qt::SolidPattern);
     painter->fillRect(rect, standardBrush);
     painter->drawRect(rect);

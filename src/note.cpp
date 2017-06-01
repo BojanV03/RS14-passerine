@@ -1,6 +1,13 @@
 #include <include/note.h>
 #include <include/passerine.h>
 
+Note::Note(char n, double tb, double te, int ch)
+    :_id(n), _timeBegin(tb), _timeEnd(te), _channelId(ch)
+{
+    setFlag(ItemIsMovable);
+    setFlag(ItemSendsGeometryChanges);
+}
+
 Note::Note(char n, double tb, double te)
     :_id(n), _timeBegin(tb), _timeEnd(te)
 {
@@ -32,10 +39,12 @@ QVariant Note::itemChange(GraphicsItemChange change, const QVariant &value)
 
 void Note::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
+    vector<QColor> colors = {"#800000", "#000080", "#000000", "#0000ff", "#00ffff", "#008080", "#808080", "#008000", "#800080", "#808000", "#a0a0a4", "#00ff00", "#c0c0c0", "#ff00ff", "#ff0000", "#ffff00"};
+
     QPen p = QPen(Qt::black);
     p.setWidth(1);
     painter->setPen(p);
-    standardBrush.setColor(Qt::darkGreen);
+    standardBrush.setColor(colors[_channelId]);
     standardBrush.setStyle(Qt::SolidPattern);
     painter->fillRect(rect, standardBrush);
     painter->drawRect(rect);
@@ -107,6 +116,16 @@ void Note::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     song->sortTracks();
 }
+int Note::getChannelId() const
+{
+    return _channelId;
+}
+
+void Note::setChannelId(int channelId)
+{
+    _channelId = channelId;
+}
+
 
 MidiFile *Note::getSong()
 {
