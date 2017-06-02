@@ -2,3 +2,4 @@
 Passerine
 moc_*
 *.pro.user.*
+ui_*.h

@@ -91,6 +91,11 @@ private:
     int widthCoef;
     std::vector<Key*> pianoKeys;
 
+    std::vector<Note*> allNotesSortedByBeginTime;
+    std::vector<Note*> allNotesSortedByEndTime;
+    unsigned lastNoteAdded;
+    unsigned lastNoteRemoved;
+
     QTimer *pianoTimer;
 
     bool chooseMidiPort( RtMidiOut *rtmidi );

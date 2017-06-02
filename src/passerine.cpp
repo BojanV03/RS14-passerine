@@ -63,6 +63,9 @@ Passerine::Passerine(QWidget *parent) :
       qDebug() << "Exception: ";
       delete midiout;
     }
+
+    lastNoteAdded = 0;
+    lastNoteRemoved = 0;
 }
 
 void Passerine::ResizeNotes(int _startNote, int _endNote)
@@ -176,26 +179,42 @@ void Passerine::drawPiano(int _startNote, int _endNote)
 
 void Passerine::makeNoteGroup()
 {
-    std::vector<Note *> n = songPlayer->getNotes();
+    allNotesSortedByBeginTime = songPlayer->getNotes();
 
     float height = scene->height() / whiteNotesInRange;
     float width;
     group->setPlayerRef(songPlayer);
-    for(unsigned i = 0; i < n.size(); i++){
-        width = (n[i]->getTimeEnd() - n[i]->getTimeBegin()) * (float)widthCoef;
-        if(isWhiteNote(n[i]->getId()))
+    for(unsigned i = 0; i < allNotesSortedByBeginTime.size(); i++){
+        width = (allNotesSortedByBeginTime[i]->getTimeEnd() - allNotesSortedByBeginTime[i]->getTimeBegin()) * (float)widthCoef;
+        if(isWhiteNote(allNotesSortedByBeginTime[i]->getId()))
         {
-            group->addToGroup(n[i]);
-            n[i]->setRect(n[i]->getTimeBegin() * widthCoef, countNumberOfWhiteNotesInRange(0, n[i]->getId()-12)*height, width, whiteNoteHeight());
+//            group->addToGroup(allNotesSortedByBeginTime[i]);
+            allNotesSortedByBeginTime[i]->setRect(allNotesSortedByBeginTime[i]->getTimeBegin() * widthCoef, countNumberOfWhiteNotesInRange(0, allNotesSortedByBeginTime[i]->getId()-12)*height, width, whiteNoteHeight());
         }
         else
         {
-            group->addToGroup(n[i]);
-            n[i]->setRect(n[i]->getTimeBegin() * widthCoef, countNumberOfWhiteNotesInRange(0, n[i]->getId()-12) * height -  (height/1.5)/2, width, blackNoteHeight());
+//            group->addToGroup(allNotesSortedByBeginTime[i]);
+            allNotesSortedByBeginTime[i]->setRect(allNotesSortedByBeginTime[i]->getTimeBegin() * widthCoef, countNumberOfWhiteNotesInRange(0, allNotesSortedByBeginTime[i]->getId()-12) * height -  (height/1.5)/2, width, blackNoteHeight());
         }
-
-        n[i]->hide();
     }
+
+    allNotesSortedByEndTime = allNotesSortedByBeginTime;
+
+    std::sort(allNotesSortedByBeginTime.begin(), allNotesSortedByBeginTime.end(), [](Note *a, Note *b)
+    {
+        if(a->getTimeBegin() < b->getTimeBegin())
+            return true;
+        else
+            return false;
+    });
+
+    std::sort(allNotesSortedByEndTime.begin(), allNotesSortedByEndTime.end(), [](Note *a, Note *b)
+    {
+        if(a->getTimeEnd() < b->getTimeEnd())
+            return true;
+        else
+            return false;
+    });
 }
 
 int Passerine::countNumberOfWhiteNotesInRange(int _startNote, int _endNote)
@@ -442,20 +461,24 @@ void Passerine::resetPiano()
 
 void Passerine::updateNoteGroup()
 {
+    float k = scene->width() / widthCoef + 5;
 
-    auto tmp = group->childNotes;
+    for(; lastNoteRemoved < allNotesSortedByEndTime.size(); lastNoteRemoved++){
+        if(allNotesSortedByEndTime[lastNoteRemoved]->getTimeEnd() >= songPlayer->getCurrentTime())
+            break;
 
-    std::vector<Note *> n = songPlayer->getNotes();
-
-    for(auto j = n.begin(); j != n.end(); j++){
-        if((*j)->getTimeBegin() > songPlayer->getCurrentTime() + 5)
-            continue;
-        else if((*j)->getTimeEnd() < songPlayer->getCurrentTime())
-            (*j)->hide();
-        else
-            (*j)->show();
+        allNotesSortedByEndTime[lastNoteRemoved]->hide();
+        allNotesSortedByEndTime[lastNoteRemoved]->setParentItem(nullptr);
     }
 
+    for(; lastNoteAdded < allNotesSortedByBeginTime.size(); lastNoteAdded++){
+        if(allNotesSortedByBeginTime[lastNoteAdded]->getTimeBegin() > songPlayer->getCurrentTime() + k)
+            break;
+
+        group->addToGroup(allNotesSortedByBeginTime[lastNoteAdded]);
+    }
+
+    group->show();
 }
 
 void Passerine::on_songSlider_sliderReleased()
