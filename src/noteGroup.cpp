@@ -1,6 +1,6 @@
 #include <include/noteGroup.h>
 
-NoteGroup::NoteGroup() : childNotes()
+NoteGroup::NoteGroup()
 {
     NoteGroup::setZValue(-1000);
 }
@@ -19,7 +19,7 @@ void NoteGroup::setRect(const QRect &value)
 void NoteGroup::addToGroup(Note * n)
 {
     n->setParentItem(this);
-    childNotes.push_back(n);
+    n->show();
 }
 
 void NoteGroup::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -47,26 +47,10 @@ void NoteGroup::mousePressEvent(QGraphicsSceneMouseEvent *event)
     qDebug() << playerRef->getSong()->getTotalTimeInSeconds();
 }
 
-void NoteGroup::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
-{
+//void NoteGroup::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+//{
 
-}
-
-std::list<Note * > NoteGroup::getChildNotes() const
-{
-    return childNotes;
-}
-
-void NoteGroup::setChildNotes(const std::list<Note * > &value)
-{
-    childNotes = value;
-}
-
-void NoteGroup::childErase(int pos)
-{
-//    delete *childNotes[pos];
-//    childNotes.erase(childNotes.begin() + pos);
-}
+//}
 
 float NoteGroup::getSceneWidth() const
 {

@@ -43,15 +43,9 @@ public:
     float getSceneWidth() const;
     void setSceneWidth(float value);
 
-    std::list<Note *> getChildNotes() const;
-    void setChildNotes(const std::list<Note * > &value);
-    void childErase(int pos);
-
-    std::list<Note *> childNotes;
-
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+//    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 private:
     QRect rect;

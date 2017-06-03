@@ -428,6 +428,7 @@ void Passerine::updateGraphics()
                 chrono::system_clock::now().time_since_epoch()
             );
 
+    updateLastNotes();
     updateNoteGroup();
 
     ui->songSlider->setValue(songPlayer->getCurrentTime());
@@ -545,4 +546,26 @@ void Passerine::on_actionSave_As_triggered()
     midifile.write(filename.toUtf8().constData());
     f.close();
 
+}
+
+void Passerine::updateLastNotes()
+{
+    auto i = std::find_if(allNotesSortedByBeginTime.begin(), allNotesSortedByBeginTime.end(), [this](Note *a)
+    {
+        if(a->getTimeBegin() >= songPlayer->getCurrentTime())
+            return true;
+        else
+            return false;
+    });
+
+    auto j = std::find_if(allNotesSortedByEndTime.begin(), allNotesSortedByEndTime.end(), [this](Note *a)
+    {
+        if(a->getTimeEnd() <= songPlayer->getCurrentTime() + scene->width()/widthCoef + 5)
+            return true;
+        else
+            return false;
+    });
+
+    lastNoteAdded = i - allNotesSortedByBeginTime.begin();
+    lastNoteRemoved = j - allNotesSortedByEndTime.begin();
 }
