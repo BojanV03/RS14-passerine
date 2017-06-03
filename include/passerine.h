@@ -96,6 +96,8 @@ private:
     unsigned lastNoteAdded;
     unsigned lastNoteRemoved;
 
+    void updateLastNotes();
+
     QTimer *pianoTimer;
 
     bool chooseMidiPort( RtMidiOut *rtmidi );
