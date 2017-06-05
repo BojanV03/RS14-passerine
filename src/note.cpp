@@ -8,6 +8,11 @@ Note::Note(char n, double tb, double te, int ch)
     setFlag(ItemSendsGeometryChanges);
 }
 
+Note::~Note()
+{
+    this->hide();
+}
+
 Note::Note(char n, double tb, double te)
     :_id(n), _timeBegin(tb), _timeEnd(te)
 {
