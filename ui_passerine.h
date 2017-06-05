@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'passerine.ui'
 **
-** Created by: Qt User Interface Compiler version 5.7.0
+** Created by: Qt User Interface Compiler version 5.2.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -47,9 +47,11 @@ public:
     QGraphicsView *graphicsView;
     QHBoxLayout *horizontalLayout;
     QSpacerItem *horizontalSpacer_2;
+    QSpacerItem *horizontalSpacer_3;
     QPushButton *playPauseButton;
     QPushButton *stopButton;
     QSpacerItem *horizontalSpacer;
+    QSlider *volumeSlider;
     QMenuBar *menuBar;
     QMenu *menuFIle;
     QMenu *menuAbout;
@@ -117,6 +119,10 @@ public:
 
         horizontalLayout->addItem(horizontalSpacer_2);
 
+        horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout->addItem(horizontalSpacer_3);
+
         playPauseButton = new QPushButton(centralWidget);
         playPauseButton->setObjectName(QStringLiteral("playPauseButton"));
         playPauseButton->setEnabled(false);
@@ -128,6 +134,7 @@ public:
         stopButton->setEnabled(false);
         stopButton->setCheckable(false);
         stopButton->setAutoDefault(false);
+        stopButton->setDefault(false);
 
         horizontalLayout->addWidget(stopButton);
 
@@ -135,13 +142,20 @@ public:
 
         horizontalLayout->addItem(horizontalSpacer);
 
+        volumeSlider = new QSlider(centralWidget);
+        volumeSlider->setObjectName(QStringLiteral("volumeSlider"));
+        volumeSlider->setMaximum(127);
+        volumeSlider->setOrientation(Qt::Horizontal);
+
+        horizontalLayout->addWidget(volumeSlider);
+
 
         verticalLayout->addLayout(horizontalLayout);
 
         Passerine->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(Passerine);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 525, 19));
+        menuBar->setGeometry(QRect(0, 0, 525, 25));
         menuFIle = new QMenu(menuBar);
         menuFIle->setObjectName(QStringLiteral("menuFIle"));
         menuAbout = new QMenu(menuBar);
@@ -162,9 +176,6 @@ public:
         menuAbout->addAction(actionAbout_Qt);
 
         retranslateUi(Passerine);
-
-        stopButton->setDefault(false);
-
 
         QMetaObject::connectSlotsByName(Passerine);
     } // setupUi

@@ -41,6 +41,28 @@ void SongPlayer::setCurrentTime(float value)
 {
     currentTime = value;
 }
+std::vector<char> SongPlayer::getVolumeCh() const
+{
+    return volumeCh;
+}
+
+void SongPlayer::setVolumeCh()
+{
+
+}
+
+
+
+int SongPlayer::getVolume() const
+{
+    return volume;
+}
+
+void SongPlayer::setVolume(int value)
+{
+    volume = value;
+}
+
 
 void SongPlayer::playSongWrapper(SongPlayer* player, float startTime, float endTime)
 {
@@ -88,6 +110,14 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
         if(stopped)
             break;
         MidiEvent curr = song->getEvent(0, currentEvent);
+
+        if(curr[0] >= 0xB0 && curr[0] <= 0xBF && (curr[1] == 0x07 || curr[1] == 0x27))
+        {
+            volumeCh[curr.getChannel()] = curr[2];
+
+            curr[2] = volume;
+        }
+
         currentTime = prevSeconds;
         if(curr.seconds < startTime)
         {
@@ -256,6 +286,9 @@ void SongPlayer::setSong(MidiFile *_song)
 {
     clearNotes();
 
+    for(unsigned i = 0; i<16; i++)
+        volumeCh.push_back(100);
+
     if(_song != nullptr)
     {
         song = _song;
@@ -270,6 +303,7 @@ void SongPlayer::setSong(MidiFile *_song)
             double end;
 
             MidiEvent event = song->getEvent(0,i);
+
             if(event.isNoteOn())
             {
                 unsigned j;
@@ -287,6 +321,7 @@ void SongPlayer::setSong(MidiFile *_song)
                 n->setOffEvent(&song->getEvent(0, j));
                 n->setSong(song);
                 notes.push_back(n);
+
             }
         }
         qDebug() << "Number of notes" << notes.size();
@@ -349,3 +384,5 @@ Note * SongPlayer::addNote(int id, float time, float duration)
     notes.push_back(n);
     return n;
 }
+
+

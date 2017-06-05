@@ -16,6 +16,7 @@ Passerine::Passerine(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Passerine)
 {
+
     ui->setupUi(this);
 
     songPlayer = new SongPlayer();
@@ -28,6 +29,9 @@ Passerine::Passerine(QWidget *parent) :
     group->setWidthCoef(widthCoef);
     pianoTimer = new QTimer(this);
     connect(pianoTimer, SIGNAL(timeout()), this, SLOT(updateGraphics()));
+
+    ui->volumeSlider->setValue(75);
+    songPlayer->setVolume(75);
 
     ui->playPauseButton->setText("\u25B6");
     ui->stopButton->setText("\u23F9");
@@ -307,6 +311,7 @@ void Passerine::on_actionOpen_triggered()
     ui->songSlider->setValue(0);
     ui->songSlider->setDisabled(false);
 
+
     noteGraphicsInit();
 
     return;
@@ -569,3 +574,15 @@ void Passerine::updateLastNotes()
     lastNoteAdded = i - allNotesSortedByBeginTime.begin();
     lastNoteRemoved = j - allNotesSortedByEndTime.begin();
 }
+
+
+void Passerine::on_volumeSlider_sliderMoved(int position)
+{
+    std::cout<<"Pomeren "<<position<<endl;
+
+    songPlayer->setVolume(position);
+
+    //songPlayer->setVolumeCh();
+
+}
+

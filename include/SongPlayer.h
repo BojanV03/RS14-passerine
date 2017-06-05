@@ -10,6 +10,7 @@
 #include <include/RtMidi.h>
 #include <include/note.h>
 
+
 #include <thread>
 #include <float.h>
 #include <QString>
@@ -58,6 +59,12 @@ public:
 
     void stop();
 
+    int getVolume() const;
+    void setVolume(int value);
+
+    std::vector<char> getVolumeCh() const;
+    void setVolumeCh();
+
 signals:
     void setCurrentTime(float value);
 
@@ -68,6 +75,10 @@ private:
     bool playing;
     bool stopped;
     std::vector<bool> noteStates;
+
+    std::vector<char> volumeCh;
+
+    int volume;
 
     float currentTime = 0;
 

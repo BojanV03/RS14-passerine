@@ -76,6 +76,8 @@ private slots:
 
     void on_actionSave_As_triggered();
 
+    void on_volumeSlider_sliderMoved(int position);
+
 private:
     Ui::Passerine *ui;
 
