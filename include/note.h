@@ -19,6 +19,7 @@ class Note : public QGraphicsItem
 public:
     Note(char n, double tb, double te);
     Note(char n, double tb, double te, int ch);
+    ~Note();
 
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);

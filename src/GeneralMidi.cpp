@@ -26,9 +26,6 @@ GeneralMidi::GeneralMidi()
     name = name.fromStdString("Clavinet");
     instruments.push_back(new Instrument(7, &name));
 
-    name = name.fromStdString("Clavinet");
-    instruments.push_back(new Instrument(7, &name));
-
     name = name.fromStdString("Celesta");
     instruments.push_back(new Instrument(8, &name));
 
@@ -49,9 +46,6 @@ GeneralMidi::GeneralMidi()
 
     name = name.fromStdString("Tubular Bells");
     instruments.push_back(new Instrument(14, &name));
-
-    name = name.fromStdString("Dulcimer");
-    instruments.push_back(new Instrument(15, &name));
 
     name = name.fromStdString("Dulcimer");
     instruments.push_back(new Instrument(15, &name));
@@ -80,9 +74,6 @@ GeneralMidi::GeneralMidi()
     name = name.fromStdString("Tango Accordion");
     instruments.push_back(new Instrument(23, &name));
 
-    name = name.fromStdString("Tango Accordion");
-    instruments.push_back(new Instrument(23, &name));
-
     name = name.fromStdString("Acoustic Guitar (nylon)");
     instruments.push_back(new Instrument(24, &name));
 
@@ -103,9 +94,6 @@ GeneralMidi::GeneralMidi()
 
     name = name.fromStdString("Distortion Guitar");
     instruments.push_back(new Instrument(30, &name));
-
-    name = name.fromStdString("Guitar Harmonics");
-    instruments.push_back(new Instrument(31, &name));
 
     name = name.fromStdString("Guitar Harmonics");
     instruments.push_back(new Instrument(31, &name));
@@ -134,9 +122,6 @@ GeneralMidi::GeneralMidi()
     name = name.fromStdString("Synth Bass 2");
     instruments.push_back(new Instrument(39, &name));
 
-    name = name.fromStdString("Synth Bass 2");
-    instruments.push_back(new Instrument(39, &name));
-
     name = name.fromStdString("Violin");
     instruments.push_back(new Instrument(40, &name));
 
@@ -157,9 +142,6 @@ GeneralMidi::GeneralMidi()
 
     name = name.fromStdString("Orchestral Harp");
     instruments.push_back(new Instrument(46, &name));
-
-    name = name.fromStdString("Timpani");
-    instruments.push_back(new Instrument(47, &name));
 
     name = name.fromStdString("Timpani");
     instruments.push_back(new Instrument(47, &name));
@@ -188,9 +170,6 @@ GeneralMidi::GeneralMidi()
     name = name.fromStdString("Orchestra Hit");
     instruments.push_back(new Instrument(55, &name));
 
-    name = name.fromStdString("Orchestra Hit");
-    instruments.push_back(new Instrument(55, &name));
-
     name = name.fromStdString("Trumpet");
     instruments.push_back(new Instrument(56, &name));
 
@@ -211,9 +190,6 @@ GeneralMidi::GeneralMidi()
 
     name = name.fromStdString("Synth Brass 1");
     instruments.push_back(new Instrument(62, &name));
-
-    name = name.fromStdString("Synth Brass 2");
-    instruments.push_back(new Instrument(63, &name));
 
     name = name.fromStdString("Synth Brass 2");
     instruments.push_back(new Instrument(63, &name));
@@ -242,9 +218,6 @@ GeneralMidi::GeneralMidi()
     name = name.fromStdString("Clarinet");
     instruments.push_back(new Instrument(71, &name));
 
-    name = name.fromStdString("Clarinet");
-    instruments.push_back(new Instrument(71, &name));
-
     name = name.fromStdString("Piccolo");
     instruments.push_back(new Instrument(72, &name));
 
@@ -265,9 +238,6 @@ GeneralMidi::GeneralMidi()
 
     name = name.fromStdString("Whistle");
     instruments.push_back(new Instrument(78, &name));
-
-    name = name.fromStdString("Ocarina");
-    instruments.push_back(new Instrument(79, &name));
 
     name = name.fromStdString("Ocarina");
     instruments.push_back(new Instrument(79, &name));
@@ -296,9 +266,6 @@ GeneralMidi::GeneralMidi()
     name = name.fromStdString("Lead 8 (bass + lead)");
     instruments.push_back(new Instrument(87, &name));
 
-    name = name.fromStdString("Lead 8 (bass + lead)");
-    instruments.push_back(new Instrument(87, &name));
-
     name = name.fromStdString("Pad 1 (new age)");
     instruments.push_back(new Instrument(88, &name));
 
@@ -319,9 +286,6 @@ GeneralMidi::GeneralMidi()
 
     name = name.fromStdString("Pad 7 (halo)");
     instruments.push_back(new Instrument(94, &name));
-
-    name = name.fromStdString("Pad 8 (sweep)");
-    instruments.push_back(new Instrument(95, &name));
 
     name = name.fromStdString("Pad 8 (sweep)");
     instruments.push_back(new Instrument(95, &name));
@@ -350,9 +314,6 @@ GeneralMidi::GeneralMidi()
     name = name.fromStdString("FX 8 (sci-fi)");
     instruments.push_back(new Instrument(103, &name));
 
-    name = name.fromStdString("FX 8 (sci-fi)");
-    instruments.push_back(new Instrument(103, &name));
-
     name = name.fromStdString("Sitar");
     instruments.push_back(new Instrument(104, &name));
 
@@ -377,9 +338,6 @@ GeneralMidi::GeneralMidi()
     name = name.fromStdString("Shanai");
     instruments.push_back(new Instrument(111, &name));
 
-    name = name.fromStdString("Shanai");
-    instruments.push_back(new Instrument(111, &name));
-
     name = name.fromStdString("Tinkle Bell");
     instruments.push_back(new Instrument(112, &name));
 
@@ -400,9 +358,6 @@ GeneralMidi::GeneralMidi()
 
     name = name.fromStdString("Synth Drum");
     instruments.push_back(new Instrument(118, &name));
-
-    name = name.fromStdString("Reverse Cymbal");
-    instruments.push_back(new Instrument(119, &name));
 
     name = name.fromStdString("Reverse Cymbal");
     instruments.push_back(new Instrument(119, &name));

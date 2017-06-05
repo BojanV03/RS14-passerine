@@ -1,5 +1,6 @@
 *.o
 Passerine
 moc_*
-*.pro.user.*
+*.pro.user*
 ui_*.h
+*.out
