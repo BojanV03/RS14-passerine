@@ -188,12 +188,10 @@ void Passerine::makeNoteGroup()
         width = (allNotesSortedByBeginTime[i]->getTimeEnd() - allNotesSortedByBeginTime[i]->getTimeBegin()) * (float)widthCoef;
         if(isWhiteNote(allNotesSortedByBeginTime[i]->getId()))
         {
-//            group->addToGroup(allNotesSortedByBeginTime[i]);
             allNotesSortedByBeginTime[i]->setRect(allNotesSortedByBeginTime[i]->getTimeBegin() * widthCoef, countNumberOfWhiteNotesInRange(0, allNotesSortedByBeginTime[i]->getId()-12)*height, width, whiteNoteHeight());
         }
         else
         {
-//            group->addToGroup(allNotesSortedByBeginTime[i]);
             allNotesSortedByBeginTime[i]->setRect(allNotesSortedByBeginTime[i]->getTimeBegin() * widthCoef, countNumberOfWhiteNotesInRange(0, allNotesSortedByBeginTime[i]->getId()-12) * height -  (height/1.5)/2, width, blackNoteHeight());
         }
     }
@@ -268,7 +266,14 @@ void Passerine::on_actionAbout_Qt_triggered()
 
 void Passerine::on_actionOpen_triggered()
 {
+    ui->playPauseButton->setText("\u25B6");
+    ui->playPauseButton->setEnabled(true);
+    ui->stopButton->setEnabled("true");
+    ui->songSlider->setValue(0);
+    ui->songSlider->setDisabled(false);
+
     if(songPlayer != nullptr){
+        songPlayer->killSound();
         songPlayer->stop();
     }
 
@@ -301,15 +306,8 @@ void Passerine::on_actionOpen_triggered()
         songPlayer->setCurrentTime(0);
         songPlayer->setPort(midiout);
     }
-    ui->playPauseButton->setText("\u25B6");
-    ui->playPauseButton->setEnabled(true);
-    ui->stopButton->setEnabled("true");
-    ui->songSlider->setValue(0);
-    ui->songSlider->setDisabled(false);
 
     noteGraphicsInit();
-
-    return;
 }
 
 bool Passerine::chooseMidiPort( RtMidiOut *rtmidi )
@@ -339,6 +337,13 @@ bool Passerine::chooseMidiPort( RtMidiOut *rtmidi )
 
 void Passerine::noteGraphicsInit()
 {
+    for(unsigned i = 0; i < allNotesSortedByBeginTime.size(); i++)
+        delete allNotesSortedByBeginTime[i];
+
+    allNotesSortedByBeginTime.clear();
+    allNotesSortedByEndTime.clear();
+    resetPiano();
+
     makeNoteGroup();
     updateNoteGroup();
 
@@ -346,6 +351,7 @@ void Passerine::noteGraphicsInit()
     group->setPos(scene->width()/6, group->pos().y());
     group->setRect(QRect(0, 0, songPlayer->getSong()->getTotalTimeInSeconds()*widthCoef + 5*scene->width()/6, ui->graphicsView->scene()->height()));
     group->setSceneWidth(scene->width());
+//    group->show();
 }
 
 bool Passerine::isWhiteNote(int i)
@@ -479,7 +485,7 @@ void Passerine::updateNoteGroup()
         group->addToGroup(allNotesSortedByBeginTime[lastNoteAdded]);
     }
 
-    group->show();
+//    group->show();
 }
 
 void Passerine::on_songSlider_sliderReleased()

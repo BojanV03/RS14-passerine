@@ -198,6 +198,9 @@ QString SongPlayer::getLyrics() const
 
 void SongPlayer::killSound()
 {
+    if(currentTime == 0)
+        return;
+
     for(int i = 0; i < 16; i++)
     {
         std::vector<unsigned char> v;
