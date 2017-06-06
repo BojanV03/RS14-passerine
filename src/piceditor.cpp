@@ -25,12 +25,12 @@ picEditor::~picEditor()
 }
 #include <QDebug>
 
-void picEditor::on_horizontalSlider_valueChanged(int value)
+void picEditor::on_horizontalSlider_valueChanged(int)
 {
     refreshImage();
 }
 
-void picEditor::on_cbPreview_toggled(bool checked)
+void picEditor::on_cbPreview_toggled(bool)
 {
     refreshImage();
 }
@@ -119,6 +119,8 @@ int picEditor::getKeyInScale(int n)
                 return i;
         }
     }
+
+    return -1;
 }
 
 MidiFile *picEditor::getMidi() const
@@ -132,7 +134,7 @@ void picEditor::setMidi(MidiFile *value)
 }
 
 
-void picEditor::on_cbInvert_toggled(bool checked)
+void picEditor::on_cbInvert_toggled(bool)
 {
     refreshImage();
 }
@@ -176,7 +178,7 @@ void picEditor::on_buttonBox_accepted()
                 noteOnCounter++;
             }
             // NoteOff event generisemo samo ako je trenutni pixel crn a prethodni beo ili ako je trenutni/zadnji pixel beo
-            if((isWhite(currPixel) && (j + 1 == image.width()) || (isWhite(currPixel) && !isWhite(nextPixel))))
+            if((isWhite(currPixel) && (j + 1 == image.width())) || (isWhite(currPixel) && !isWhite(nextPixel)))
             {
                 int n = Midi->addNoteOff(0, tpq*(j+1), 0, getKeyInScale(i)+12);
 

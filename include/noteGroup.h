@@ -6,7 +6,7 @@
 #include <include/SongPlayer.h>
 #include <QGraphicsSceneMouseEvent>
 
-class NoteGroup : public QGraphicsItemGroup {
+class NoteGroup : public QGraphicsItem {
 public:
     NoteGroup();
 

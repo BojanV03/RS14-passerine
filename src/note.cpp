@@ -112,12 +112,12 @@ void Note::setStandardBrush(const QBrush &value)
     standardBrush = value;
 }
 
-void Note::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void Note::mousePressEvent(QGraphicsSceneMouseEvent *)
 {
     qDebug() << "Pressed";
 }
 
-void Note::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+void Note::mouseReleaseEvent(QGraphicsSceneMouseEvent *)
 {
     song->sortTracks();
 }

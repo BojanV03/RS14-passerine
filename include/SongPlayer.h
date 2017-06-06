@@ -63,7 +63,7 @@ public:
     void setVolume(int value);
 
     std::vector<char> getVolumeCh() const;
-    void setVolumeCh(int Channel, unsigned char value);
+    void setVolumeCh(unsigned Channel, unsigned char value);
     void resetVolumeCh();
     void setSongVolumeOnAllChannels();
 

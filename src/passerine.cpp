@@ -99,7 +99,7 @@ void Passerine::ResizePiano(int _startNote, int _endNote)
 {
     startNote = _startNote;
     endNote = _endNote;
-    scene->setSceneRect(0, 0, ui->graphicsView->width(), ui->graphicsView->height());
+    scene->setSceneRect(0, 0, ui->graphicsView->width(), ui->graphicsView->height() - 5);
 
     whiteNotesInRange = countNumberOfWhiteNotesInRange(_startNote, _endNote);
 
@@ -139,7 +139,7 @@ void Passerine::drawPiano(int _startNote, int _endNote)
     startNote = _startNote;
     endNote = _endNote;
 
-    scene->setSceneRect(0, 0, ui->graphicsView->width(), ui->graphicsView->height());
+    scene->setSceneRect(0, 0, ui->graphicsView->width(), ui->graphicsView->height() - 51);
 
     whiteNotesInRange = countNumberOfWhiteNotesInRange(_startNote, _endNote);
 
