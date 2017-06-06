@@ -33,6 +33,8 @@ void NoteGroup::mousePressEvent(QGraphicsSceneMouseEvent *event)
     float height = 1.0 * rect.height()/numOfWhiteNotes;
     float width = 1.0 * widthCoef;
 
+    n->setSong(playerRef->getSong());
+
     if(isWhiteNote(n->getId()))
     {
         addToGroup(n);
