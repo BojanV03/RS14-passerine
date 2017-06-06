@@ -22,7 +22,7 @@ QRectF Key::boundingRect() const
     return rect;
 }
 
-void Key::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void Key::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     if(painter == nullptr)
         return;
@@ -110,12 +110,12 @@ void Key::setRect(float x, float y, float width, float height)
     rect = QRect(x, y, width, height);
 }
 
-void Key::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void Key::mousePressEvent(QGraphicsSceneMouseEvent *)
 {
     qDebug() << "Pressed";
 }
 
-void Key::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+void Key::mouseReleaseEvent(QGraphicsSceneMouseEvent *)
 {
     qDebug() << "Released";
 }

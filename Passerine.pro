@@ -35,10 +35,8 @@ SOURCES += src/main.cpp\
     src/rtmidi_c.cpp \
     src/portselector.cpp \
     src/SongPlayer.cpp \
-    src/Octave.cpp \
     src/Key.cpp \
     src/note.cpp \
-    src/AnimationGroup.cpp \
     src/noteGroup.cpp \
     src/piceditor.cpp \
     src/Instrument.cpp \
@@ -55,13 +53,8 @@ HEADERS  += include/passerine.h \
     include/rtmidi_c.h \
     include/portselector.h \
     include/SongPlayer.h \
-    include/SongPlayer.h \
-    include/Octave.h \
-    include/Octave.h \
-    include/Key.h \
     include/Key.h \
     include/note.h \
-    include/AnimationGroup.h \
     include/noteGroup.h \
     include/piceditor.h \
     include/Instrument.h \

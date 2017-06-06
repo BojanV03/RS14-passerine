@@ -59,7 +59,7 @@ std::vector<char> SongPlayer::getVolumeCh() const
     return volumeCh;
 }
 
-void SongPlayer::setVolumeCh(int channel, unsigned char value)
+void SongPlayer::setVolumeCh(unsigned channel, unsigned char value)
 {
     if(channel > volumeCh.size())
         return;
@@ -253,7 +253,7 @@ std::vector<Note *> SongPlayer::getNotes() const
     return notes;
 }
 
-void SongPlayer::setNotes(const std::vector<Note> &value)
+void SongPlayer::setNotes(const std::vector<Note> &)
 {
 //    notes = value;
 }
@@ -338,7 +338,7 @@ void SongPlayer::setSong(MidiFile *_song)
         int numEvent;
         numEvent = song->getEventCount(0);
 
-        for(unsigned i = 0; i< numEvent; i++)
+        for(int i = 0; i< numEvent; i++)
         {
             double end;
 
@@ -346,7 +346,7 @@ void SongPlayer::setSong(MidiFile *_song)
 
             if(event.isNoteOn())
             {
-                unsigned j;
+                int j;
                 for(j = i; j< numEvent; j++)
                 {
                     if(song->getEvent(0,j).isNoteOff() && event[1] == song->getEvent(0,j)[1])
@@ -409,6 +409,7 @@ Note * SongPlayer::addNote(int id, float time, float duration)
 
     int index = song->addNoteOn(0, song->getAbsoluteTickTime(time), 0, id, 90);
   //  song->getEvent(0, index).tick = song->getAbsoluteTickTime(time);
+    n->setOnEvent(&song->getEvent(0, index));
     song->getEvent(0, index).seconds=song->getTimeInSeconds(0, index);
 
     qDebug() << "start time: " << song->getEvent(0, index).seconds;

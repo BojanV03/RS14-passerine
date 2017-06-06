@@ -37,11 +37,11 @@ private slots:
     void on_cbLockToScale_toggled(bool checked);
 
 private:
+    QImage *originalImage;
     int numberOfKeys = 96;
     SongPlayer *playerRef;
     void refreshImage();
     Ui::picEditor *ui;
-    QImage *originalImage;
     QImage image;
     MidiFile *Midi = new MidiFile();
 

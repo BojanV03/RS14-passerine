@@ -24,7 +24,6 @@
 #include <include/MidiFile.h>
 #include <include/SongPlayer.h>
 #include <include/note.h>
-#include <include/AnimationGroup.h>
 #include <include/Key.h>
 #include <include/piceditor.h>
 #include <chrono>
