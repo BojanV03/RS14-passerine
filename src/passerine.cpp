@@ -584,9 +584,7 @@ void Passerine::updateLastNotes()
 
 void Passerine::on_volumeSlider_sliderMoved(int position)
 {
-    std::cout<<"Pomeren "<<position<<endl;
-
-    songPlayer->setVolume(position);
+    songPlayer->setVolumeLoudnessMultiplier(position);
 
     //songPlayer->setVolumeCh();
 

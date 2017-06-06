@@ -157,7 +157,7 @@
       <item>
        <widget class="QSlider" name="volumeSlider">
         <property name="maximum">
-         <number>127</number>
+         <number>200</number>
         </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -174,7 +174,7 @@
      <x>0</x>
      <y>0</y>
      <width>525</width>
-     <height>20</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFIle">

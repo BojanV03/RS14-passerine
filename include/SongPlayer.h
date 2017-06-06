@@ -63,7 +63,14 @@ public:
     void setVolume(int value);
 
     std::vector<char> getVolumeCh() const;
-    void setVolumeCh();
+    void setVolumeCh(int Channel, unsigned char value);
+    void resetVolumeCh();
+    void setSongVolumeOnAllChannels();
+
+
+
+    int getVolumeLoudnessMultiplier() const;
+    void setVolumeLoudnessMultiplier(int value);
 
 signals:
     void setCurrentTime(float value);
@@ -89,6 +96,7 @@ private:
 
     std::thread playThread;
 
+    int volumeLoudnessMultiplier;
     static void playSongWrapper(SongPlayer* player, float startTime, float endTime);
     void PlaySongInNewThread(float startTime = 0, float endTime = FLT_MAX);
 
