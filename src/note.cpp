@@ -112,9 +112,17 @@ void Note::setStandardBrush(const QBrush &value)
     standardBrush = value;
 }
 
-void Note::mousePressEvent(QGraphicsSceneMouseEvent *)
+void Note::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
-    qDebug() << "Pressed";
+    if(e->button() == Qt::RightButton)
+    {
+        onEvent->seconds = -1;
+        offEvent->seconds = 0;
+        offEvent->tick = song->getAbsoluteTickTime(offEvent->seconds);
+        onEvent->tick = song->getAbsoluteTickTime(offEvent->seconds);
+        song->sortTracks();
+        setRect(QRect(-100, -100, 0.01, 0.01));
+    }
 }
 
 void Note::mouseReleaseEvent(QGraphicsSceneMouseEvent *)

@@ -28,10 +28,10 @@ void NoteGroup::mousePressEvent(QGraphicsSceneMouseEvent *event)
     qreal x = clickLocation.rx() + this->x() - startX;    // podesavamo X tako da uvek pocetak bude na kraju dirki klavira
 
     int i = calculateNoteIdFromLocation(QPointF(x, clickLocation.ry()));
-    Note * n = playerRef->addNote(i + 12, playerRef->getCurrentTime() + x/widthCoef, 1);
+    Note * n = playerRef->addNote(i + 12, playerRef->getCurrentTime() + x/widthCoef, newNoteLength);
 
     float height = 1.0 * rect.height()/numOfWhiteNotes;
-    float width = 1.0 * widthCoef;
+    float width = 1.0 * widthCoef*newNoteLength;
 
     n->setSong(playerRef->getSong());
 
@@ -47,6 +47,16 @@ void NoteGroup::mousePressEvent(QGraphicsSceneMouseEvent *event)
     }
 
     qDebug() << playerRef->getSong()->getTotalTimeInSeconds();
+}
+
+float NoteGroup::getNewNoteLength() const
+{
+    return newNoteLength;
+}
+
+void NoteGroup::setNewNoteLength(float value)
+{
+    newNoteLength = value;
 }
 
 //void NoteGroup::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)

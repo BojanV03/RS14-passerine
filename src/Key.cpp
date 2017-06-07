@@ -112,10 +112,47 @@ void Key::setRect(float x, float y, float width, float height)
 
 void Key::mousePressEvent(QGraphicsSceneMouseEvent *)
 {
-    qDebug() << "Pressed";
+    isPressed = true;
+    vector<unsigned char> message;
+    message.push_back( 0xCF );
+    message.push_back( 0 );
+    outputPort->sendMessage(&message);
+
+    message[0] = 0xF1;  // System common- undefined?
+    message[1] = 60;
+    outputPort->sendMessage( &message );
+
+    message[0] = 0xBF;
+    message[1] = 0x07;
+    message.push_back(100);
+    outputPort->sendMessage(&message);
+
+    message[0] = 0x9F;
+    message[1] = midiID;
+    message[2] = 60;
+    outputPort->sendMessage(&message);
+
+    update();
 }
 
 void Key::mouseReleaseEvent(QGraphicsSceneMouseEvent *)
 {
-    qDebug() << "Released";
+    isPressed = false;
+    vector<unsigned char> message;
+    message.push_back(0x8F);
+    message.push_back(midiID);
+    message.push_back(60);
+    outputPort->sendMessage(&message);
+
+    update();
+}
+
+RtMidiOut *Key::getOutputPort() const
+{
+    return outputPort;
+}
+
+void Key::setOutputPort(RtMidiOut *value)
+{
+    outputPort = value;
 }

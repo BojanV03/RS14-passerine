@@ -43,6 +43,9 @@ public:
     float getSceneWidth() const;
     void setSceneWidth(float value);
 
+    float getNewNoteLength() const;
+    void setNewNoteLength(float value);
+
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
 //    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
@@ -56,6 +59,7 @@ private:
     SongPlayer *playerRef;
     float sceneWidth;
 
+    float newNoteLength = 1;
     float startX;
     float startY = 0;
 };

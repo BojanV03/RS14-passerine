@@ -77,6 +77,8 @@ private slots:
 
     void on_volumeSlider_sliderMoved(int position);
 
+    void on_tbnoteLength_textChanged();
+
 private:
     Ui::Passerine *ui;
 
@@ -111,6 +113,7 @@ private:
     void pianoKeyPress();
     void ResizePiano(int _startNote = 0, int _endNote = 96);
     void resetPiano();
+    void enabledGUI(bool value);
     void updateNoteGroup();
 
     chrono::microseconds currentTime;

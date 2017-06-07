@@ -163,6 +163,8 @@ class MidiFile {
       int       addPitchBend              (int aTrack, int aTick,
                                            int aChannel, double amount);
 
+      void remove(MidiEvent *e);
+
       // Meta-event adding convenience functions:
       int       addMetaEvent              (int aTrack, int aTick, int aType,
                                              vector<uchar>& metaData);

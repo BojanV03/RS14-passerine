@@ -8,6 +8,8 @@
 #include <QPainter>
 #include <QGraphicsItem>
 #include <QDebug>
+#include <include/RtMidi.h>
+#include <include/MidiEvent.h>
 
 class Key : public QGraphicsItem
 {
@@ -36,14 +38,20 @@ public:
     void setRect(const QRect &value);
     void setRect(float x, float y, float width, float height);
 
+    RtMidiOut *getOutputPort() const;
+    void setOutputPort(RtMidiOut *value);
+
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+
 private:
+
     bool isPressed;
     QBrush standardColor;
     QBrush pressedColor;
     QRect rect;
+    RtMidiOut* outputPort;
     int midiID;
 };
 

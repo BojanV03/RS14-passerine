@@ -130,6 +130,7 @@ void Passerine::ResizePiano(int _startNote, int _endNote)
 
             y += height;
         }
+        pianoKeys[j]->setOutputPort(midiout);
     }
     scene->update();
 }
@@ -157,7 +158,6 @@ void Passerine::drawPiano(int _startNote, int _endNote)
         height = scene->height() / whiteNotesInRange;
         qDebug() << "Passerine.cpp height: " << height;
         x = 0;
-
         if(!isWhiteNote(i)) // Black Key
         {
             height /= 1.5;
@@ -178,6 +178,7 @@ void Passerine::drawPiano(int _startNote, int _endNote)
             y += height;
         }
         pianoKeys.push_back(key);
+        key->setMidiID(j+12);
     }
 }
 
@@ -270,12 +271,6 @@ void Passerine::on_actionAbout_Qt_triggered()
 
 void Passerine::on_actionOpen_triggered()
 {
-    ui->playPauseButton->setText("\u25B6");
-    ui->playPauseButton->setEnabled(true);
-    ui->stopButton->setEnabled("true");
-    ui->songSlider->setValue(0);
-    ui->songSlider->setDisabled(false);
-
     if(songPlayer != nullptr){
         songPlayer->killSound();
         songPlayer->stop();
@@ -296,6 +291,7 @@ void Passerine::on_actionOpen_triggered()
         return;
     }
 
+    enabledGUI(true);
     qDebug() << "Time: " << midifile.getTotalTimeInSeconds();
 
     ui->songSlider->setMaximum(midifile.getTotalTimeInSeconds());
@@ -312,6 +308,7 @@ void Passerine::on_actionOpen_triggered()
     }
 
 
+    enabledGUI(true);
     noteGraphicsInit();
 }
 
@@ -471,6 +468,17 @@ void Passerine::resetPiano()
     }
 }
 
+void Passerine::enabledGUI(bool value)
+{
+    ui->playPauseButton->setText("\u25B6");
+    ui->playPauseButton->setEnabled(value);
+    ui->stopButton->setEnabled(value);
+    ui->songSlider->setValue(0);
+    ui->songSlider->setEnabled(value);
+    ui->volumeSlider->setEnabled(value);
+    ui->tbnoteLength->setEnabled(value);
+}
+
 void Passerine::updateNoteGroup()
 {
     float k = scene->width() / widthCoef + 5;
@@ -490,7 +498,7 @@ void Passerine::updateNoteGroup()
         group->addToGroup(allNotesSortedByBeginTime[lastNoteAdded]);
     }
 
-//    group->show();
+    group->show();
 }
 
 void Passerine::on_songSlider_sliderReleased()
@@ -506,11 +514,7 @@ void Passerine::on_actionNew_triggered()
     songPlayer->setCurrentTime(0);
     songPlayer->setPort(midiout);
     ui->songSlider->setValue(0);
-    ui->playPauseButton->setEnabled(true);
-    ui->stopButton->setEnabled("true");
-    ui->songSlider->setDisabled(false);
-
-
+    enabledGUI(true);
 }
 
 void Passerine::on_actionLoadImage_triggered()
@@ -546,7 +550,7 @@ void Passerine::on_actionSave_triggered()
 {
     midifile.joinTracks();
     midifile.sortTracks();
-    midifile.write("FinalnaVerzija1.mid");
+    midifile.write(midifile.getFilename());
 }
 
 void Passerine::on_actionSave_As_triggered()
@@ -585,8 +589,23 @@ void Passerine::updateLastNotes()
 void Passerine::on_volumeSlider_sliderMoved(int position)
 {
     songPlayer->setVolumeLoudnessMultiplier(position);
-
-    //songPlayer->setVolumeCh();
-
 }
 
+void Passerine::on_tbnoteLength_textChanged()
+{
+    QString num = ui->tbnoteLength->toPlainText();
+    bool ok;
+    double d = num.toDouble(&ok);
+    if(ok)
+    {
+        group->setNewNoteLength(d);
+    }
+    else
+    {
+        QMessageBox messageBox;
+        messageBox.critical(0,"Error","text box value must be a float number");
+        messageBox.setFixedSize(500,200);
+        ui->tbnoteLength->setText("1");
+
+    }
+}

@@ -1,4 +1,3 @@
-
 #include <QGraphicsItem>
 #include <QBrush>
 #include <QColor>
@@ -55,10 +54,8 @@ public:
     void setChannelId(int channelId);
 
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mousePressEvent(QGraphicsSceneMouseEvent *e);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-
-
 
 private:
     char _id;
@@ -69,7 +66,6 @@ private:
 
     MidiEvent *onEvent;
     MidiEvent *offEvent;
-
 
     QBrush standardBrush;
     QRect rect;

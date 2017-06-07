@@ -54,6 +54,20 @@ void SongPlayer::setVolumeLoudnessMultiplier(int value)
 
     setSongVolumeOnAllChannels();
 }
+
+void SongPlayer::removeNote(Note *me)
+{
+    int ind = 0;
+    for(auto i = notes.begin(); i != notes.end(); i++)
+    {
+        i++;
+        if(*i == me)
+        {
+            notes.erase(notes.begin() + ind);
+        }
+    }
+
+}
 std::vector<char> SongPlayer::getVolumeCh() const
 {
     return volumeCh;
@@ -117,12 +131,12 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
     message.push_back( 0xC0 );  //Channel 1 instrument
     message.push_back( instrument );
     //qDebug() << "Sent: " << message;
-    outputPort->sendMessage( &message );
+//    outputPort->sendMessage( &message );
 
     message[0] = 0xC1;          //Channel 2 instrument
     message[1] = instrument;
     //qDebug() << "Sent: " << message;
-    outputPort->sendMessage( &message );
+//    outputPort->sendMessage( &message );
 
 //    qDebug() << "Number of tracks: " << song->getNumTracks();
 //    qDebug() << "EventCount: " << song->getEventCount(0);
@@ -133,7 +147,8 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
 
     // Control Change: 176, 7, 100 (volume)
     setSongVolumeOnAllChannels();
-    message[0] = 0xB0;
+
+    message[0] = 0xBF;
     message[1] = 0x07;
     message.push_back(100);
     outputPort->sendMessage(&message);
@@ -146,6 +161,16 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
         if(stopped)
             break;
         MidiEvent curr = song->getEvent(0, currentEvent);
+        message.resize(curr.size());
+
+
+        // Update instruments
+        if(curr[0] >= 0xC0 && curr[0] <= 0xCF)
+        {
+            message[0] = curr[0];
+            message[1] = curr[1];
+            outputPort->sendMessage(&message);
+        }
 
         currentTime = prevSeconds;
         if(curr.seconds < startTime)
@@ -157,13 +182,11 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
             playing = false;
             break;
         }
-
+        // Volume Change control
         if(curr[0] >= 0xB0 && curr[0] <= 0xBF && (curr[1] == 0x07 || curr[1] == 0x27))
         {
             qDebug() << "Volume changed for channel" << curr[0] - 0xB0 << " to the value of " << curr[2];
             volumeCh[curr.getChannel()] = curr[2];
-
-//            curr[2] = volume;
         }
         if(curr.isNoteOn() || curr.isNoteOff())
         {
@@ -406,6 +429,7 @@ Note * SongPlayer::addNote(int id, float time, float duration)
 //    qDebug() << "Added note " << id << " starting at: " << time << " seconds and lasting " << duration << " seconds";
 
     Note * n(new Note(id, time, time + duration));
+    qDebug() << "***** " << duration;
 
     int index = song->addNoteOn(0, song->getAbsoluteTickTime(time), 0, id, 90);
   //  song->getEvent(0, index).tick = song->getAbsoluteTickTime(time);

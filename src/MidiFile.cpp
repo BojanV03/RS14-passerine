@@ -1762,7 +1762,13 @@ int MidiFile::addPitchBend(int aTrack, int aTick, int aChannel, double amount) {
    return addEvent(aTrack, aTick, mididata);
 }
 
-
+void MidiFile::remove(MidiEvent *e)
+{
+    for(auto i = events.begin(); i != events.end(); i++)
+    {
+        (*i)->remove(e);
+    }
+}
 
 //////////////////////////////
 //

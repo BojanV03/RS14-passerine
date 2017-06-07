@@ -67,11 +67,10 @@ public:
     void resetVolumeCh();
     void setSongVolumeOnAllChannels();
 
-
-
     int getVolumeLoudnessMultiplier() const;
     void setVolumeLoudnessMultiplier(int value);
 
+    void removeNote(Note *me);
 signals:
     void setCurrentTime(float value);
 

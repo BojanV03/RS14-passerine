@@ -187,6 +187,19 @@ int MidiEventList::append(MidiEvent& event) {
    return (int)list.size()-1;
 }
 
+void MidiEventList::remove(MidiEvent *event)
+{
+    int index = 0;
+    for(auto i = list.begin(); i != list.end(); i++)
+    {
+        if(event = *i)
+        {
+            list.erase(list.begin() + index);
+        }
+        index++;
+    }
+}
+
 
 int MidiEventList::push(MidiEvent& event) {
    return append(event);
