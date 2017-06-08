@@ -39,7 +39,6 @@ public:
     float getStartX() const;
     void setStartX(float value);
 
-
     float getSceneWidth() const;
     void setSceneWidth(float value);
 

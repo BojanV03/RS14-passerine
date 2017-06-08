@@ -72,6 +72,7 @@ Passerine::Passerine(QWidget *parent) :
     lastNoteRemoved = 0;
 }
 
+// Promena velicine nota prilikom promene velicine prozora
 void Passerine::ResizeNotes(int _startNote, int _endNote)
 {
     float height = scene->height()/countNumberOfWhiteNotesInRange(_startNote, _endNote);
@@ -95,6 +96,7 @@ void Passerine::ResizeNotes(int _startNote, int _endNote)
     updateGraphics();
 }
 
+// Promena velicine dirki prilikom promene velicine prozora
 void Passerine::ResizePiano(int _startNote, int _endNote)
 {
     startNote = _startNote;
@@ -135,6 +137,7 @@ void Passerine::ResizePiano(int _startNote, int _endNote)
     scene->update();
 }
 
+// Iscrtavanje dirki na klaviru
 void Passerine::drawPiano(int _startNote, int _endNote)
 {
     startNote = _startNote;
@@ -243,6 +246,11 @@ void Passerine::resizeEvent(QResizeEvent* event)
 
 Passerine::~Passerine()
 {
+    delete scene;
+    delete songPlayer;
+    delete group;
+    delete pianoTimer;
+    delete midiout;
     delete ui;
 }
 
@@ -256,7 +264,7 @@ void Passerine::on_actionAbout_Passerine_triggered()
     QWidget *a = new QWidget();
     QString *s = new QString("A simple MIDI file composer.\n\n"
                              "\nFaculty of Mathematics, University of Belgrade "
-                             "2017");
+                             "2017\n");
 
     QMessageBox::about(a, tr("About Passerine"), *s);
 
@@ -268,7 +276,7 @@ void Passerine::on_actionAbout_Qt_triggered()
 
     QMessageBox::aboutQt(a, tr("About Qt"));
 }
-
+// Otvara fajl, i pesmu, enableuje GUI i prikaze note
 void Passerine::on_actionOpen_triggered()
 {
     if(songPlayer != nullptr){
@@ -310,8 +318,11 @@ void Passerine::on_actionOpen_triggered()
 
     enabledGUI(true);
     noteGraphicsInit();
+
+    on_stopButton_clicked();
 }
 
+// biramo output port
 bool Passerine::chooseMidiPort( RtMidiOut *rtmidi )
 {
   std::string portName;
@@ -328,12 +339,15 @@ bool Passerine::chooseMidiPort( RtMidiOut *rtmidi )
   if(PS->selectedPort != -1)
       std::cout << "\nPrihvacen ";
   else
+  {
+      delete PS;
       return false;
-
+  }
   std::cout << "\nOpening " << rtmidi->getPortName(PS->selectedPort) << std::endl;
   qDebug() << "Selected Port: " << QString::fromStdString(rtmidi->getPortName(PS->selectedPort));
   rtmidi->openPort(PS->selectedPort);
 
+  delete PS;
   return true;
 }
 
@@ -353,7 +367,6 @@ void Passerine::noteGraphicsInit()
     group->setPos(scene->width()/6, group->pos().y());
     group->setRect(QRect(0, 0, songPlayer->getSong()->getTotalTimeInSeconds()*widthCoef + 5*scene->width()/6, ui->graphicsView->scene()->height()));
     group->setSceneWidth(scene->width());
-//    group->show();
 }
 
 bool Passerine::isWhiteNote(int i)
@@ -409,6 +422,12 @@ void Passerine::on_stopButton_clicked()
     for(int i = 0; i < 128; i++)
         songPlayer->setNoteState(i, false);
 
+    allNotesSortedByBeginTime.clear();
+    allNotesSortedByEndTime.clear();
+
+    makeNoteGroup();
+    updateNoteGroup();
+
     updateGraphics();
 }
 
@@ -425,6 +444,7 @@ void Passerine::pianoKeyPress()
         }
     }
 }
+
 void Passerine::updateGraphics()
 {
     currentTime = chrono::duration_cast< chrono::microseconds >(
@@ -439,7 +459,12 @@ void Passerine::updateGraphics()
     updateLastNotes();
     updateNoteGroup();
 
-    ui->songSlider->setValue(songPlayer->getCurrentTime());
+    if(songPlayer!= nullptr)
+    {
+        ui->tbLyrics->setText(songPlayer->getLyrics());
+        ui->songSlider->setValue(songPlayer->getCurrentTime());
+    }
+
     pianoKeyPress();
     group->setX(scene->width()/6 - songPlayer->getCurrentTime()*widthCoef);
 }
@@ -555,7 +580,9 @@ void Passerine::on_actionSave_triggered()
 
 void Passerine::on_actionSave_As_triggered()
 {
-    QString filename = QFileDialog::getSaveFileName(this, "Save file", "", ".mid");
+    QString filename = QFileDialog::getSaveFileName(this,
+        tr("Save Midi File"), "",
+        tr("MidiFile (*.mid);;All Files (*)"));
     QFile f(filename);
     f.open( QIODevice::WriteOnly );
     midifile.write(filename.toUtf8().constData());
@@ -606,6 +633,5 @@ void Passerine::on_tbnoteLength_textChanged()
         messageBox.critical(0,"Error","text box value must be a float number");
         messageBox.setFixedSize(500,200);
         ui->tbnoteLength->setText("1");
-
     }
 }

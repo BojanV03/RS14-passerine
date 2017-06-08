@@ -127,6 +127,7 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
     song->joinTracks();
     song->sortTracks();
 
+    lyrics.clear();
     // Program change: 192, 5
     message.push_back( 0xC0 );  //Channel 1 instrument
     message.push_back( instrument );
@@ -175,6 +176,15 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
         currentTime = prevSeconds;
         if(curr.seconds < startTime)
         {
+            if(curr.isMeta() && curr[1] == 5)
+            {
+                QString S;
+                for(int j = 0; j < curr[2]; j++)
+                {
+                    lyrics.append(curr[3+j]);
+                }
+                prevSeconds = curr.seconds;
+            }
             continue;
         }
         else if(curr.seconds > endTime)
@@ -241,10 +251,10 @@ void SongPlayer::PlaySongInNewThread(float startTime, float endTime)
     }
 
     // Control Change: 176, 7, 40
-    message[0] = 176;
-    message[1] = 7;
-    message[2] = 100;
-    outputPort->sendMessage( &message );
+//    message[0] = 176;
+//    message[1] = 7;
+//    message[2] = 100;
+//    outputPort->sendMessage( &message );
 
 //    SLEEP( 500 );
 
@@ -380,6 +390,7 @@ void SongPlayer::setSong(MidiFile *_song)
                     }
                 }
                 Note * n(new Note(event[1], event.seconds, end, event.getChannel()));
+
                 n->setOnEvent(&song->getEvent(0, i));
                 n->setOffEvent(&song->getEvent(0, j));
                 n->setSong(song);

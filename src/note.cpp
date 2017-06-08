@@ -1,5 +1,4 @@
 #include <include/note.h>
-#include <include/passerine.h>
 
 Note::Note(char n, double tb, double te, int ch)
     :_id(n), _timeBegin(tb), _timeEnd(te), _channelId(ch)
@@ -25,16 +24,19 @@ QRectF Note::boundingRect() const
     return rect;
 }
 
+// Dragovanje nota
 QVariant Note::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     if (change == ItemPositionChange)
     {
         float difference = pos().x() - value.toPointF().x();
 
-        onEvent->seconds = onEvent->seconds - difference/200;
+        onEvent->seconds = onEvent->seconds - difference/200;   // postavljanje vremena za ON/OFF signale
         onEvent->tick = song->getAbsoluteTickTime(onEvent->seconds);
         offEvent->seconds= offEvent->seconds- difference/200;
         offEvent->tick = song->getAbsoluteTickTime(offEvent->seconds);
+        _timeBegin = onEvent->seconds;
+        _timeEnd = offEvent->seconds;
 
         qDebug() << "OffEvent->tick = " << offEvent->tick;
         return QPointF(value.toPointF().x(), pos().y());
@@ -111,7 +113,7 @@ void Note::setStandardBrush(const QBrush &value)
 {
     standardBrush = value;
 }
-
+// Brisanje nota
 void Note::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
     if(e->button() == Qt::RightButton)
@@ -120,6 +122,8 @@ void Note::mousePressEvent(QGraphicsSceneMouseEvent *e)
         offEvent->seconds = 0;
         offEvent->tick = song->getAbsoluteTickTime(offEvent->seconds);
         onEvent->tick = song->getAbsoluteTickTime(offEvent->seconds);
+        _timeBegin = offEvent->seconds;
+        _timeEnd = offEvent->seconds;
         song->sortTracks();
         setRect(QRect(-100, -100, 0.01, 0.01));
     }
@@ -160,6 +164,7 @@ void Note::setOffEvent(MidiEvent *value)
     offEvent = value;
 }
 
+// Resizeovanje nota
 void Note::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
     if(offEvent->seconds + (event->delta()/12)/200.0 < onEvent->seconds) // Ako skrolom dovedemo notu do negativne duzine
@@ -167,12 +172,14 @@ void Note::wheelEvent(QGraphicsSceneWheelEvent *event)
         offEvent->seconds = onEvent->seconds + 0.05;                    // stavimo joj duzinu na 0.01s
         setRect(QRect(rect.left(), rect.top(), 0.05*200, rect.height()));
         offEvent->tick = song->getAbsoluteTickTime(offEvent->seconds);
+        _timeEnd = offEvent->seconds;
     }
     else
     {
         offEvent->seconds = offEvent->seconds + (event->delta()/12)/200.0;
         setRect(QRect(rect.left(), rect.top(), rect.width()+event->delta()/12, rect.height()));
         offEvent->tick = song->getAbsoluteTickTime(offEvent->seconds);
+        _timeEnd = offEvent->seconds;
     }
     song->sortTracks();
 }

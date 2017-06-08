@@ -69,7 +69,6 @@ private:
 
     QBrush standardBrush;
     QRect rect;
-
 };
 
 #endif // NOTE_H

@@ -5,8 +5,17 @@
 #include <QImage>
 #include <QPixmap>
 #include <include/SongPlayer.h>
+#include <include/MidiFile.h>
+#include <QDebug>
+#include <include/GeneralMidi.h>
 
-namespace Ui {
+#define isWhite(A) (*A == QColor(255, 255, 255).rgba())
+#define NUMBER_OF_OCTAVES 8
+#define KEYS_PER_OCTAVE 12
+#define KEYS_PER_SCALE 7
+
+namespace Ui
+{
 class picEditor;
 }
 
@@ -28,7 +37,6 @@ private slots:
     void on_horizontalSlider_valueChanged(int value);
 
     void on_cbPreview_toggled(bool checked);
-
 
     void on_cbInvert_toggled(bool checked);
 

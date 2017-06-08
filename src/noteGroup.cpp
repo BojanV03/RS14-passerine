@@ -16,25 +16,29 @@ void NoteGroup::setRect(const QRect &value)
     update();
 }
 
+//Dodavanje note u grupu kao child item
 void NoteGroup::addToGroup(Note * n)
 {
     n->setParentItem(this);
     n->show();
 }
 
+// Dodavanje note u pesmu klikom na grupu
 void NoteGroup::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     QPointF clickLocation = event->pos();
     qreal x = clickLocation.rx() + this->x() - startX;    // podesavamo X tako da uvek pocetak bude na kraju dirki klavira
 
     int i = calculateNoteIdFromLocation(QPointF(x, clickLocation.ry()));
-    Note * n = playerRef->addNote(i + 12, playerRef->getCurrentTime() + x/widthCoef, newNoteLength);
+    Note *n = playerRef->addNote(i + 12, playerRef->getCurrentTime() + x/widthCoef, newNoteLength);
 
+    qDebug() << "ODRADJENO NESTO SA N";
     float height = 1.0 * rect.height()/numOfWhiteNotes;
     float width = 1.0 * widthCoef*newNoteLength;
 
     n->setSong(playerRef->getSong());
 
+    qDebug() << "DODATA REFERENCA NA SONG";
     if(isWhiteNote(n->getId()))
     {
         addToGroup(n);
@@ -47,6 +51,7 @@ void NoteGroup::mousePressEvent(QGraphicsSceneMouseEvent *event)
     }
 
     qDebug() << playerRef->getSong()->getTotalTimeInSeconds();
+    qDebug() << "DODATA NOTA KRAJ";
 }
 
 float NoteGroup::getNewNoteLength() const
