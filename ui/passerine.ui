@@ -87,34 +87,12 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QTextEdit" name="tbnoteLength">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>225</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Length of a new note, in seconds</string>
-        </property>
-        <property name="statusTip">
-         <string>Length of a new note, in seconds</string>
-        </property>
-        <property name="whatsThis">
-         <string>Length of a new note, in seconds</string>
-        </property>
-        <property name="placeholderText">
-         <string>New Note Length (in seconds)</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_2">
+       <spacer name="horizontalSpacer_3">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::MinimumExpanding</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -125,9 +103,19 @@
        </spacer>
       </item>
       <item>
-       <spacer name="horizontalSpacer_3">
+       <widget class="QLineEdit" name="tbnoteLength">
+        <property name="placeholderText">
+         <string>New Note Length</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::MinimumExpanding</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -171,6 +159,9 @@
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
         <property name="sizeHint" stdset="0">
          <size>
           <width>40</width>
@@ -192,6 +183,22 @@
         </property>
        </widget>
       </item>
+      <item>
+       <spacer name="horizontalSpacer_4">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
      </layout>
     </item>
    </layout>
@@ -202,7 +209,7 @@
      <x>0</x>
      <y>0</y>
      <width>525</width>
-     <height>19</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFIle">

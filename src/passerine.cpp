@@ -618,9 +618,8 @@ void Passerine::on_volumeSlider_sliderMoved(int position)
     songPlayer->setVolumeLoudnessMultiplier(position);
 }
 
-void Passerine::on_tbnoteLength_textChanged()
+void Passerine::on_tbnoteLength_textChanged(const QString &num)
 {
-    QString num = ui->tbnoteLength->toPlainText();
     bool ok;
     double d = num.toDouble(&ok);
     if(ok)

@@ -77,7 +77,9 @@ private slots:
 
     void on_volumeSlider_sliderMoved(int position);
 
-    void on_tbnoteLength_textChanged();
+//    void on_tbnoteLength_textChanged();
+
+    void on_tbnoteLength_textChanged(const QString &arg1);
 
 private:
     Ui::Passerine *ui;

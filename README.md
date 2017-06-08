@@ -16,13 +16,15 @@ soundfont /usr/share/soundfonts/FluidR3_GM.sf2
 
 ## Usage
 
-It supports playback of MIDI songs, at the moment. You can use the seek bar to play the song from whichever part you want!
+Use the menu bar to open songs!
+
+You can add a new note by clicking the left click and delete them by right-clicking. Length of a note is adjusted by scroll wheel!
 
 ## Progress
 
 version -1: https://youtu.be/biz5vJ76a4g
 
-versionn 0: https://youtu.be/nEcjDrxMd64
+version 0: https://youtu.be/nEcjDrxMd64
 
 ### Special thanks to
 
