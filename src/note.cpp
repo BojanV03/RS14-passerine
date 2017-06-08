@@ -46,7 +46,10 @@ QVariant Note::itemChange(GraphicsItemChange change, const QVariant &value)
 
 void Note::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    vector<QColor> colors = {"#800000", "#000080", "#000000", "#0000ff", "#00ffff", "#008080", "#808080", "#008000", "#800080", "#808000", "#a0a0a4", "#00ff00", "#c0c0c0", "#ff00ff", "#ff0000", "#ffff00"};
+    vector<QColor> colors = {"#800000", "#000080", "#000000", "#0000ff",
+                             "#00ffff", "#008080", "#808080", "#008000",
+                             "#800080", "#808000", "#a0a0a4", "#00ff00",
+                             "#c0c0c0", "#ff00ff", "#ff0000", "#ffff00"};
 
     QPen p = QPen(Qt::black);
     p.setWidth(1);

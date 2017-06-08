@@ -221,7 +221,7 @@ int NoteGroup::calculateNoteIdFromLocation(QPointF location)
         {
             float height = whiteNoteHeight / 1.5;
 
-            if(targetY >= y-height/2 && targetY <= y+height/2)    //naisli smo na crnu dirku, strava, vracamo rezultat
+            if(targetY >= y-height/2 && targetY <= y+height/2)    //naisli smo na crnu dirku, vracamo rezultat
             {
                 qDebug() << i;
                 result = i;
